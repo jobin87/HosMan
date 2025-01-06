@@ -47,6 +47,7 @@ export function CenteredSignInView() {
   });
 
   const {
+    reset,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
@@ -65,7 +66,7 @@ export function CenteredSignInView() {
   const onSubmit = handleSubmit(async (data) => {
     const ipaddress = await getClientIp();
     if (await ipaddress) {
-      console.log("hello")
+     console.log(ipaddress)
     } else {
       toast.error('Error fetching IP address! Try again later.');
     }

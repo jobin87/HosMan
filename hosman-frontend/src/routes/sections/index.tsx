@@ -3,8 +3,8 @@ import { Navigate, useRoutes } from 'react-router-dom';
 
 import { authRoutes} from './auth';
 import { mainRoutes } from './main';
-// import { dashboardRoutes } from './dashboard';
 import { CONFIG } from 'src/config-global';
+import { dashboardRoutes } from './dashboard';
 
 // ----------------------------------------------------------------------
 
@@ -19,7 +19,7 @@ export function Router() {
     ...authRoutes,
 
     // Dashboard
-    // ...dashboardRoutes,
+    ...dashboardRoutes,
 
     // Main
     ...mainRoutes,

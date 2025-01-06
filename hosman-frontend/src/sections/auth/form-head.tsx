@@ -30,7 +30,7 @@ export function FormHead({ sx, icon, title, description, ...other }: FormHeadPro
         <Typography variant="h5">{title}</Typography>
 
         {description && (
-          <Typography variant="body2" sx={{ color: 'violet' }}>
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
             {description}
           </Typography>
         )}

@@ -13,16 +13,13 @@ import { paths } from 'src/routes/paths';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-// import { useAppDispatch } from 'src/store';
-// import { requestSignInWithPassword } from 'src/store/app/appThunk';
+import { useAppDispatch } from 'src/store';
 
 import { AnimateLogo2 } from 'src/components/animate';
 import { Field, Form } from 'src/components/hook-form';
 import { Iconify } from 'src/components/iconify';
 
-// import { useEffect } from 'react';
-// import toast from 'react-hot-toast';
-// import useUniqueBrowserId from 'src/hooks/use-browser-id';
+import toast from 'react-hot-toast';
 import { FormHead } from '../form-head';
 
 // ----------------------------------------------------------------------
@@ -43,32 +40,36 @@ export const SignInSchema = zod.object({
 
 export function CenteredSignInView() {
   const password = useBoolean();
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
-  // const methods = useForm<SignInSchemaType>({
-  //   resolver: zodResolver(SignInSchema),
-  // });
+  const methods = useForm<SignInSchemaType>({
+    resolver: zodResolver(SignInSchema),
+  });
 
-  // const {
-  //   handleSubmit,
-  //   formState: { isSubmitting },
-  // } = methods;
+  const {
+    handleSubmit,
+    formState: { isSubmitting },
+  } = methods;
 
-  // const getClientIp = async () => {
-  //   try {
-  //     const response = await fetch('https://api64.ipify.org?format=json');
-  //     const data = await response.json();
-  //     return data.ip;
-  //   } catch (error) {
-  //     console.error('Error fetching IP address:', error);
-  //     return null;
-  //   }
-  // };
+  const getClientIp = async () => {
+    try {
+      const response = await fetch('https://api64.ipify.org?format=json');
+      const data = await response.json();
+      return data.ip;
+    } catch (error) {
+      console.error('Error fetching IP address:', error);
+      return null;
+    }
+  };
 
-  // const onSubmit = handleSubmit(async (data) => {
-  //   const ipaddress = await getClientIp();
-  //   console.log(ipaddress)
-  // });
+  const onSubmit = handleSubmit(async (data) => {
+    const ipaddress = await getClientIp();
+    if (await ipaddress) {
+      console.log("hello")
+    } else {
+      toast.error('Error fetching IP address! Try again later.');
+    }
+  });
 
 
   const renderLogo = <AnimateLogo2 sx={{ mb: 3, mx: 'auto' }} />;
@@ -112,6 +113,7 @@ export function CenteredSignInView() {
         size="large"
         type="submit"
         variant="contained"
+        loading={isSubmitting}
       >
         Sign in
       </LoadingButton>
@@ -145,6 +147,9 @@ export function CenteredSignInView() {
         }
       />
 
+      <Form methods={methods} onSubmit={onSubmit}>
+        {renderForm}
+      </Form>
     </Box>
   );
 }

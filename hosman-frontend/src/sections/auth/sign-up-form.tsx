@@ -120,8 +120,6 @@ export function SignUpForm(data: any) {
             display="grid"
             gridTemplateColumns={{ xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' }}
           >
-            <Field.Text name="contactPerson" label="Contact Person Name" />
-            <Field.Text name="sellerEmail" label="Email address" />
             <Field.Select
               fullWidth
               name="sellerType"
@@ -133,6 +131,8 @@ export function SignUpForm(data: any) {
               ))}
               defaultValue={'COMPANY'}
             />
+            <Field.Text name="contactPerson" label="Contact Person Name" />
+            <Field.Text name="sellerEmail" label="Email address" />
             <Field.Text name="state" label="State/Region" />
             <Field.Text name="address" label="Address" />
             <Field.Text name="zipcode" label="ZipCode" />

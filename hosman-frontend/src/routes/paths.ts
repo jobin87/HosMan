@@ -34,6 +34,7 @@ export const paths = {
   // DASHBOARD
   dashboard: {
     root: ROOTS.DASHBOARD,
+    welcome:`$ROOTS.DASHBOARD/one`,
     two: `${ROOTS.DASHBOARD}/account`,
     three: `${ROOTS.DASHBOARD}/three`,
 

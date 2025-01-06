@@ -22,7 +22,6 @@ import { useAppDispatch } from 'src/store';
 import { layoutClasses } from '../classes';
 import { AccountDrawer } from '../components/account-drawer';
 import { MenuButton } from '../components/menu-button';
-import { NotificationsDrawer } from '../components/notifications-drawer';
 import { SettingsButton } from '../components/settings-button';
 import { _account } from '../config-nav-account';
 import { navData as dashboardNavData } from '../config-nav-dashboard';
@@ -50,11 +49,10 @@ export type DashboardLayoutProps = {
 export function DashboardLayout({ sx, children, header, data }: DashboardLayoutProps) {
   const userData = useUser();
 
-  const dispatch = useAppDispatch();
 
   const isDefaultPasswordUpdated = userData?.defaultPassword;
 
-  const [defaultPasswordChangeAlertOpen, setDefaultPasswordChangeAlertOpen] =
+  const [ setDefaultPasswordChangeAlertOpen] =
     useState<boolean>(isDefaultPasswordUpdated);
 
   const theme = useTheme();
@@ -75,13 +73,7 @@ export function DashboardLayout({ sx, children, header, data }: DashboardLayoutP
   const isNavHorizontal = settings.navLayout === 'horizontal';
   const isNavVertical = isNavMini || settings.navLayout === 'vertical';
 
-  useEffect(() => {
-    setDefaultPasswordChangeAlertOpen(isDefaultPasswordUpdated);
-  }, [isDefaultPasswordUpdated]);
 
-  // useEffect(() => {
-  //   dispatch(requestUserDetails());
-  // }, []);
 
   return (
     <LayoutSection

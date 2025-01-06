@@ -11,11 +11,11 @@ import { useRouter } from 'src/routes/hooks';
 
 import { Button, Dialog, MenuItem, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { Field, Form, schemaHelper } from 'src/components/hook-form';
 import { SELLER_TYPES } from 'src/constants/seller.constants';
 import { paths } from 'src/routes/paths';
 import { useAppDispatch } from 'src/store';
-import { AuthCenteredLayout } from 'src/layouts/auth-centered';
 
 // ----------------------------------------------------------------------
 
@@ -92,9 +92,13 @@ export function SignUpForm(data: any) {
     switch (values.sellerType) {
       case 'INDIVIDUAL':
         setIdentityPlaceHolder('National ID');
-        setFullnamePlaceHolder('HospitalId');
+        setFullnamePlaceHolder('Business Name');
         break;
-      case 'Hospital':
+      case 'ORGANIZATION':
+        setIdentityPlaceHolder('Organization Registration Number');
+        setFullnamePlaceHolder('Organization Name');
+        break;
+      case 'COMPANY':
         setIdentityPlaceHolder('Company Registration Number');
         setFullnamePlaceHolder('Company Name');
         break;
@@ -111,15 +115,18 @@ export function SignUpForm(data: any) {
   });
 
   return (
-    <AuthCenteredLayout>
+    <>
       <Form methods={methods} onSubmit={onSubmit}>
         <Card sx={{ p: 3, boxShadow: 0 }} elevation={0}>
           <Box
             rowGap={3}
-            columnGap={10}
+            columnGap={2}
             display="grid"
             gridTemplateColumns={{ xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' }}
           >
+            <Field.Text name="contactPerson" label="Contact Person Name" />
+            <Field.Text name="sellerEmail" label="Email address" />
+
             <Field.Select
               fullWidth
               name="sellerType"
@@ -131,8 +138,7 @@ export function SignUpForm(data: any) {
               ))}
               defaultValue={'COMPANY'}
             />
-            <Field.Text name="contactPerson" label="Contact Person Name" />
-            <Field.Text name="sellerEmail" label="Email address" />
+
             <Field.Text name="state" label="State/Region" />
             <Field.Text name="address" label="Address" />
             <Field.Text name="zipcode" label="ZipCode" />
@@ -175,6 +181,6 @@ export function SignUpForm(data: any) {
           </Stack>
         </Box>
       </Dialog>
-    </AuthCenteredLayout>
+    </>
   );
 }

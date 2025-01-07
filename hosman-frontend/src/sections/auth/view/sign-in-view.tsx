@@ -21,12 +21,14 @@ import { Iconify } from 'src/components/iconify';
 
 import toast from 'react-hot-toast';
 import { FormHead } from '../form-head';
+import { useNavigate } from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 
 export type SignInSchemaType = zod.infer<typeof SignInSchema>;
 
 export const SignInSchema = zod.object({
+  
   email: zod
     .string()
     .min(1, { message: 'Email is required!' })
@@ -38,9 +40,11 @@ export const SignInSchema = zod.object({
   deviceId: zod.string().min(1, { message: 'Device ID is required!' }),
 });
 
+
 export function CenteredSignInView() {
   const password = useBoolean();
   const dispatch = useAppDispatch();
+  const navigate= useNavigate()
 
   const methods = useForm<SignInSchemaType>({
     resolver: zodResolver(SignInSchema),
@@ -67,11 +71,12 @@ export function CenteredSignInView() {
     const ipaddress = await getClientIp();
     if (await ipaddress) {
      console.log(ipaddress)
+     navigate(paths.dashboard.welcome)
+
     } else {
       toast.error('Error fetching IP address! Try again later.');
     }
   });
-
 
   const renderLogo = <AnimateLogo2 sx={{ mb: 3, mx: 'auto' }} />;
 
@@ -114,8 +119,7 @@ export function CenteredSignInView() {
         size="large"
         type="submit"
         variant="contained"
-        loading={isSubmitting}
-      >
+        loading={isSubmitting}      >
         Sign in
       </LoadingButton>
     </Box>

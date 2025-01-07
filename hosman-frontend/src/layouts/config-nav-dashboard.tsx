@@ -46,23 +46,23 @@ export const navData = [
    * Overview
    */
   {
-    subheader: 'Version 1.0',
-    items: [{ title: 'Overview', path: paths.dashboard.root, icon: ICONS.dashboard }],
+    subheader: 'Overview',
+    items: [{ title: 'Hospital-Info', path: paths.dashboard.root, icon: ICONS.dashboard }],
   },
   /*
    * Management
    */
   {
-    subheader: 'Seller Hub',
+    subheader: 'diagnosis-data',
     items: [
       {
-        title: 'Products',
+        title: 'patients',
         path: paths.dashboard.product.root,
         icon: ICONS.product,
         children: [
-          { title: 'List', path: paths.dashboard.product.list },
-          { title: 'Brands', path: paths.dashboard.product.brands.list },
-          { title: 'Reviews', path: paths.dashboard.product.review.list },
+          { title: 'patients', path: paths.dashboard.product.list },
+          { title: 'Cured', path: paths.dashboard.product.brands.list },
+          { title: 'Reasons', path: paths.dashboard.product.review.list },
         ],
       },
       {

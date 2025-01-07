@@ -1,4 +1,4 @@
-import { SELLER_STATUS } from './seller.constants';
+import { SELLER_STATUS } from './service.constants';
 
 export enum uploadFileFolders {
   sellerDocuments = 'seller/{sellerId}/documents/',

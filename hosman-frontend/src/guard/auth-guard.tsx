@@ -4,8 +4,8 @@ import { usePathname, useRouter, useSearchParams } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
 
 import { SplashScreen } from 'src/components/loading-screen';
-import { SELLER_STATUS } from 'src/constants/seller.constants';
 import { useUser } from 'src/hooks/use-user';
+import { SERVICE_STATUS } from 'src/constants/service.constants';
 
 // ----------------------------------------------------------------------
 
@@ -41,19 +41,19 @@ export function AuthGuard({ children }: Props) {
     }
 
     if (!sellerDetails?.isSellerApproved) {
-      if (sellerDetails?.approvalStatus === SELLER_STATUS.DECLINED) {
+      if (sellerDetails?.approvalStatus === SERVICE_STATUS.DECLINED) {
         router.replace(paths.onboarding.root);
         setIsChecking(false);
         return;
       }
 
-      if (sellerDetails?.approvalStatus === SELLER_STATUS.UNDERVERIFICATION) {
+      if (sellerDetails?.approvalStatus === SERVICE_STATUS.UNDERVERIFICATION) {
         router.replace(paths.onboarding.root);
         setIsChecking(false);
         return;
       }
 
-      if (sellerDetails?.approvalStatus === SELLER_STATUS.PENDING) {
+      if (sellerDetails?.approvalStatus === SERVICE_STATUS.PENDING) {
         //PENDING
         if (pathname?.split('/')?.[1] === 'onboarding') {
           setIsChecking(false);

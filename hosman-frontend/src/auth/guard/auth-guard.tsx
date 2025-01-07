@@ -1,13 +1,11 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
+import { usePathname, useRouter, useSearchParams } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
-import { useRouter, usePathname, useSearchParams } from 'src/routes/hooks';
-
-import { CONFIG } from 'src/config-global';
 
 import { SplashScreen } from 'src/components/loading-screen';
-
-import { useAuthContext } from '../hooks';
+import { SERVICE_STATUS } from 'src/constants/service.constants';
+import { useUser } from 'src/hooks/use-user';
 
 // ----------------------------------------------------------------------
 
@@ -22,7 +20,7 @@ export function AuthGuard({ children }: Props) {
 
   const searchParams = useSearchParams();
 
-  const { authenticated, loading } = useAuthContext();
+  const { loading, userLogged, sellerDetails } = useUser();
 
   const [isChecking, setIsChecking] = useState<boolean>(true);
 
@@ -30,41 +28,50 @@ export function AuthGuard({ children }: Props) {
     (name: string, value: string) => {
       const params = new URLSearchParams(searchParams.toString());
       params.set(name, value);
-
       return params.toString();
     },
     [searchParams]
   );
 
-  const checkPermissions = async (): Promise<void> => {
-    if (loading) {
-      return;
-    }
-
-    if (!authenticated) {
-      const { method } = CONFIG.auth;
-
-      const signInPath = {
-        jwt: paths.auth.jwt.signIn,
-        auth0: paths.auth.auth0.signIn,
-        amplify: paths.auth.amplify.signIn,
-        firebase: paths.auth.firebase.signIn,
-        supabase: paths.auth.supabase.signIn,
-      }[method];
-
-      const href = `${signInPath}?${createQueryString('returnTo', pathname)}`;
-
+  const checkPermissions = useCallback(() => {
+    if (!userLogged) {
+      const href = `${paths.auth.signIn}?${createQueryString('returnTo', pathname)}`;
       router.replace(href);
       return;
     }
 
+    if (!sellerDetails?.isSellerApproved) {
+      if (sellerDetails?.approvalStatus === SERVICE_STATUS.DECLINED) {
+        router.replace(paths.onboarding.root);
+        setIsChecking(false);
+        return;
+      }
+
+      if (sellerDetails?.approvalStatus === SERVICE_STATUS.UNDERVERIFICATION) {
+        router.replace(paths.onboarding.root);
+        setIsChecking(false);
+        return;
+      }
+
+      if (sellerDetails?.approvalStatus === SERVICE_STATUS.PENDING) {
+        //PENDING
+        if (pathname?.split('/')?.[1] === 'onboarding') {
+          setIsChecking(false);
+          return;
+        } else {
+          router.replace(paths.onboarding.form);
+          setIsChecking(false);
+          return;
+        }
+      }
+    }
+
     setIsChecking(false);
-  };
+  }, [userLogged, sellerDetails, createQueryString, pathname, router]);
 
   useEffect(() => {
     checkPermissions();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authenticated, loading]);
+  }, [checkPermissions, loading]);
 
   if (isChecking) {
     return <SplashScreen />;

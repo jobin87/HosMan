@@ -13,7 +13,6 @@ import { Field, Form } from 'src/components/hook-form';
 import { Iconify } from 'src/components/iconify';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useAppDispatch } from 'src/store';
-import { updateUserPassword } from 'src/store/app/appThunk';
 
 // ----------------------------------------------------------------------
 
@@ -61,32 +60,32 @@ export function AccountChangePassword() {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = handleSubmit(async (data) => {
-    try {
-      const response = await dispatch(
-        updateUserPassword({
-          currentPassword: data.currentPassword?.toString(),
-          newPassword: data.newPassword?.toString(),
-        })
-      ).unwrap();
-      if (response?.passwordUpdated) {
-        toast.success('Password updated successfully!');
-        reset({
-          currentPassword: '',
-          newPassword: '',
-          confirmPassword: '',
-        });
-      } else {
-        toast.error('Failed to update password');
-      }
-    } catch (error) {
-      console.error('Error updating password:', error);
-      toast.error('Error updating password');
-    }
-  });
+  // const onSubmit = handleSubmit(async (data) => {
+  //   try {
+  //     const response = await dispatch(
+  //       updateUserPassword({
+  //         currentPassword: data.currentPassword?.toString(),
+  //         newPassword: data.newPassword?.toString(),
+  //       })
+  //     ).unwrap();
+  //     if (response?.passwordUpdated) {
+  //       toast.success('Password updated successfully!');
+  //       reset({
+  //         currentPassword: '',
+  //         newPassword: '',
+  //         confirmPassword: '',
+  //       });
+  //     } else {
+  //       toast.error('Failed to update password');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error updating password:', error);
+  //     toast.error('Error updating password');
+  //   }
+  // });
 
   return (
-    <Form methods={methods} onSubmit={onSubmit}>
+    <Form methods={methods} >
       <Card sx={{ p: 3, gap: 3, display: 'flex', flexDirection: 'column' }}>
         {['currentPassword', 'newPassword', 'confirmPassword'].map((field, index) => (
           <Field.Text

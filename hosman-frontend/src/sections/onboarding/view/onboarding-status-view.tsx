@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { CONFIG } from 'src/config-global';
-import { SELLER_STATUS } from 'src/constants/seller.constants';
+import { SELLER_STATUS } from 'src/constants/service.constants';
 import { useUser } from 'src/hooks/use-user';
 import { SignOutButton } from 'src/layouts/components/sign-out-button';
 import { useRouter } from 'src/routes/hooks';

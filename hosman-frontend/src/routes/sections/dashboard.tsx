@@ -24,7 +24,7 @@ const UserProfilePage = lazy(() => import('src/pages/dashboard/user/profile'));
 const UserAccountPage = lazy(() => import('src/pages/dashboard/user/account'));
 const UserSecurityPage = lazy(() => import('src/pages/dashboard/user/account-security'));
 const DeviceSessionPage = lazy(() => import('src/pages/dashboard/user/device-sessions'));
-const GeneralPage = lazy(() => import('src/pages/dashboard/user/general-account'));
+// const GeneralPage = lazy(() => import('src/pages/dashboard/user/general-account'));
 const WelcomePage = lazy(()=>import('src/pages/dashboard/one'))
 
 // ----------------------------------------------------------------------
@@ -51,10 +51,10 @@ export const dashboardRoutes = [
           { path: 'profile', element: <UserProfilePage /> },
           { path: 'security', element: <UserSecurityPage /> },
           { path: 'device', element: <DeviceSessionPage /> },
-          { path: 'general', element: <GeneralPage /> },
+          // { path: 'general', element: <GeneralPage /> },
         ],
       },
-      {path: 'welcome', element: <WelcomePage/> },
+      {path: 'one', element: <WelcomePage/> },
       {
         path: 'documents',
         children: [

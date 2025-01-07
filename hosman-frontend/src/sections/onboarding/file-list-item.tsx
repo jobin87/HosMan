@@ -23,7 +23,7 @@ import { CustomPopover, usePopover } from 'src/components/custom-popover';
 import { FileThumbnail } from 'src/components/file-thumbnail';
 import { Iconify } from 'src/components/iconify';
 import { DOCUMENTS_STATUS } from 'src/constants/files.constant';
-import { SELLER_STATUS } from 'src/constants/seller.constants';
+import { SELLER_STATUS } from 'src/constants/service.constants';
 
 // ----------------------------------------------------------------------
 

@@ -60,32 +60,33 @@ export const navData = [
         path: paths.dashboard.product.root,
         icon: ICONS.product,
         children: [
-          { title: 'patients', path: paths.dashboard.product.list },
-          { title: 'Cured', path: paths.dashboard.product.brands.list },
-          { title: 'Reasons', path: paths.dashboard.product.review.list },
+          { title: 'patients-list', path: paths.dashboard.product.list },
+          { title: 'Add-patient', path: paths.dashboard.product.list },
+
         ],
       },
       {
-        title: 'Invoice',
+        title: 'Appointment',
         path: paths.dashboard.invoice.root,
         icon: ICONS.invoice,
         children: [
-          { title: 'List', path: paths.dashboard.invoice.list },
-          { title: 'Create', path: paths.dashboard.invoice.new },
+          { title: 'office-consoltation', path: paths.dashboard.invoice.list },
+          { title: 'online-Consultation', path: paths.dashboard.invoice.new },
         ],
       },
       {
-        title: 'Sellers',
+        title: 'treatments',
         path: paths.dashboard.sellers.root,
         icon: ICONS.user,
-        children: [{ title: 'List', path: paths.dashboard.sellers.list }],
+        children: [{ title: 'doctors List', path: paths.dashboard.sellers.list }],
       },
       {
-        title: 'File Manager',
+        title: 'Hospital files',
         path: paths.dashboard.fileManager.root,
         icon: ICONS.folder,
         children: [{ title: 'List', path: paths.dashboard.fileManager.list }],
       },
+     
     ],
   },
   {
@@ -97,8 +98,17 @@ export const navData = [
         icon: ICONS.kanban,
         children: [
           {
+            title: 'Doctors',
+            path: paths.dashboard.settings.staff.list,
+          },
+          {
             title: 'All-Staff',
             path: paths.dashboard.settings.staff.list,
+          },
+          {
+            title: 'Rounds-management',
+            path: paths.dashboard.fileManager.root,
+            children: [{ title: 'List', path: paths.dashboard.fileManager.list }],
           },
           {
             title: 'Roles',

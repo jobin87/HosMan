@@ -1,21 +1,29 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { basicInitialState, MovieState, networkCallInitialState } from '../types';
-// import { checkEmailExist, requestSignInWithPassword, requestSignUp } from './appThunk';
+
+import { basicInitialState, networkCallInitialState } from '../types';
+import {
+  changeDefaultPassword,
+  getAllUserDocuments,
+  requestForgetPassword,
+  requestResetPassword,
+  requestSellerRegistration,
+  requestSignInWithPassword,
+  requestUserDetails,
+} from './appThunk';
 
 const initialState = {
-  auth: basicInitialState, // user data, loading, error states
-  usersSignedUp: basicInitialState,
-  accessToken: null, // Authentication token
-  userLogged: false, // Whether the user is logged in
-  forgetpassword: networkCallInitialState, // Network state for forget password
-  resetpassword: networkCallInitialState, // Network state for reset password
-  userDocuments: [], // Documents associated with the user
-  movies: { ...MovieState }, // Movies related data
+  auth: basicInitialState,
+  accessToken: null,
+  userLogged: false,
+  forgetpassword: networkCallInitialState,
+  resetpassword: networkCallInitialState,
+  userDocuments: [],
 
+  // ---------------------------------------
   onboarding: {
     steps: {
-      step: 6, // Current step in onboarding
-      enabled: false, // Whether onboarding is enabled
+      step: 6,
+      enabled: false,
     },
   },
 };
@@ -25,10 +33,7 @@ export const appReducer = createSlice({
   initialState,
   reducers: {
     setLoading: (state, action) => {
-      state.auth.data = action.payload;
-    },
-    setUsersignup: (state, action) => {
-      state.usersSignedUp = action.payload;
+      state.auth.loading = action.payload;
     },
     setLogged: (state, action) => {
       state.userLogged = action.payload;
@@ -50,49 +55,93 @@ export const appReducer = createSlice({
     setResetPassword: (state, action) => {
       state.resetpassword = action.payload;
     },
+    setOnboardingSteps: (state, action) => {
+      state.onboarding.steps = action.payload;
+    },
   },
-  extraReducers: (builder) => {
+  extraReducers(builder) {
     builder
-      // // Sign In
-      // .addCase(requestSignInWithPassword.fulfilled, (state, action) => {
-      //   if (action.payload?.user) {
-      //     state.auth.data = action.payload;
-      //     state.accessToken = action.payload.token;
-      //     state.userLogged = true;
-      //   }
-      //   state.auth.loading = false;
-      // })
-      // .addCase(requestSignInWithPassword.pending, (state) => {
-      //   state.auth.loading = true;
-      // })
-      // .addCase(requestSignInWithPassword.rejected, (state, action) => {
-      //   state.auth.error = action.error;
-      //   state.auth.loading = false;
-      // })
-      // // Sign Up
-      // .addCase(requestSignUp.fulfilled, (state, action) => {
-      //   state.auth.data = action.payload;
-      //   state.auth.loading = false;
-      // })
-      // .addCase(requestSignUp.pending, (state) => {
-      //   state.auth.loading = true;
-      // })
-      // .addCase(requestSignUp.rejected, (state, action) => {
-      //   state.auth.error = action.error;
-      //   state.auth.loading = false;
-      // })
-      // // Check Email Existence
-      // .addCase(checkEmailExist.fulfilled, (state, action) => {
-      //   state.usersSignedUp.data = action.payload;
-      //   state.usersSignedUp.loading = false;
-      // })
-      // .addCase(checkEmailExist.pending, (state) => {
-      //   state.auth.loading = true;
-      // })
-      // .addCase(checkEmailExist.rejected, (state, action) => {
-      //   state.auth.error = action.error;
-      //   state.auth.loading = false;
-      // });
+      // Sign In
+      .addCase(requestSignInWithPassword.fulfilled, (state, action) => {
+        state.auth.loading = false;
+        state.auth.data = action.payload;
+
+        const { userLogged, accessToken } = action.payload;
+
+        if (userLogged) {
+          state.accessToken = accessToken;
+          state.userLogged = userLogged;
+        }
+      })
+      .addCase(requestSignInWithPassword.pending, (state, action) => {
+        state.auth.loading = true;
+      })
+      .addCase(requestSignInWithPassword.rejected, (state, action) => {
+        state.auth.error = action.error;
+        state.auth.loading = false;
+      })
+
+      // Seller Registration
+      .addCase(requestSellerRegistration.fulfilled, (state, action) => {
+        state.auth.loading = false;
+      })
+      .addCase(requestSellerRegistration.pending, (state, action) => {
+        state.auth.loading = true;
+      })
+      .addCase(requestSellerRegistration.rejected, (state, action) => {
+        state.auth.error = action.error;
+        state.auth.loading = false;
+      })
+
+      // Forget Password
+      .addCase(requestForgetPassword.fulfilled, (state, action) => {
+        state.forgetpassword.loading = false;
+        state.forgetpassword.data = action.payload;
+      })
+      .addCase(requestForgetPassword.pending, (state, action) => {
+        state.forgetpassword.loading = true;
+      })
+      .addCase(requestForgetPassword.rejected, (state, action) => {
+        state.forgetpassword.error = action.error;
+        state.forgetpassword.loading = false;
+      })
+
+      // Reset Password
+      .addCase(requestResetPassword.fulfilled, (state, action) => {
+        state.forgetpassword.loading = false;
+        state.forgetpassword.data = action.payload;
+      })
+      .addCase(requestResetPassword.pending, (state, action) => {
+        state.forgetpassword.loading = true;
+      })
+      .addCase(requestResetPassword.rejected, (state, action) => {
+        state.forgetpassword.error = action.error;
+        state.forgetpassword.loading = false;
+      })
+
+      // -------------------------------------------------------------------------------------
+
+      // User Details
+      .addCase(requestUserDetails.fulfilled, (state, action) => {
+        state.auth.data = {
+          ...state.auth.data,
+          ...action.payload,
+        };
+      })
+
+      // Change Default Password
+      .addCase(changeDefaultPassword.fulfilled, (state, action) => {
+        console.log('action.payload.defaultPasswordUpdated', action.payload, state);
+        if (action.payload) {
+          state.auth.data.defaultPassword = false;
+        }
+      })
+      .addCase(getAllUserDocuments.fulfilled, (state, action) => {
+        console.log('action.payload.documents', action.payload, state);
+        if (action.payload) {
+          state.userDocuments = action.payload;
+        }
+      });
   },
 });
 
@@ -104,6 +153,7 @@ export const {
   setForgetPassword,
   setResetPassword,
   setUserLoggedOut,
+  setOnboardingSteps,
 } = appReducer.actions;
 
 export default appReducer.reducer;

@@ -71,7 +71,7 @@ export function CenteredSignInView() {
     const ipaddress = await getClientIp();
     if (await ipaddress) {
      console.log(ipaddress)
-     navigate(paths.dashboard.welcome)
+     navigate(paths.dashboard.root)
 
     } else {
       toast.error('Error fetching IP address! Try again later.');

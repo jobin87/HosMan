@@ -3,7 +3,7 @@ import { Box, Paper, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Scrollbar } from 'src/components/scrollbar';
 import { useUser } from 'src/hooks/use-user';
-import { API_METHODS, ENDPOINT_DOCUMENT_DELETE, makeNetworkCall } from 'src/network';
+// import { API_METHODS, ENDPOINT_DOCUMENT_DELETE, makeNetworkCall } from 'src/network';
 import { useAppDispatch, useAppSelector } from 'src/store';
 import { setOnboardingSteps } from 'src/store/app/appReducer';
 import { requestSellerOnboardingStatus } from 'src/store/sellers/sellersThunk';
@@ -20,7 +20,7 @@ export function OnboardingDocuments() {
 
   const { sellerDetails } = useUser();
 
-  const { steps } = useAppSelector((state) => state.app.onboarding);
+  // const { steps } = useAppSelector((state) => state.app.onboarding);
 
   const dispatch = useAppDispatch();
 
@@ -44,28 +44,28 @@ export function OnboardingDocuments() {
     setNotUploadedDocuments(filterUploadedDocuments);
   }, [sellerStatus]);
 
-  const handleDeleteDocument = async (fileId: string) => {
-    try {
-      const response = await makeNetworkCall({
-        method: API_METHODS.DELETE,
-        url: `${ENDPOINT_DOCUMENT_DELETE}${fileId}`,
-      });
+  // const handleDeleteDocument = async (fileId: string) => {
+  //   try {
+  //     const response = await makeNetworkCall({
+  //       method: API_METHODS.DELETE,
+  //       url: `${ENDPOINT_DOCUMENT_DELETE}${fileId}`,
+  //     });
 
-      if (response?.data?.data?.documentDeleted)
-        dispatch(requestSellerOnboardingStatus(sellerDetails?.id));
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     if (response?.data?.data?.documentDeleted)
+  //       dispatch(requestSellerOnboardingStatus(sellerDetails?.id));
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  const handleNext = async () => {
-    try {
-      dispatch(requestSellerOnboardingStatus(sellerDetails?.id));
-      dispatch(setOnboardingSteps({ step: 6, enabled: true }));
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const handleNext = async () => {
+  //   try {
+  //     dispatch(requestSellerOnboardingStatus(sellerDetails?.id));
+  //     dispatch(setOnboardingSteps({ step: 6, enabled: true }));
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   return (
     <Box>
@@ -75,19 +75,19 @@ export function OnboardingDocuments() {
           Upload necessary documents to complete verification. This ensures compliance and builds
           trust with buyers, helping your store grow.
         </Typography>
-        <Scrollbar sx={{ gap: 2, overflowY: 'scroll', minHeight: 420 }}>
+        {/* <Scrollbar sx={{ gap: 2, overflowY: 'scroll', minHeight: 420 }}>
           {notUploadedDocuments?.map((file) => <FileAddItem key={file.key} file={file} />)}
           {sellerStatus?.currentDocuments?.map((file) => (
-            <FileListItem key={file.id} file={file} onDelete={(id) => handleDeleteDocument(id)} />
+            // <FileListItem key={file.id} file={file} onDelete={(id) => handleDeleteDocument(id)} />
           ))}
-        </Scrollbar>
+        </Scrollbar> */}
       </Paper>
       <Stack mt={2} direction="row" justifyContent={'flex-end'}>
         <LoadingButton
           variant="contained"
           type="submit"
-          disabled={!steps.enabled}
-          onClick={handleNext}
+          // disabled={!steps.enabled}
+          // onClick={handleNext}
         >
           Next
         </LoadingButton>

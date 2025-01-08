@@ -13,7 +13,6 @@ import { Iconify } from 'src/components/iconify';
 import { useEffect } from 'react';
 import { useParams } from 'src/routes/hooks';
 import { AccountChangePassword } from '../account-change-password';
-import { AccountGeneral } from '../account-general';
 import { AccountNotifications } from '../account-notifications';
 import { DeviceSessionPage } from '../device-session-view';
 
@@ -59,7 +58,6 @@ export function AccountView() {
       </Tabs>
 
       {/* Display the corresponding content based on the selected tab */}
-      {tabs.value === 'general' && <AccountGeneral />}
       {tabs.value === 'security' && <AccountChangePassword />}
       {tabs.value === 'notifications' && <AccountNotifications />}
       {tabs.value === 'devices' && <DeviceSessionPage />}

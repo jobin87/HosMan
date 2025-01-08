@@ -168,7 +168,7 @@ export function SettingsDrawer({
         [`& .${drawerClasses.paper}`]: {
           ...paper({
             theme,
-            color: varAlpha(theme.vars.palette.background.defaultChannel, 0.9),
+            color: varAlpha(theme.vars.palette.background.paperChannel, 0.1),
           }),
           width: 360,
           ...sx,

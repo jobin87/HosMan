@@ -10,10 +10,10 @@ import { Paper, Typography } from '@mui/material';
 import { Field, Form } from 'src/components/hook-form';
 import { useUser } from 'src/hooks/use-user';
 import { useAppDispatch, useAppSelector } from 'src/store';
-import {
-  requestSellerOnboardingStatus,
-  requestSellerOnboardingUpdateBank,
-} from 'src/store/sellers/sellersThunk';
+// import {
+//   requestSellerOnboardingStatus,
+//   requestSellerOnboardingUpdateBank,
+// } from 'src/store/sellers/sellersThunk';
 
 // ----------------------------------------------------------------------
 
@@ -53,16 +53,16 @@ export function OnboardingBank() {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = handleSubmit(async (data) => {
-    try {
-      const response = await dispatch(requestSellerOnboardingUpdateBank(data));
-      if (response?.payload?.bankDetailsUpdated) {
-        dispatch(requestSellerOnboardingStatus(sellerDetails?.id));
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  });
+  // const onSubmit = handleSubmit(async (data) => {
+  //   try {
+  //     const response = await dispatch(requestSellerOnboardingUpdateBank(data));
+  //     if (response?.payload?.bankDetailsUpdated) {
+  //       dispatch(requestSellerOnboardingStatus(sellerDetails?.id));
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // });
 
   return (
     <Box>
@@ -72,7 +72,7 @@ export function OnboardingBank() {
           Link your bank account to receive payments for your sales. All transactions are secure,
           and funds will be directly deposited to your account.
         </Typography>
-        <Form methods={methods} onSubmit={onSubmit}>
+        <Form methods={methods} >
           <Box sx={{ pb: 1 }}>
             <Box
               rowGap={3}
@@ -95,7 +95,7 @@ export function OnboardingBank() {
           variant="contained"
           type="submit"
           disabled={!steps.enabled}
-          onClick={onSubmit}
+          // onClick={onSubmit}
         >
           Next
         </LoadingButton>

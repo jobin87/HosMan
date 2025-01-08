@@ -11,10 +11,10 @@ import { useEffect } from 'react';
 import { Field, Form, schemaHelper } from 'src/components/hook-form';
 import { useUser } from 'src/hooks/use-user';
 import { useAppDispatch, useAppSelector } from 'src/store';
-import {
-  requestSellerOnboardingStatus,
-  requestSellerOnboardingUpdateDetails,
-} from 'src/store/sellers/sellersThunk';
+// import {
+//   requestSellerOnboardingStatus,
+//   requestSellerOnboardingUpdateDetails,
+// } from 'src/store/sellers/sellersThunk';
 
 // ----------------------------------------------------------------------
 
@@ -68,16 +68,16 @@ export function OnboardingGeneral() {
     }
   }, [sellerDetails, reset]);
 
-  const onSubmit = handleSubmit(async (data) => {
-    try {
-      const response = await dispatch(requestSellerOnboardingUpdateDetails(values));
-      if (response?.payload?.sellerDetailsUpdated) {
-        dispatch(requestSellerOnboardingStatus(sellerDetails?.id));
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  });
+  // const onSubmit = handleSubmit(async (data) => {
+  //   try {
+  //     const response = await dispatch(requestSellerOnboardingUpdateDetails(values));
+  //     if (response?.payload?.sellerDetailsUpdated) {
+  //       dispatch(requestSellerOnboardingStatus(sellerDetails?.id));
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // });
 
   return (
     <Box>
@@ -87,7 +87,7 @@ export function OnboardingGeneral() {
           Create a secure seller account to manage your store and listings. Your account will be
           your gateway to selling and monitoring sales.
         </Typography>
-        <Form methods={methods} onSubmit={onSubmit}>
+        <Form methods={methods} >
           <Box sx={{ pb: 1 }}>
             <Box
               rowGap={3}
@@ -118,7 +118,7 @@ export function OnboardingGeneral() {
           variant="contained"
           type="submit"
           disabled={!steps.enabled}
-          onClick={onSubmit}
+          // onClick={onSubmit}
         >
           Next
         </LoadingButton>

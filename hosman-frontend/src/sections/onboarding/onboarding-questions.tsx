@@ -6,10 +6,10 @@ import { Scrollbar } from 'src/components/scrollbar';
 import { useUser } from 'src/hooks/use-user';
 import { useAppDispatch, useAppSelector } from 'src/store';
 import { setOnboardingSteps } from 'src/store/app/appReducer';
-import {
-  requestSellerOnboardingStatus,
-  requestSellerOnboardingUpdateQuestion,
-} from 'src/store/sellers/sellersThunk';
+// import {
+//   requestSellerOnboardingStatus,
+//   requestSellerOnboardingUpdateQuestion,
+// } from 'src/store/sellers/sellersThunk';
 import { AnsweredQuestion, QuestionTypes } from './type';
 
 //----------------------------------------------------------------
@@ -96,7 +96,6 @@ export function OnboardingQuestions() {
       fullWidth
       labelId="demo-simple-select-label"
       id="demo-simple-select"
-      placeholder="Select"
       value={extractAnswer(question.key)}
       onChange={(e) => handleOptionSelection(e.target.value, question.key, question.label)}
     >
@@ -160,21 +159,21 @@ export function OnboardingQuestions() {
     checkIfEnableButton();
   }, [questionsAnswered]);
 
-  const handleNext = async () => {
-    try {
-      const response = await dispatch(
-        requestSellerOnboardingUpdateQuestion({
-          sellerId: sellerDetails?.id,
-          questions: questionsAnswered,
-        })
-      );
-      if (response?.payload?.questionsUpdated) {
-        dispatch(requestSellerOnboardingStatus(sellerDetails?.id));
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const handleNext = async () => {
+  //   try {
+  //     const response = await dispatch(
+  //       requestSellerOnboardingUpdateQuestion({
+  //         sellerId: sellerDetails?.id,
+  //         questions: questionsAnswered,
+  //       })
+  //     );
+  //     if (response?.payload?.questionsUpdated) {
+  //       dispatch(requestSellerOnboardingStatus(sellerDetails?.id));
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   return (
     <Box>
@@ -209,7 +208,7 @@ export function OnboardingQuestions() {
         </Scrollbar>
       </Paper>
       <Stack mt={2} direction="row" justifyContent={'flex-end'}>
-        <Button variant="contained" disabled={!steps.enabled} onClick={handleNext}>
+        <Button variant="contained" disabled={!steps.enabled} >
           Next
         </Button>
       </Stack>

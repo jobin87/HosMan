@@ -17,13 +17,13 @@ import { fDateTime } from 'src/utils/format-time';
 import { Button, Dialog, Slide, Typography } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router';
+// import { useNavigate } from 'react-router';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { CustomPopover, usePopover } from 'src/components/custom-popover';
 import { FileThumbnail } from 'src/components/file-thumbnail';
 import { Iconify } from 'src/components/iconify';
 import { DOCUMENTS_STATUS } from 'src/constants/files.constant';
-import { SELLER_STATUS } from 'src/constants/service.constants';
+import { SERVICE_STATUS } from 'src/constants/service.constants';
 
 // ----------------------------------------------------------------------
 
@@ -47,7 +47,7 @@ export function FileListItem({ file, onDelete, sx, ...other }: Props) {
 
   const confirm = useBoolean();
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const openDocument = () => {
     setOpenPreviewDialog({ docUrl: file?.docUrl!, open: true });
@@ -140,9 +140,9 @@ export function FileListItem({ file, onDelete, sx, ...other }: Props) {
           <Typography
             variant="body2"
             color={
-              (file.status === SELLER_STATUS.APPROVED && 'success.main') ||
-              (file.status === SELLER_STATUS.PENDING && 'warning.main') ||
-              (file.status === SELLER_STATUS.DECLINED && 'error.main') ||
+              (file.status === SERVICE_STATUS.APPROVED && 'success.main') ||
+              (file.status === SERVICE_STATUS.PENDING && 'warning.main') ||
+              (file.status === SERVICE_STATUS.DECLINED && 'error.main') ||
               'default'
             }
           >

@@ -6,7 +6,7 @@ import { CONFIG } from 'src/config-global';
 
 // ----------------------------------------------------------------------
 
-const axiosInstance = axios.create({ baseURL: CONFIG.serverUrl });
+const axiosInstance = axios.create({ baseURL: CONFIG.baseUrl });
 
 axiosInstance.interceptors.response.use(
   (response) => response,

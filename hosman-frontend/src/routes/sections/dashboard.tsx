@@ -15,7 +15,7 @@ import { LoadingScreen } from 'src/components/loading-screen';
 
 import { DashboardLayout } from 'src/layouts/dashboard/layout';
 
-const IndexPage = lazy(() => import('src/pages/dashboard/one'));
+const IndexPage = lazy(() => import('src/pages/dashboard/six'));
 
 const UploadDocuments = lazy(() => import('src/pages/dashboard/upload-documents'));
 
@@ -25,7 +25,7 @@ const UserAccountPage = lazy(() => import('src/pages/dashboard/user/account'));
 const UserSecurityPage = lazy(() => import('src/pages/dashboard/user/account-security'));
 const DeviceSessionPage = lazy(() => import('src/pages/dashboard/user/device-sessions'));
 // const GeneralPage = lazy(() => import('src/pages/dashboard/user/general-account'));
-const WelcomePage = lazy(()=>import('src/pages/dashboard/one'))
+const HomePage = lazy(()=>import('src/pages/home'))
 
 // ----------------------------------------------------------------------
 
@@ -42,7 +42,7 @@ export const dashboardRoutes = [
     path: 'dashboard',
     element: <GuestGuard>{layoutContent}</GuestGuard>,
     children: [
-      // { element: <UserAccountPage />, index: true },
+      { element: <HomePage/>, index: true },
       {
         path: 'user',
         children: [
@@ -54,7 +54,6 @@ export const dashboardRoutes = [
           // { path: 'general', element: <GeneralPage /> },
         ],
       },
-      {path: 'one', element: <WelcomePage/> },
       {
         path: 'documents',
         children: [

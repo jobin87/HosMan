@@ -11,10 +11,10 @@ import { useEffect } from 'react';
 import { Field, Form, schemaHelper } from 'src/components/hook-form';
 import { useUser } from 'src/hooks/use-user';
 import { useAppDispatch, useAppSelector } from 'src/store';
-import {
-  requestSellerOnboardingStatus,
-  requestSellerOnboardingUpdateAddress,
-} from 'src/store/sellers/sellersThunk';
+// import {
+//   requestSellerOnboardingStatus,
+//   requestSellerOnboardingUpdateAddress,
+// } from 'src/store/sellers/sellersThunk';
 
 // ----------------------------------------------------------------------
 
@@ -102,37 +102,37 @@ export function OnboardingAddress() {
     }
   }, [sellerDetails, reset]);
 
-  const onSubmit = handleSubmit(async (data) => {
-    try {
-      const response = await dispatch(
-        requestSellerOnboardingUpdateAddress({
-          pickupAddress: {
-            street: data.pickupStreet,
-            area: data.pickupArea,
-            governorate: data.pickupGovernorate,
-            postalCode: data.pickupPostalCode,
-            country: data.pickupCountry,
-            buildingNumber: data.pickupBuildingNumber,
-            additionalInfo: data.pickupAdditionalInfo,
-          },
-          returnAddress: {
-            street: data.returnStreet,
-            area: data.returnArea,
-            governorate: data.returnGovernorate,
-            postalCode: data.returnPostalCode,
-            country: data.returnCountry,
-            buildingNumber: data.returnBuildingNumber,
-            additionalInfo: data.returnAdditionalInfo,
-          },
-        })
-      );
-      if (response?.payload?.addressUpdated) {
-        dispatch(requestSellerOnboardingStatus(sellerDetails?.id));
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  });
+  // const onSubmit = handleSubmit(async (data) => {
+  //   try {
+  //     const response = await dispatch(
+  //       requestSellerOnboardingUpdateAddress({
+  //         pickupAddress: {
+  //           street: data.pickupStreet,
+  //           area: data.pickupArea,
+  //           governorate: data.pickupGovernorate,
+  //           postalCode: data.pickupPostalCode,
+  //           country: data.pickupCountry,
+  //           buildingNumber: data.pickupBuildingNumber,
+  //           additionalInfo: data.pickupAdditionalInfo,
+  //         },
+  //         returnAddress: {
+  //           street: data.returnStreet,
+  //           area: data.returnArea,
+  //           governorate: data.returnGovernorate,
+  //           postalCode: data.returnPostalCode,
+  //           country: data.returnCountry,
+  //           buildingNumber: data.returnBuildingNumber,
+  //           additionalInfo: data.returnAdditionalInfo,
+  //         },
+  //       })
+  //     );
+  //     if (response?.payload?.addressUpdated) {
+  //       dispatch(requestSellerOnboardingStatus(sellerDetails?.id));
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // });
 
   return (
     <Box>
@@ -142,7 +142,7 @@ export function OnboardingAddress() {
           Enter the address where your products will be picked up and returned. This helps us
           coordinate deliveries and ensures a seamless shipping process.
         </Typography>
-        <Form methods={methods} onSubmit={onSubmit}>
+        <Form methods={methods} >
           <Box sx={{ pb: 1, mb: 3 }}>
             <Typography variant="subtitle1" sx={{ mt: 0, mb: 2 }}>
               Pickup Address
@@ -232,7 +232,7 @@ export function OnboardingAddress() {
           variant="contained"
           type="submit"
           disabled={!steps.enabled}
-          onClick={onSubmit}
+          // onClick={onSubmit}
         >
           Next
         </LoadingButton>

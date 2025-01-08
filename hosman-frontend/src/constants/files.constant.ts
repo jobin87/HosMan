@@ -1,4 +1,4 @@
-import { SELLER_STATUS } from './service.constants';
+import { SERVICE_STATUS } from "./service.constants";
 
 export enum uploadFileFolders {
   sellerDocuments = 'seller/{sellerId}/documents/',
@@ -27,9 +27,9 @@ export const SELLER_REQUIRED_DOCUMENTS = [
 ];
 
 export const DOCUMENTS_STATUS = [
-  { value: SELLER_STATUS.ALL, label: 'All' },
-  { value: SELLER_STATUS.PENDING, label: 'Pending' },
-  { value: SELLER_STATUS.UNDERVERIFICATION, label: 'Under Verification' },
-  { value: SELLER_STATUS.DECLINED, label: 'Declined' },
-  { value: SELLER_STATUS.APPROVED, label: 'Approved' },
+  { value: SERVICE_STATUS.ALL, label: 'All' },
+  { value: SERVICE_STATUS.PENDING, label: 'Pending' },
+  { value: SERVICE_STATUS.UNDERVERIFICATION, label: 'Under Verification' },
+  { value: SERVICE_STATUS.DECLINED, label: 'Declined' },
+  { value: SERVICE_STATUS.APPROVED, label: 'Approved' },
 ];

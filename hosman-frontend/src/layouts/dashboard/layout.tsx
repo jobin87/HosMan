@@ -32,6 +32,11 @@ import { NavHorizontal } from './nav-horizontal';
 import { NavMobile } from './nav-mobile';
 import { NavVertical } from './nav-vertical';
 import { StyledDivider, useNavColorVars } from './styles';
+import { Searchbar } from '../components/searchbar';
+import { LanguagePopover } from '../components/language-popover';
+import { NotificationsDrawer } from '../components/notifications-drawer';
+import { _contacts, _notifications } from 'src/_mock';
+import { ContactsPopover } from '../components/contacts-popover';
 
 // ----------------------------------------------------------------------
 
@@ -222,8 +227,8 @@ export function DashboardLayout({ sx, children, header, data }: DashboardLayoutP
         '--layout-nav-mini-width': '88px',
         '--layout-nav-vertical-width': '300px',
         '--layout-nav-horizontal-height': '64px',
-        '--layout-dashboard-content-pt': theme.spacing(1),
-        '--layout-dashboard-content-pb': theme.spacing(8),
+        '--layout-dashboard-content-pt': theme.spacing(4),
+        '--layout-dashboard-content-pb': theme.spacing(2),
         '--layout-dashboard-content-px': theme.spacing(5),
       }}
       sx={{

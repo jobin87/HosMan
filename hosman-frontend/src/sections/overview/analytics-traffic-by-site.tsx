@@ -24,7 +24,7 @@ export function AnalyticsTrafficBySite({ title, subheader, list, sx, ...other }:
     <Card sx={sx} {...other}>
       <CardHeader title={title} subheader={subheader} />
 
-      <Box display="grid" gap={2} gridTemplateColumns="repeat(2, 1fr)" sx={{ p: 3 }}>
+      <Box display="grid" gap={3} gridTemplateColumns="repeat(2, 1fr)" sx={{ p: 3 }}>
         {list.map((site) => (
           <Box
             key={site.label}
@@ -35,17 +35,37 @@ export function AnalyticsTrafficBySite({ title, subheader, list, sx, ...other }:
               textAlign: 'center',
               alignItems: 'center',
               flexDirection: 'column',
-              border: `solid 1px ${varAlpha(theme.vars.palette.grey['500Channel'], 0.12)}`,
-            })}
+              border: `solid 6px ${varAlpha(theme.vars.palette.grey['500Channel'], 0.12)}`,
+              transition: 'background-color 0.3s ease, transform 0.2s ease',
+              cursor: 'pointer',
+              // Apply hover effect on all screen sizes
+              "&:hover": {
+                backgroundColor: 'blue', // Change to blue when hovered
+                color: 'white', // Change text color to white
+                transform: 'scale(1.05)', // Slight zoom effect on hover
+              },
+              // Optional: Active effect (click effect)
+              "&:active": {
+                transform: 'scale(0.98)', // Make it feel pressed when clicked
+              },
+            })
+          }
+          onClick={() => {
+            // You can define actions for each item click here
+            console.log(`clicked!` );
+          }}
           >
             {site.value === 'facebook' && (
               <Iconify icon="eva:facebook-fill" color="#1877F2" width={32} />
             )}
-            {site.value === 'google' && <Iconify icon="logos:google-icon" width={32} />}
-            {site.value === 'linkedin' && (
-              <Iconify icon="eva:linkedin-fill" color="#0A66C2" width={32} />
+            {site.value === 'Appointments' && <Iconify icon="material-symbols:add-notes-outline-rounded" width={32} />}
+            {site.value === 'Reports' && (
+              <Iconify icon="ic:round-report-gmailerrorred" color="#0A66C2" width={32} />
             )}
-            {site.value === 'twitter' && <Iconify icon="ri:twitter-x-fill" width={32} />}
+            {site.value === 'New-Patients' && <Iconify icon="ep:list" width={32} />}
+            {site.value === 'Total-Beds' && (
+              <Iconify icon="tabler:emergency-bed" color="#0A66C2" width={32} />
+            )}
 
             <Typography variant="h6" sx={{ mt: 1 }}>
               {fShortenNumber(site.total)}

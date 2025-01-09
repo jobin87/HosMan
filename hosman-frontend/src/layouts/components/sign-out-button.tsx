@@ -1,42 +1,60 @@
 import type { ButtonProps } from '@mui/material/Button';
-import type { Theme, SxProps } from '@mui/material/styles';
-
-import { useCallback } from 'react';
+import type { SxProps, Theme } from '@mui/material/styles';
 
 import Button from '@mui/material/Button';
+import { useCallback } from 'react';
 
-import { useRouter } from 'src/routes/hooks';
-
-import { useAuthContext } from 'src/auth/hooks';
-import { signOut } from 'src/auth/context/jwt/action';
-
-// ----------------------------------------------------------------------
+import { Iconify } from 'src/components/iconify';
+import {
+  API_METHODS,
+  ENDPOINT_ADMIN_USER_LOGOUT_CURRENT_SESSION,
+  makeNetworkCall,
+} from 'src/network';
+import { useAppDispatch } from 'src/store';
+import { requestSignOut } from 'src/store/app/appThunk';
 
 type Props = ButtonProps & {
   sx?: SxProps<Theme>;
+  label?: string;
+  fullWidth?: boolean;
+  color?: string;
   onClose?: () => void;
 };
 
-export function SignOutButton({ onClose, ...other }: Props) {
-  const router = useRouter();
-
-  const { checkUserSession } = useAuthContext();
+export function SignOutButton({
+  onClose,
+  label = 'Logout',
+  fullWidth = true,
+  color = 'error',
+  ...other
+}: Props) {
+  const dispatch = useAppDispatch();
 
   const handleLogout = useCallback(async () => {
     try {
-      await signOut();
-      await checkUserSession?.();
-
-      onClose?.();
-      router.refresh();
+      const response = await makeNetworkCall({
+        method: API_METHODS.DELETE,
+        url: ENDPOINT_ADMIN_USER_LOGOUT_CURRENT_SESSION,
+      });
+      if (response?.data?.data?.loggedOut) {
+        dispatch(requestSignOut(onClose));
+      }
     } catch (error) {
       console.error(error);
     }
-  }, [checkUserSession, onClose, router]);
+  }, [dispatch, onClose]);
 
   return (
-    <Button fullWidth variant="soft" size="large" color="error" onClick={handleLogout} {...other}>
-      Logout
+    <Button
+      fullWidth={fullWidth}
+      variant={'soft'}
+      size="large"
+      color={color}
+      onClick={handleLogout}
+      {...other}
+      startIcon={<Iconify icon="solar:logout-2-outline" />}
+    >
+      {label}
     </Button>
   );
 }

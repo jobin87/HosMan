@@ -120,7 +120,7 @@ export function AccountDrawer({ data = [], sx, ...other }: AccountDrawerProps) {
             </Typography>
           </Stack>
 
-          <Stack direction="row" spacing={1} flexWrap="wrap" justifyContent="center" sx={{ p: 3 }}>
+          {/* <Stack direction="row" spacing={1} flexWrap="wrap" justifyContent="center" sx={{ p: 3 }}>
             {[...Array(3)].map((_, index) => (
               <Tooltip
                 key={_mock.fullName(index + 1)}
@@ -144,7 +144,7 @@ export function AccountDrawer({ data = [], sx, ...other }: AccountDrawerProps) {
                 <Iconify icon="mingcute:add-line" />
               </IconButton>
             </Tooltip>
-          </Stack>
+          </Stack> */}
 
           <Stack
             sx={{
@@ -186,9 +186,6 @@ export function AccountDrawer({ data = [], sx, ...other }: AccountDrawerProps) {
             })}
           </Stack>
 
-          <Box sx={{ px: 2.5, py: 3 }}>
-            <UpgradeBlock />
-          </Box>
         </Scrollbar>
 
         <Box sx={{ p: 2.5 }}>

@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import { AuthGuard, GuestGuard } from 'src/guard';
+import {  GuestGuard } from 'src/guard';
 
 
 

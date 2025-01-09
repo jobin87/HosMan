@@ -428,6 +428,11 @@
   resolved "https://registry.yarnpkg.com/@fontsource/barlow/-/barlow-5.1.1.tgz#0c061bcb9a48893c60e73a6e90d13e1e279155b3"
   integrity sha512-41BWOY3bZg0Hc7eQkeMEFIPUIt2wkVYHhfhlV8VVVaiRBdQw5JY8NT9qpB3Z/IKZ9dQuhHzUjuQJu9ALmjEwig==
 
+"@fontsource/dm-sans@^5.1.1":
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/@fontsource/dm-sans/-/dm-sans-5.1.1.tgz#48b9cf802ddfc1b61351d0db8afac4b11cf0f8c0"
+  integrity sha512-xApcrecLZkQMM6bl7U+Eokg8Y4LeYMiR+cQUTUNx4Adun5ZpiIlPB9+JEXg/k1gFea/72nmn30AekCBA+HhUCA==
+
 "@hookform/resolvers@^3.9.1":
   version "3.9.1"
   resolved "https://registry.yarnpkg.com/@hookform/resolvers/-/resolvers-3.9.1.tgz#a23883c40bfd449cb6c6ab5a0fa0729184c950ff"

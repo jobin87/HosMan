@@ -44,10 +44,10 @@ export function AnalyticsWidgetSummary({
     xaxis: { categories: chart.categories },
     grid: {
       padding: {
-        top: 6,
-        left: 6,
-        right: 6,
-        bottom: 6,
+        top: 0,
+        left: 2,
+        right: 0,
+        bottom: 2,
       },
     },
     tooltip: {
@@ -72,7 +72,7 @@ export function AnalyticsWidgetSummary({
       }}
       {...other}
     >
-      <Box sx={{ width: 48, height: 48, mb: 3 }}></Box>
+      <Box sx={{ width: 5, height: 8, }}></Box>
 
 
       <Box

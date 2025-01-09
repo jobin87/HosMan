@@ -56,35 +56,26 @@ export const navData = [
     subheader: 'diagnosis-data',
     items: [
       {
+        title: 'Doctors',
+        path: paths.dashboard.settings.staff.list,
+      },
+      {
         title: 'patients',
-        path: paths.dashboard.product.root,
-        icon: ICONS.product,
-        children: [
-          { title: 'patients-list', path: paths.dashboard.product.list },
-          { title: 'Add-patient', path: paths.dashboard.product.list },
-
-        ],
+        path: paths.dashboard.product.root
       },
       {
         title: 'Appointment',
         path: paths.dashboard.invoice.root,
-        icon: ICONS.invoice,
-        children: [
-          { title: 'office-consoltation', path: paths.dashboard.invoice.list },
-          { title: 'online-Consultation', path: paths.dashboard.invoice.new },
-        ],
       },
       {
         title: 'treatments',
         path: paths.dashboard.sellers.root,
-        icon: ICONS.user,
-        children: [{ title: 'doctors List', path: paths.dashboard.sellers.list }],
       },
+      
       {
-        title: 'Hospital files',
+        title: 'Reports',
         path: paths.dashboard.fileManager.root,
-        icon: ICONS.folder,
-        children: [{ title: 'List', path: paths.dashboard.fileManager.list }],
+
       },
      
     ],
@@ -94,31 +85,15 @@ export const navData = [
     items: [
       {
         title: 'Staff Management',
-        path: paths.dashboard.settings.root,
-        icon: ICONS.kanban,
-        children: [
-          {
-            title: 'Doctors',
-            path: paths.dashboard.settings.staff.list,
-          },
-          {
-            title: 'All-Staff',
-            path: paths.dashboard.settings.staff.list,
-          },
-          {
-            title: 'Rounds-management',
-            path: paths.dashboard.fileManager.root,
-            children: [{ title: 'List', path: paths.dashboard.fileManager.list }],
-          },
-          {
-            title: 'Roles',
-            path: paths.dashboard.settings.roles.list,
-          },
-        ],
+        path: paths.dashboard.settings.root,      
       },
       {
-        title: 'Account',
-        path: paths.dashboard.settings.account,
+        title: 'Hospital-files',
+        path: paths.dashboard.settings.staff.list,
+      },
+      {
+        title: 'Inventory',
+        path: paths.dashboard.settings.staff.list,
       },
     ],
   },

@@ -81,7 +81,7 @@ export function fShortenNumber(inputValue: InputNumberValue, options?: Options) 
   if (number === null) return '';
 
   const fm = new Intl.NumberFormat(locale.code, {
-    notation: 'compact',
+    notation: 'standard',
     maximumFractionDigits: 2,
     ...options,
   }).format(number);

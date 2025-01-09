@@ -34,7 +34,7 @@ export function NavHorizontal({ data, layoutQuery, sx, ...other }: NavHorizontal
           width: 1,
           zIndex: 9,
           position: 'absolute',
-          borderStyle: 'dashed',
+          borderStyle: 'solid',
         }}
       />
 

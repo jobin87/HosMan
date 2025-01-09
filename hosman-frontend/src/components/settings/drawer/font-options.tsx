@@ -30,7 +30,7 @@ export function FontOptions({ value, options, onClickOption }: Props) {
                   <SvgColor
                     width={28}
                     src={`${CONFIG.assetsDir}/assets/icons/settings/ic-font.svg`}
-                    sx={{ color: 'currentColor' }}
+                    sx={{ color: 'currentcolor' }}
                   />
                 }
                 label={option.endsWith('Variable') ? option.replace(' Variable', '') : option}

@@ -40,7 +40,7 @@ export const Logo = forwardRef<HTMLDivElement, LogoProps>(
       <Box
         alt="Full logo"
         component="img"
-        src={`${CONFIG.assetsDir}/logo/logo-full.svg`}
+        src={`${CONFIG.assetsDir}/logo/logo-single.svg`}
         width="100%"
         height="100%"
       />

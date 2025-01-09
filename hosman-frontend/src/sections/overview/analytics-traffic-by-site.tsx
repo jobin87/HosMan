@@ -38,7 +38,7 @@ export function AnalyticsTrafficBySite({ title, subheader, list, sx, ...other }:
               border: `solid 6px ${varAlpha(theme.vars.palette.grey['500Channel'], 0.12)}`,
               transition: 'background-color 0.3s ease, transform 0.2s ease',
               cursor: 'pointer',
-              // Hover effect
+              // Apply hover effect on all screen sizes
               "&:hover": {
                 backgroundColor: 'blue', // Change to blue when hovered
                 color: 'white', // Change text color to white
@@ -48,7 +48,6 @@ export function AnalyticsTrafficBySite({ title, subheader, list, sx, ...other }:
               "&:active": {
                 transform: 'scale(0.98)', // Make it feel pressed when clicked
               },
-              
             })
           }
           onClick={() => {

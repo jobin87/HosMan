@@ -5,9 +5,6 @@ import {  GuestGuard } from 'src/guard';
 
 
 
-// All Staff
-const AllStaffList = lazy(() => import('src/pages/dashboard/settings/staff/all-staff'));
-
 // Roles
 const StaffRolesList = lazy(() => import('src/pages/dashboard/settings/staff/roles'));
 
@@ -20,6 +17,16 @@ const IndexPage = lazy(() => import('src/pages/dashboard/six'));
 const UploadDocuments = lazy(() => import('src/pages/dashboard/upload-documents'));
 
 // ----------------------------------------------------------------------
+const DoctorListPage = lazy(() => import('src/pages/dashboard/doctors/doctors-list'));
+const PatientsListPage = lazy(() => import('src/pages/dashboard/patients/patients-list'));
+const AppointMentListPage = lazy(() => import('src/pages/dashboard/appointment/appointment-list'));
+const TreatmentListPage = lazy(() => import('src/pages/dashboard/treatment/treatment'));
+const ReportPage = lazy(() => import('src/pages/dashboard/reports/reports'));
+
+
+
+
+
 const UserProfilePage = lazy(() => import('src/pages/dashboard/user/profile'));
 const UserAccountPage = lazy(() => import('src/pages/dashboard/user/account'));
 const UserSecurityPage = lazy(() => import('src/pages/dashboard/user/account-security'));
@@ -43,6 +50,41 @@ export const dashboardRoutes = [
     element: <GuestGuard>{layoutContent}</GuestGuard>,
     children: [
       { element: <HomePage/>, index: true },
+      {
+        path: 'doctors',
+        children: [
+          { element: <DoctorListPage/>, index: true },
+          { path: 'Doctors-profile', element: <UserProfilePage /> },
+        ],
+      },
+      {
+        path: 'patients',
+        children: [
+          { element: <PatientsListPage/>, index: true },
+          { path: 'Patients-profile', element: <UserProfilePage /> },
+        ],
+      },
+      {
+        path: 'appointment',
+        children: [
+          { element: <AppointMentListPage/>, index: true },
+          { path: 'Patients-profile', element: <UserProfilePage /> },
+        ],
+      },
+      {
+        path: 'treatment',
+        children: [
+          { element: <TreatmentListPage/>, index: true },
+          { path: 'Patients-profile', element: <UserProfilePage /> },
+        ],
+      },
+      {
+        path: 'report',
+        children: [
+          { element: <ReportPage/>, index: true },
+          { path: 'Patients-profile', element: <UserProfilePage /> },
+        ],
+      },
       {
         path: 'user',
         children: [
@@ -68,8 +110,6 @@ export const dashboardRoutes = [
           {
             path: 'staff',
             children: [
-              { element: <AllStaffList />, index: true },
-              { path: 'list', element: <AllStaffList /> },
             ],
           },
           {

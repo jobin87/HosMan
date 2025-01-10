@@ -1,18 +1,18 @@
-import { Helmet } from 'react-helmet-async';
+// import { Helmet } from 'react-helmet-async';
 
-import { CONFIG } from 'src/config-global';
-import { AllStaffListView } from 'src/sections/all-staff/view';
+// import { CONFIG } from 'src/config-global';
+// import { AllStaffListView } from 'src/sections/all-staff/view';
 
-const metadata = { title: `All Staff | Staff | Settings - ${CONFIG.appName}` };
+// const metadata = { title: `All Staff | Staff | Settings - ${CONFIG.appName}` };
 
-export default function Page() {
-  return (
-    <>
-      <Helmet>
-        <title> {metadata.title}</title>
-      </Helmet>
+// export default function Page() {
+//   return (
+//     <>
+//       <Helmet>
+//         <title> {metadata.title}</title>
+//       </Helmet>
 
-      <AllStaffListView />
-    </>
-  );
-}
+//       <AllStaffListView />
+//     </>
+//   );
+// }

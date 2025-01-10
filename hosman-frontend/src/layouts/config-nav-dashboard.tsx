@@ -57,24 +57,24 @@ export const navData = [
     items: [
       {
         title: 'Doctors',
-        path: paths.dashboard.settings.staff.list,
+        path: paths.dashboard.doctor.root,
       },
       {
         title: 'patients',
-        path: paths.dashboard.product.root
+        path: paths.dashboard.patients.root
       },
       {
         title: 'Appointment',
-        path: paths.dashboard.invoice.root,
+        path: paths.dashboard.Appointment.root,
       },
       {
         title: 'treatments',
-        path: paths.dashboard.sellers.root,
+        path: paths.dashboard.Treatment.root,
       },
       
       {
         title: 'Reports',
-        path: paths.dashboard.fileManager.root,
+        path: paths.dashboard.Reports.root,
 
       },
      

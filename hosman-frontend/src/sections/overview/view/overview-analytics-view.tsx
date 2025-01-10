@@ -7,7 +7,8 @@ import { AnalyticsTrafficBySite } from "../analytics-traffic-by-site";
 import { AnalyticsConversionRates } from "../analytics-conversion-rates";
 import Grid from "@mui/material/Grid";
 import { red } from "@mui/material/colors";
-import { Avatar, Paper } from "@mui/material";
+import { HospitalInfo } from "../hospital-info";
+import { HospitalFlipping } from "../hospital-flipping-card";
 // ----------------------------------------------------------------------
 
 export function OverviewAnalyticsView() {
@@ -17,25 +18,23 @@ export function OverviewAnalyticsView() {
         variant="h4"
         sx={{ mb: { xs: 6, md: 5 }, color: "primary.main" }}
       >
-        Empowering  health with personalized care
-      </Typography>
+                HosMan is your perfect hospital partner here it shows how to manage 
 
-      <Typography
-        variant="h4"
-        sx={{ mb: { xs: 6, md: 5 }}}
-      >
-        HosMan is your perfect hospital partner here it shows how to manage 
       </Typography>
       
 
       <Grid container spacing={3} >
-      <Grid color={red} mt={3}>
-        <Paper>
-          <Avatar></Avatar>
-        </Paper>
-
+      <Grid item sx={{ backgroundColor: red }} xs={12} md={6} lg={6} xl={7} mb={3}>
+        <HospitalInfo 
+          message="treating hearts so you can be better"  // Replace with actual message
+        />
       </Grid>
-        <Grid xs={12} md={6} lg={12} sx={{}}>
+      <Grid item sx={{ backgroundColor: red }} xs={12} md={6} lg={4} mb={3} >
+        <HospitalFlipping
+          message="treating hearts so you can be better"  // Replace with actual message
+        />
+      </Grid>
+        <Grid xs={12} md={6} lg={12}>
           <AnalyticsTrafficBySite
             title="Statistics"
             list={[
@@ -60,7 +59,7 @@ export function OverviewAnalyticsView() {
           />
         </Grid>
 
-        <Grid xs={12} md={6} lg={5} mt={1}>
+        <Grid xs={12} md={6} lg={5} mt={1} ml={5}>
           <AnalyticsConversionRates
             title="Conversion rates"
             subheader="(+43%) than last year"

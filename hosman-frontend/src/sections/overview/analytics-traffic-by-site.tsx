@@ -10,6 +10,7 @@ import { fShortenNumber } from 'src/utils/format-number';
 import { varAlpha } from 'src/theme/styles';
 
 import { Iconify } from 'src/components/iconify';
+import AnimatedCounter from 'src/components/animate/animate counter';
 
 // ----------------------------------------------------------------------
 
@@ -25,9 +26,9 @@ export function AnalyticsTrafficBySite({ title, subheader, list, sx, ...other }:
       <CardHeader title={title} subheader={subheader} />
 
       <Box display="grid" gap={3} gridTemplateColumns="repeat(2, 1fr)" sx={{ p: 3 }}>
-        {list.map((site) => (
+        {list.map((property) => (
           <Box
-            key={site.label}
+            key={property.label}
             sx={(theme) => ({
               py: 2.5,
               display: 'flex',
@@ -55,24 +56,21 @@ export function AnalyticsTrafficBySite({ title, subheader, list, sx, ...other }:
             console.log(`clicked!` );
           }}
           >
-            {site.value === 'facebook' && (
-              <Iconify icon="eva:facebook-fill" color="#1877F2" width={32} />
-            )}
-            {site.value === 'Appointments' && <Iconify icon="material-symbols:add-notes-outline-rounded" width={32} />}
-            {site.value === 'Reports' && (
+            {property.value === 'Appointments' && <Iconify icon="material-symbols:add-notes-outline-rounded" width={32} />}
+            {property.value === 'Reports' && (
               <Iconify icon="ic:round-report-gmailerrorred" color="#0A66C2" width={32} />
             )}
-            {site.value === 'New-Patients' && <Iconify icon="ep:list" width={32} />}
-            {site.value === 'Total-Beds' && (
+            {property.value === 'New-Patients' && <Iconify icon="ep:list" width={32} />}
+            {property.value === 'Total-Beds' && (
               <Iconify icon="tabler:emergency-bed" color="#0A66C2" width={32} />
             )}
 
             <Typography variant="h6" sx={{ mt: 1 }}>
-              {fShortenNumber(site.total)}
+              <AnimatedCounter value={property.total} duration={2} />
             </Typography>
 
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              {site.label}
+              {property.label}
             </Typography>
           </Box>
         ))}

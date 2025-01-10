@@ -38,6 +38,37 @@ export const paths = {
     two: `${ROOTS.DASHBOARD}/account`,
     three: `${ROOTS.DASHBOARD}/three`,
 
+    doctor: {
+      root: `${ROOTS.DASHBOARD}/doctors`,
+      profile: `${ROOTS.DASHBOARD}/doctors/doctors-profile`,
+      security: `${ROOTS.DASHBOARD}/user/security`,
+      general: `${ROOTS.DASHBOARD}/user/general`,
+    },
+    patients: {
+      root: `${ROOTS.DASHBOARD}/patients`,
+      profile: `${ROOTS.DASHBOARD}/doctors/doctors-profile`,
+      security: `${ROOTS.DASHBOARD}/user/security`,
+      general: `${ROOTS.DASHBOARD}/user/general`,
+    },
+    Appointment: {
+      root: `${ROOTS.DASHBOARD}/appointment`,
+      profile: `${ROOTS.DASHBOARD}/doctors/doctors-profile`,
+      security: `${ROOTS.DASHBOARD}/user/security`,
+      general: `${ROOTS.DASHBOARD}/user/general`,
+    },
+    Treatment: {
+      root: `${ROOTS.DASHBOARD}/treatment`,
+      profile: `${ROOTS.DASHBOARD}/doctors/doctors-profile`,
+      security: `${ROOTS.DASHBOARD}/user/security`,
+      general: `${ROOTS.DASHBOARD}/user/general`,
+    },
+    Reports: {
+      root: `${ROOTS.DASHBOARD}/report`,
+      profile: `${ROOTS.DASHBOARD}/doctors/doctors-profile`,
+      security: `${ROOTS.DASHBOARD}/user/security`,
+      general: `${ROOTS.DASHBOARD}/user/general`,
+    },
+
     user: {
       root: `${ROOTS.DASHBOARD}/user`,
       account: (tab: string) => `${ROOTS.DASHBOARD}/user/account/${tab}`,

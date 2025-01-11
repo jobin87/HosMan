@@ -28,7 +28,7 @@ export function HospitalInfo({ message, ...cardprops }: Props) {
 
       {/* Chart Legends */}
       <ChartLegends
-        labels={['Heart Treatment Listed in Top 3']}  // Corrected to array
+        labels={['Heart Treatment success rate is 93%']}  // Corrected to array
         colors={chartOptions.colors}  // Now correctly defined
         sx={{ p: 3, justifyContent: 'center' }}
       />

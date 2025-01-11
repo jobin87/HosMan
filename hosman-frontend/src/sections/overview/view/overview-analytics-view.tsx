@@ -34,7 +34,7 @@ export function OverviewAnalyticsView() {
           message="treating hearts so you can be better"  // Replace with actual message
         />
       </Grid>
-        <Grid xs={12} md={6} lg={12}>
+        <Grid item xs={12} md={6} lg={12}>
           <AnalyticsTrafficBySite
             title="Statistics"
             list={[
@@ -46,7 +46,7 @@ export function OverviewAnalyticsView() {
           />
         </Grid>
 
-        <Grid xs={12} md={6} lg={5} mt={1}>
+        <Grid item xs={12} md={6} lg={5} mt={1}>
           <AnalyticsCurrentVisits
             title="Patients-Visit-By-Departments"
             chart={{
@@ -59,7 +59,7 @@ export function OverviewAnalyticsView() {
           />
         </Grid>
 
-        <Grid xs={12} md={6} lg={5} mt={1} ml={5}>
+        <Grid item xs={12} md={6} lg={5} mt={1}>
           <AnalyticsConversionRates
             title="Conversion rates"
             subheader="(+43%) than last year"

@@ -23,7 +23,7 @@ export function NavHorizontal({ data, layoutQuery, sx, ...other }: NavHorizontal
         flexDirection: 'column',
         display: { xs: 'none', [layoutQuery]: 'flex' },
         borderBottom: (theme) =>
-          `solid 1px ${varAlpha(theme.vars.palette.grey['500Channel'], 0.08)}`,
+          `solid 1px ${varAlpha(theme.vars.palette.grey['600Channel'], 0.08)}`,
         ...sx,
       }}
     >

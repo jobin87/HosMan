@@ -1,11 +1,8 @@
+import { createPaletteChannel } from './styles';
 import type { ThemeUpdateOptions } from './types';
-
 // ----------------------------------------------------------------------
 
 export const overridesTheme: ThemeUpdateOptions = {
-  /**
-   *
- ```jsx
   colorSchemes: {
     light: {
       palette: {
@@ -21,6 +18,4 @@ export const overridesTheme: ThemeUpdateOptions = {
     },
   },
   shape: { borderRadius: 0 },
- ```
- */
 };

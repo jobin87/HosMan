@@ -1,5 +1,5 @@
 // Auth
-export const ENDPOINT_ADMIN_LOGIN = '/api/admin-auth/v1/admin-login';
+export const ENDPOINT_ADMIN_LOGIN = '/api/auth/v1/login';
 export const ENDPOINT_UPDATE_PASSWORD = '/api/admin-auth/v1/update-default-password';
 export const ENDPOINT_FORGOT_PASSWORD = '/api/admin-auth/v1/forget-password';
 export const ENDPOINT_RESET_PASSWORD = '/api/admin-auth/v1/forget-password-verify';

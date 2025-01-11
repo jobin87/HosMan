@@ -1,8 +1,5 @@
-import type { Theme } from '@mui/material/styles';
+import { extendTheme, type Theme } from '@mui/material/styles';
 import type { SettingsState } from 'src/components/settings';
-
-import { experimental_extendTheme as extendTheme } from '@mui/material/styles';
-
 import { colorSchemes, components, customShadows, shadows, typography } from './core';
 import { overridesTheme } from './overrides-theme';
 import { setFont } from './styles/utils';

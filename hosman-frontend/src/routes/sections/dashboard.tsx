@@ -19,7 +19,7 @@ const UploadDocuments = lazy(() => import('src/pages/dashboard/upload-documents'
 // ----------------------------------------------------------------------
 const DoctorListPage = lazy(() => import('src/pages/dashboard/doctors/doctors-list'));
 const PatientsListPage = lazy(() => import('src/pages/dashboard/patients/patients-list'));
-const AppointMentListPage = lazy(() => import('src/pages/dashboard/appointment/appointment-list'));
+const AppointMentListPage = lazy(() => import('src/pages/dashboard/appointment/appointment-admi-list'));
 const TreatmentListPage = lazy(() => import('src/pages/dashboard/treatment/treatment'));
 const ReportPage = lazy(() => import('src/pages/dashboard/reports/reports'));
 

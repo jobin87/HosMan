@@ -23,9 +23,20 @@ const userSchema = new mongoose.Schema(
       default: false
 
     },
+    role:{
+      type: String,
+      enum:['Hospital','Individual'],
+      default:'Individual'
+    },
+    category:{
+      type:String,
+      enum:["Doctor", "Nurse","Management"]
+    }
+
    
   },
-  { timestamps: true }
+  { timestamps: true },
+  
 );
 
 const User = mongoose.model('User', userSchema);

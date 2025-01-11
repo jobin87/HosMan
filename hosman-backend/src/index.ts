@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import { connectDb } from './config/db';
+import authRoutes from './routes/authRoutes';
 
 dotenv.config({ path: '.env.development' });
 const app = express();
@@ -8,6 +9,7 @@ const app = express();
 // Middleware
 app.use(express.json());
 connectDb()
+app.use('/api/auth/v1/',authRoutes)
 
 // Routes
 app.get('/', (req: Request, res: Response) => {

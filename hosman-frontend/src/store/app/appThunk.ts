@@ -51,7 +51,7 @@ export const requestSignInWithPassword = createAsyncThunk(
 );
 
 // Seller Registration
-export const requestSellerRegistration = createAsyncThunk(
+export const requestUserRegistration = createAsyncThunk(
   'app/registerSeller',
   async (data: SellerRegistrationParams) => {
     const response = await makeNetworkCall({
@@ -59,7 +59,8 @@ export const requestSellerRegistration = createAsyncThunk(
       url: ENDPOINT_SELLER_ONBOARDING_REGISTRATION,
       data,
     });
-    return response?.data;
+    console.log(response)
+    return response?.data?.data;
   }
 );
 

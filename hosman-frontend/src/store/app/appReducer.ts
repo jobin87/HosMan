@@ -6,9 +6,9 @@ import {
   getAllUserDocuments,
   requestForgetPassword,
   requestResetPassword,
-  requestSellerRegistration,
   requestSignInWithPassword,
   requestUserDetails,
+  requestUserRegistration,
 } from './appThunk';
 
 const initialState = {
@@ -82,14 +82,13 @@ export const appReducer = createSlice({
       })
 
       // Seller Registration
-      .addCase(requestSellerRegistration.fulfilled, (state, action) => {
-        state.auth.loading = true;
-        state.auth.data= action.payload
-      })
-      .addCase(requestSellerRegistration.pending, (state, action) => {
+      .addCase(requestUserRegistration.fulfilled, (state, action) => {
         state.auth.loading = true;
       })
-      .addCase(requestSellerRegistration.rejected, (state, action) => {
+      .addCase(requestUserRegistration.pending, (state, action) => {
+        state.auth.loading = true;
+      })
+      .addCase(requestUserRegistration.rejected, (state, action) => {
         state.auth.error = action.error;
         state.auth.loading = false;
       })

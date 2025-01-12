@@ -114,7 +114,7 @@ const authRoutes = express.Router();
  *       500:
  *         description: Internal server error
  */
-authRoutes.post('/signup', signup);
+authRoutes.post('/registration', signup);
 authRoutes.post('/login', login);
 
 // authRoutes.post('/checkemail', checkEmailExist);

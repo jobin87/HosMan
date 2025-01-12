@@ -97,19 +97,13 @@ export interface SellerDetails {
 }
 
 export interface SellerRegistrationParams {
-  sellerName: string;
-  sellerEmail: string;
-  sellerRegNum: string;
-  sellerType: string;
-  address: string;
-  state: string;
-  zipcode: string;
-  country: string;
-  countryCode: string;
-  name: string;
-  phone: string;
-  contactPerson: string;
-  profileImage: string;
+  userName: string;
+  userEmail: string;
+  password: string;
+  userRegNum: string;
+  role: string | null;
+  zipCode: string;
+  deviceId: string;
 }
 
 export interface UserProps {

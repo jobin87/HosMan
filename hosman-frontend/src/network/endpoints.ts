@@ -15,7 +15,8 @@ export const ENDPOINT_ADMIN_USER_NOTIFICATION_SETTINGS = '/api/admin-user/v1/not
 export const ENDPOINT_ADMIN_USER_UPDATE_PASSWORD = '/api/admin-user/v1/update-password';
 
 // Seller Onboarding
-export const ENDPOINT_SELLER_ONBOARDING_REGISTRATION = '/api/seller-onboarding/v1/registration';
+
+export const ENDPOINT_SELLER_ONBOARDING_REGISTRATION = '/api/auth/v1/registration';
 export const ENDPOINT_SELLER_ONBOARDING_STATUS = '/api/seller-onboarding/v1/status/'; // + sellerId
 export const ENDPOINT_SELLER_ONBOARDING_REGISTRATION_SUBMIT =
   '/api/seller-onboarding/v1/registration-submit';

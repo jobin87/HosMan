@@ -18,20 +18,23 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    isPremium:{
-      type:Boolean,
+    regNumber:{
+      type:String,
       default: false
 
     },
     role:{
       type: String,
-      enum:['Hospital','Individual'],
-      default:'Individual'
+      enum:['Manager','Doctor','Nurse'],
+      default:'Manager'
     },
-    category:{
-      type:String,
-      enum:["Doctor", "Nurse","Management"]
+    zipCode:{
+      type: String,
+      required: true,
+      unique:true
+
     }
+
 
    
   },

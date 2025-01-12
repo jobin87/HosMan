@@ -47,7 +47,7 @@ function shouldSkipGeneratingVar(keys: string[], value: string | number): boolea
     'cssVarPrefix',
     'unstable_sxConfig',
     'typography',
-    // 'transitions',
+    'transitions',
   ];
 
   const skipPaletteKeys: {

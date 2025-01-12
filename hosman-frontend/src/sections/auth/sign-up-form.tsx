@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { isValidPhoneNumber } from "react-phone-number-input/input";
 import { z as zod } from "zod";
 
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -15,19 +16,20 @@ import toast from "react-hot-toast";
 import { Field, Form, schemaHelper } from "src/components/hook-form";
 import { paths } from "src/routes/paths";
 import { useAppDispatch } from "src/store";
-import { SERVICE_TYPES, USER_TYPES } from "src/constants/service.constants";
+import { requestSellerRegistration } from "src/store/app/appThunk";
+import { USER_TYPES } from "src/constants/service.constants";
 
 // ----------------------------------------------------------------------
 
 export type NewUserSchemaType = zod.infer<typeof NewUserSchema>;
 
 export const NewUserSchema = zod.object({
-  userName: zod.string().min(1, { message: "Name is required!" }),
-  userEmail: zod
+  sellerName: zod.string().min(1, { message: "Name is required!" }),
+  sellerEmail: zod
     .string()
     .min(1, { message: "Email is required!" })
     .email({ message: "Email must be a valid email address!" }),
-  userRegNum: zod
+  sellerRegNum: zod
     .string()
     .min(1, { message: "Cannot leave this field empty!" }),
   userType: schemaHelper.objectOrNull<string | null>({
@@ -40,6 +42,7 @@ export const NewUserSchema = zod.object({
     message: { required_error: "Country is required!" },
   }),
   countryCode: zod.string().min(1, { message: "Invalid country code" }),
+  phone: schemaHelper.phoneNumber({ isValidPhoneNumber }),
   contactPerson: zod
     .string()
     .min(1, { message: "Contact person name is required!" }),
@@ -59,10 +62,10 @@ export function SignUpForm(data: any) {
   const dispatch = useAppDispatch();
 
   const defaultValues = {
-    userName: "",
-    userEmail: "",
-    userRegNum: "",
-    userType: "COMPANY",
+    sellerName: "",
+    sellerEmail: "",
+    sellerRegNum: "",
+    UserType: "HOSPITAL",
     address: "",
     state: "",
     zipcode: "",
@@ -88,46 +91,53 @@ export function SignUpForm(data: any) {
 
   const values = watch();
 
-  // let countryCode = (data: string) => {
-  //   setValue('countryCode', `+${data}`);
-  // };
+  let countryCode = (data: string) => {
+    setValue("countryCode", `+${data}`);
+  };
 
   useEffect(() => {
     switch (values.userType) {
-      case "INDIVIDUAL":
-        setFullnamePlaceHolder("Hospital Name");
-        setIdentityPlaceHolder("Hospital Register ID");
+      case "DOCTOR":
+        setIdentityPlaceHolder("Doctor ID");
+        setFullnamePlaceHolder("Doctor Name");
         break;
-      case "HOSPITAL":
-        setFullnamePlaceHolder("Hospital Name");
+      case "MANAGER":
         setIdentityPlaceHolder("Hospital Registration Number");
+        setFullnamePlaceHolder("Manager Name");
+        break;
+      case "NURSE":
+        setIdentityPlaceHolder("Nurse ID");
+        setFullnamePlaceHolder("Nurse Name");
         break;
       default:
         setIdentityPlaceHolder("Hospital Registration Number");
-        setFullnamePlaceHolder("Hospital Name");
+        setFullnamePlaceHolder("Manager Name");
         break;
     }
   }, [values.userType]);
 
-  // const onSubmit = handleSubmit(async (data) => {
-  //   const formData = methods.getValues();
-  //   try {
-  //     const response = await dispatch(requestSellerRegistration(formData as any)).unwrap();
-  //     if (response?.sellerRegistrationRequested) {
-  //       toast.success('Registration completed successfully');
-  //       setIsSignUpSuccess(true);
-  //     } else {
-  //       toast.error('Sign Up Failed');
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //     toast.error('An error occurred during sign up.');
-  //   }
-  // });
+  const onSubmit = handleSubmit(async (data) => {
+    setValue("phone", data.phone.slice(data.countryCode.length));
+    const formData = methods.getValues();
+    try {
+      const response = await dispatch(
+        requestSellerRegistration(formData as any)
+      ).unwrap();
+      if (response?.userWithRoleRequested) {
+        toast.success("Registration completed successfully");
+        setIsSignUpSuccess(true);
+      } else {
+        toast.error("Sign Up Failed");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("An error occurred during sign up.");
+    }
+  });
 
   return (
     <>
-      <Form methods={methods}>
+      <Form methods={methods} onSubmit={onSubmit}>
         <Card sx={{ p: 3, boxShadow: 0 }} elevation={0}>
           <Box
             rowGap={3}
@@ -138,35 +148,26 @@ export function SignUpForm(data: any) {
             <Field.Select
               fullWidth
               name="userType"
-              label="Category"
-              children={SERVICE_TYPES.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-              defaultValue={"Hospital"}
-            />
-            <Field.Text name="userName" label={fullnamePlaceHolder} />
-            <Field.Text name="userRegNum" label={identityPlaceHolder} />
-            <Field.Select
-              fullWidth
-              name="userType"
-              label="User"
+              label="Role"
               children={USER_TYPES.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
                 </MenuItem>
               ))}
-              defaultValue={"Hospital"}
+              defaultValue={"MANAGER"}
             />
-            <Field.Text name="userEmail" label="Email address" />
-            <Field.Text name="state" label="State/Region" />
-            <Field.Text name="address" label="Address" />
+            <Field.Text name="sellerName" label={fullnamePlaceHolder} />
+            <Field.Text name="sellerRegNum" label={identityPlaceHolder} />
+
             <Field.Text name="zipcode" label="ZipCode" />
+            <Field.Text name="sellerEmail" label="Email address" />
+            <Field.Text name="Password" label="Password" />
+
           </Box>
           <Stack alignItems="flex-center" sx={{ mt: 3 }} flex={1}>
             <LoadingButton
               type="submit"
+              onClick={onSubmit}
               variant="contained"
               loading={isSubmitting}
               sx={{ py: 1.5 }}

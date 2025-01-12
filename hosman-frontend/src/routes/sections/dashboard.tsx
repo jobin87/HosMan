@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import {  GuestGuard } from 'src/guard';
+import {  AuthGuard, GuestGuard } from 'src/guard';
 
 
 
@@ -47,7 +47,7 @@ const layoutContent = (
 export const dashboardRoutes = [
   {
     path: 'dashboard',
-    element: <GuestGuard>{layoutContent}</GuestGuard>,
+    element: <AuthGuard>{layoutContent}</AuthGuard>,
     children: [
       { element: <HomePage/>, index: true },
       {

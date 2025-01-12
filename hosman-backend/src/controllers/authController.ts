@@ -9,7 +9,7 @@ const SECRET_KEY= "112eryt33"
 
 export const signup = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { username, email, password ,role,category} = req.body;
+    const { username,role, regNumber,email, password ,zipCode} = req.body;
 
     // Check if all fields are provided
     if (!username || !email || !password ) {
@@ -29,9 +29,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
       res.status(400).json({ success: false, message: 'Password must be at least 6 characters not more than ' });
       return;
     }
-    if(role=='Hospital' && !category){
-      res.status(400).json({success: false, message:' if role is Hospital then category is required'})
-    }
+  
 
     // Check if the email already exists
     const existingUser = await User.findOne({ email });
@@ -39,11 +37,16 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
       res.status(400).json({ success: false, message: 'User exists with this email' });
       return;
     }
+    if(!regNumber){
+      res.status(400).json({success: false, message:"regNumber is required"})
+    }
 
-
+    if(!zipCode){
+      res.status(400).json({success: false, message:"zipcode is required"})
+    }
 
     // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password,10)
 
     // Create a new user and save it to the database
     const newUser = new User({
@@ -51,29 +54,17 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
       email,
       password: hashedPassword,
       role: role,
-      category:category
+      regNumber:regNumber,
+      zipCode: zipCode
 
     });
-       // Generate a JWT token
-       const token = jwt.sign({ id: newUser._id, email: newUser.email }, process.env.JWT_SECRET || SECRET_KEY, { expiresIn: '1h' });
-
-    const userResponse = {
-      userId: newUser._id, // Map _id to userId
-      email: newUser.email,
-      name: newUser.username,
-      role: role,
-      token:token,
-      category:category,
-      stateRegion: "kerala/konni",
-      address:"konni-thannithode"
-  
-    };
 
     await newUser.save();
 
 
     // Respond with the success message and token
-    res.status(200).json({  userResponse });
+    res.status(200).json({ userWithRoleRequested: "true"
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Internal Server Error', error });
   }

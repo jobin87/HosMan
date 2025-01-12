@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { isValidPhoneNumber } from "react-phone-number-input/input";
 import { z as zod } from "zod";
 
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -10,42 +9,44 @@ import Stack from "@mui/material/Stack";
 
 import { useRouter } from "src/routes/hooks";
 
-import { Button, Dialog, MenuItem, Typography } from "@mui/material";
+import { Button, Dialog, InputAdornment, MenuItem, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Field, Form, schemaHelper } from "src/components/hook-form";
 import { paths } from "src/routes/paths";
 import { useAppDispatch } from "src/store";
-import { requestSellerRegistration } from "src/store/app/appThunk";
+import { requestUserRegistration } from "src/store/app/appThunk";
 import { USER_TYPES } from "src/constants/service.constants";
+import IconButton from '@mui/material/IconButton';
+import { Iconify } from "src/components/iconify";
 
 // ----------------------------------------------------------------------
 
 export type NewUserSchemaType = zod.infer<typeof NewUserSchema>;
 
 export const NewUserSchema = zod.object({
-  sellerName: zod.string().min(1, { message: "Name is required!" }),
-  sellerEmail: zod
+  userName: zod.string().min(1, { message: "Name is required!" }),
+  userEmail: zod
     .string()
     .min(1, { message: "Email is required!" })
     .email({ message: "Email must be a valid email address!" }),
-  sellerRegNum: zod
+  userRegNum: zod
     .string()
     .min(1, { message: "Cannot leave this field empty!" }),
   userType: schemaHelper.objectOrNull<string | null>({
     message: { required_error: "Type is required!" },
   }),
   address: zod.string().min(1, { message: "Address is required!" }),
-  state: zod.string().min(1, { message: "State is required!" }),
   zipcode: zod.string().min(1, { message: "Zip code is required!" }),
   country: schemaHelper.objectOrNull<string | null>({
     message: { required_error: "Country is required!" },
   }),
-  countryCode: zod.string().min(1, { message: "Invalid country code" }),
-  phone: schemaHelper.phoneNumber({ isValidPhoneNumber }),
-  contactPerson: zod
+  zipCode: zod.string()
+  .regex(/^[1-9][0-9]{5}$/,{message:'invalid zipcode'}),
+  password: zod
     .string()
-    .min(1, { message: "Contact person name is required!" }),
+    .min(1, { message: 'Password is required!' })
+    .min(6, { message: 'Password must be at least 6 characters!' }),
 });
 
 export function SignUpForm(data: any) {
@@ -59,13 +60,13 @@ export function SignUpForm(data: any) {
   );
 
   const router = useRouter();
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();  
 
   const defaultValues = {
     sellerName: "",
     sellerEmail: "",
     sellerRegNum: "",
-    UserType: "HOSPITAL",
+    UserType: "",
     address: "",
     state: "",
     zipcode: "",
@@ -91,9 +92,6 @@ export function SignUpForm(data: any) {
 
   const values = watch();
 
-  let countryCode = (data: string) => {
-    setValue("countryCode", `+${data}`);
-  };
 
   useEffect(() => {
     switch (values.userType) {
@@ -117,12 +115,12 @@ export function SignUpForm(data: any) {
   }, [values.userType]);
 
   const onSubmit = handleSubmit(async (data) => {
-    setValue("phone", data.phone.slice(data.countryCode.length));
     const formData = methods.getValues();
     try {
       const response = await dispatch(
-        requestSellerRegistration(formData as any)
+        requestUserRegistration(formData as any)
       ).unwrap();
+      console.log(response);
       if (response?.userWithRoleRequested) {
         toast.success("Registration completed successfully");
         setIsSignUpSuccess(true);
@@ -161,7 +159,8 @@ export function SignUpForm(data: any) {
 
             <Field.Text name="zipcode" label="ZipCode" />
             <Field.Text name="sellerEmail" label="Email address" />
-            <Field.Text name="Password" label="Password" />
+
+
 
           </Box>
           <Stack alignItems="flex-center" sx={{ mt: 3 }} flex={1}>

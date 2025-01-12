@@ -59,7 +59,7 @@ export const requestSellerRegistration = createAsyncThunk(
       url: ENDPOINT_SELLER_ONBOARDING_REGISTRATION,
       data,
     });
-    return response?.data?.data;
+    return response?.data;
   }
 );
 

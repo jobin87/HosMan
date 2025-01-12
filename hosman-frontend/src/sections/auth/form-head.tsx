@@ -18,7 +18,7 @@ export function FormHead({ sx, icon, title, description, ...other }: FormHeadPro
         <Box component="span" display="inline-flex" sx={{ mx: 'auto', mb: 3, py: '5rem 0 ' }}>
           {icon}
         </Box>
-      )}
+  )}
 
       <Box
         gap={1.5}

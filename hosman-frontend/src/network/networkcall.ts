@@ -64,7 +64,7 @@ export const makeNetworkCall = async (config: INetworkCallConfig) => {
     }
 
     return call;
-  } catch (error) {
+  } catch (error:any) {
     toast?.error(error?.response?.data?.message || error?.message || 'Something went wrong');
     return null;
   }

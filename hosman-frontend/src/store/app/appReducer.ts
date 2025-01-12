@@ -83,7 +83,8 @@ export const appReducer = createSlice({
 
       // Seller Registration
       .addCase(requestSellerRegistration.fulfilled, (state, action) => {
-        state.auth.loading = false;
+        state.auth.loading = true;
+        state.auth.data= action.payload
       })
       .addCase(requestSellerRegistration.pending, (state, action) => {
         state.auth.loading = true;

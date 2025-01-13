@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import path from 'path';
 import User from '../models/user';
+import Session from '../models/session';
 const SECRET_KEY= "112eryt33"
 
 
@@ -70,38 +71,59 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const login =async(req:Request, res:Response):Promise<void> =>{
-  try{
-    const {email,password} = req.body;
-    const emailexist= await User.findOne({email})
-    if(!emailexist){
-      res.status(400).json({success:false, message:'your email is  not valid or available for  login'})
-      return
+
+export const login = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { email, password, deviceId, clientIP } = req.body;
+
+    // Check if user exists
+    const existingUser = await User.findOne({ email });
+    if (!existingUser) {
+      res.status(400).json({ success: false, message: 'Your email is not valid or available for login' });
+      return;
     }
-    const isPasswordCorrect = await bcrypt.compare(password, emailexist?.password)
-      if(!isPasswordCorrect){
-        res.status(400).json({success:false, message:'your email is  not having valid credentials  for  login'})
 
-      }
-       // Generate a JWT token
-       const token = jwt.sign({ id: emailexist._id, email: emailexist.email }, process.env.JWT_SECRET || SECRET_KEY, { expiresIn: '1h' });
+    // Validate password
+    const isPasswordCorrect = await bcrypt.compare(password, existingUser.password);
+    if (!isPasswordCorrect) {
+      res.status(400).json({ success: false, message: 'Invalid credentials for login' });
+      return;
+    }
 
-      const userResponse ={
-        token,
-        userLogged:true
+    // Generate JWT Token
+    const token = jwt.sign(
+      { id: existingUser._id, email: existingUser.email },
+      SECRET_KEY,
+      { expiresIn: '1h' }
+    );
 
+    // Create session for device tracking
+    await Session.create({
+      userId: existingUser._id,
+      deviceId: deviceId,
+      ipAddress: clientIP,
+      isActive: true,
+      loginTime: new Date(),
+    });
 
-      }
-    
+    // User response with token and basic info
+    const userResponse = {
+      token,
+      user: {
+        id: existingUser._id,
+        email: existingUser.email,
+        username: existingUser.username,
+        role: existingUser.role,
+      },
+    };
 
-    res.status(200).json({success:true,message:"succesfull",userResponse})
-
-    
+    // Successful response
+    res.status(200).json({ success: true, message: 'Login successful', userResponse });
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'Internal server error', error: err });
   }
-  catch(err){
-    res.status(500).json({sucess: false, message:"internal issue"})
-  }
-}
+};
+
 
 // export const checkEmailExist = async (req: Request, res: Response): Promise<void> => {
 //   try {

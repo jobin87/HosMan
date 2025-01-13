@@ -76,7 +76,6 @@ export function CenteredSignInView() {
             email: data.email,
             password: data.password,
             deviceId: data.deviceId,
-            clientIP: ipaddress,
           })
         );
       } catch (error) {

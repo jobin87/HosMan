@@ -6,7 +6,7 @@ export const useUser = () => {
 
   const userDetails: IUserDetails = auth?.data;
 
-  console.log('auth : ', auth)
+  // console.log('auth : ', auth)
 
   return {
     ...userDetails,

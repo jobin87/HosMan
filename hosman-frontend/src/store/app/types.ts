@@ -4,7 +4,7 @@ export type SignInParams = {
   email: string;
   password: string;
   deviceId: string;
-  clientIP: string;
+
 };
 
 export interface InitialStateProps {
@@ -96,12 +96,12 @@ export interface SellerDetails {
   defaultCancelAge: number;
 }
 
-export interface SellerRegistrationParams {
+export interface UserRegistrationParams {
+  role: string | null;
   userName: string;
   userEmail: string;
   password: string;
   userRegNum: string;
-  role: string | null;
   zipCode: string;
   deviceId: string;
 }

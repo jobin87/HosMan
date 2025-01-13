@@ -31,7 +31,6 @@ export function RHFSwitch({ name, helperText, label, slotProps, ...other }: RHFS
   const { control } = useFormContext();
 
   const ariaLabel = `Switch ${name}`;
-
   return (
     <Controller
       name={name}

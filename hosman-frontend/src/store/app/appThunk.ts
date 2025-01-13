@@ -12,8 +12,8 @@ import {
   ENDPOINT_DOCUMENT_UPDATE,
   ENDPOINT_FORGOT_PASSWORD,
   ENDPOINT_RESET_PASSWORD,
-  ENDPOINT_SELLER_ONBOARDING_REGISTRATION,
   ENDPOINT_UPDATE_PASSWORD,
+  ENDPOINT_USER_ONBOARDING_REGISTRATION,
   makeNetworkCall,
 } from 'src/network';
 import { paths } from 'src/routes/paths';
@@ -26,8 +26,8 @@ import type {
   IDocumentUpdateProps,
   IForgetPassword,
   IResetPassword,
-  SellerRegistrationParams,
-  SignInParams,
+   SignInParams,
+UserRegistrationParams,
 } from './types';
 
 // Sign in action
@@ -50,13 +50,13 @@ export const requestSignInWithPassword = createAsyncThunk(
   }
 );
 
-// Seller Registration
+// User Registration
 export const requestUserRegistration = createAsyncThunk(
   'app/registerSeller',
-  async (data: SellerRegistrationParams) => {
+  async (data: UserRegistrationParams) => {
     const response = await makeNetworkCall({
       method: API_METHODS.POST,
-      url: ENDPOINT_SELLER_ONBOARDING_REGISTRATION,
+      url: ENDPOINT_USER_ONBOARDING_REGISTRATION,
       data,
     });
     console.log(response)

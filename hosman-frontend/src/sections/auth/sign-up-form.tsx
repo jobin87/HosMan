@@ -9,7 +9,13 @@ import Stack from "@mui/material/Stack";
 
 import { useRouter } from "src/routes/hooks";
 
-import { Button, Dialog, InputAdornment, MenuItem, Typography } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  InputAdornment,
+  MenuItem,
+  Typography,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Field, Form, schemaHelper } from "src/components/hook-form";
@@ -17,8 +23,9 @@ import { paths } from "src/routes/paths";
 import { useAppDispatch } from "src/store";
 import { requestUserRegistration } from "src/store/app/appThunk";
 import { USER_TYPES } from "src/constants/service.constants";
-import IconButton from '@mui/material/IconButton';
+import IconButton from "@mui/material/IconButton";
 import { Iconify } from "src/components/iconify";
+import { Password } from "@mui/icons-material";
 
 // ----------------------------------------------------------------------
 
@@ -37,43 +44,39 @@ export const NewUserSchema = zod.object({
     message: { required_error: "Type is required!" },
   }),
   address: zod.string().min(1, { message: "Address is required!" }),
-  zipcode: zod.string().min(1, { message: "Zip code is required!" }),
   country: schemaHelper.objectOrNull<string | null>({
     message: { required_error: "Country is required!" },
   }),
-  zipCode: zod.string()
-  .regex(/^[1-9][0-9]{5}$/,{message:'invalid zipcode'}),
+  zipCode: zod
+    .string()
+    .regex(/^[1-9][0-9]{5}$/, { message: "invalid zipcode" }),
   password: zod
     .string()
-    .min(1, { message: 'Password is required!' })
-    .min(6, { message: 'Password must be at least 6 characters!' }),
+    .min(1, { message: "Password is required!" })
+    .min(6, { message: "Password must be at least 6 characters!" }),
 });
 
-export function SignUpForm(data: any) {
+export function SignUpForm() {
   const [isSignUpSuccess, setIsSignUpSuccess] = useState(false);
-
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [identityPlaceHolder, setIdentityPlaceHolder] = useState<string | null>(
-    "Select Seller Type"
+    "Select User Type"
   );
   const [fullnamePlaceHolder, setFullnamePlaceHolder] = useState<string | null>(
-    "Select Seller Type"
+    "Select User Type"
   );
 
   const router = useRouter();
-  const dispatch = useAppDispatch();  
+  const dispatch = useAppDispatch();
 
   const defaultValues = {
-    sellerName: "",
-    sellerEmail: "",
-    sellerRegNum: "",
-    UserType: "",
+    userName: "",
+    userEmail: "",
+    userRegNum: "",
+    userType: "MANAGER",
     address: "",
-    state: "",
+    password: "",
     zipcode: "",
-    country: "Oman",
-    countryCode: "+968",
-    phone: "",
-    contactPerson: "",
   };
 
   const methods = useForm<NewUserSchemaType>({
@@ -91,7 +94,6 @@ export function SignUpForm(data: any) {
   } = methods;
 
   const values = watch();
-
 
   useEffect(() => {
     switch (values.userType) {
@@ -120,7 +122,6 @@ export function SignUpForm(data: any) {
       const response = await dispatch(
         requestUserRegistration(formData as any)
       ).unwrap();
-      console.log(response);
       if (response?.userWithRoleRequested) {
         toast.success("Registration completed successfully");
         setIsSignUpSuccess(true);
@@ -132,6 +133,10 @@ export function SignUpForm(data: any) {
       toast.error("An error occurred during sign up.");
     }
   });
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible((prev) => !prev);
+  };
 
   return (
     <>
@@ -145,28 +150,55 @@ export function SignUpForm(data: any) {
           >
             <Field.Select
               fullWidth
-              name="userType"
               label="Role"
-              children={USER_TYPES.map((option) => (
+              {...methods.register("userType")}
+              defaultValue="MANAGER"
+            >
+              {USER_TYPES.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
                 </MenuItem>
               ))}
-              defaultValue={"MANAGER"}
+            </Field.Select>
+
+            <Field.Text
+              {...methods.register("userName")}
+              label={fullnamePlaceHolder}
             />
-            <Field.Text name="sellerName" label={fullnamePlaceHolder} />
-            <Field.Text name="sellerRegNum" label={identityPlaceHolder} />
-
-            <Field.Text name="zipcode" label="ZipCode" />
-            <Field.Text name="sellerEmail" label="Email address" />
-
-
-
+            <Field.Text
+              {...methods.register("userRegNum")}
+              label={identityPlaceHolder}
+            />
+            <Field.Text
+              {...methods.register("zipCode")}
+              label="ZipCode"
+            />
+            <Field.Text
+              {...methods.register("userEmail")}
+              label="Email address"
+            />
+            <Field.Text
+              label="Password"
+              {...methods.register("password")}
+              placeholder="6+ characters"
+              type={passwordVisible ? "text" : "password"}
+              InputLabelProps={{ shrink: true }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={togglePasswordVisibility} edge="end">
+                      <Iconify
+                        icon={passwordVisible ? "solar:eye-bold" : "solar:eye-closed-bold"}
+                      />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
           </Box>
-          <Stack alignItems="flex-center" sx={{ mt: 3 }} flex={1}>
+          <Stack alignItems="center" sx={{ mt: 3 }} flex={1}>
             <LoadingButton
               type="submit"
-              onClick={onSubmit}
               variant="contained"
               loading={isSubmitting}
               sx={{ py: 1.5 }}

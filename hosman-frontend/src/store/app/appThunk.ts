@@ -39,14 +39,15 @@ export const requestSignInWithPassword = createAsyncThunk(
       url: ENDPOINT_ADMIN_LOGIN,
       data: params,
     });
-
-    const { userLogged } = response?.data?.data;
+    const {userLogged} = response?.data?.data;
 
     if (userLogged) {
       return response?.data?.data;
     }
+    console.log(userLogged)
 
     throw new Error('Something went wrong!');
+
   }
 );
 

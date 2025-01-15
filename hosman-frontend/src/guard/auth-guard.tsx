@@ -40,34 +40,34 @@ export function AuthGuard({ children }: Props) {
       return;
     }
 
-    if (!sellerDetails?.isSellerApproved) {
-      if (sellerDetails?.approvalStatus === SERVICE_STATUS.DECLINED) {
-        router.replace(paths.onboarding.root);
-        setIsChecking(false);
-        return;
-      }
+    // if (!sellerDetails?.isSellerApproved) {
+    //   // if (sellerDetails?.approvalStatus === SERVICE_STATUS.DECLINED) {
+    //   //   router.replace(paths.onboarding.root);
+    //   //   setIsChecking(false);
+    //   //   return;
+    //   // }
 
-      if (sellerDetails?.approvalStatus === SERVICE_STATUS.UNDERVERIFICATION) {
-        router.replace(paths.onboarding.root);
-        setIsChecking(false);
-        return;
-      }
+    //   // if (sellerDetails?.approvalStatus === SERVICE_STATUS.UNDERVERIFICATION) {
+    //   //   router.replace(paths.onboarding.root);
+    //   //   setIsChecking(false);
+    //   //   return;
+    //   // }
 
-      if (sellerDetails?.approvalStatus === SERVICE_STATUS.PENDING) {
-        //PENDING
-        if (pathname?.split('/')?.[1] === 'onboarding') {
-          setIsChecking(false);
-          return;
-        } else {
-          router.replace(paths.onboarding.form);
-          setIsChecking(false);
-          return;
-        }
-      }
-    }
+    //   // if (sellerDetails?.approvalStatus === SERVICE_STATUS.PENDING) {
+    //   //   //PENDING
+    //   //   // if (pathname?.split('/')?.[1] === 'onboarding') {
+    //   //   //   setIsChecking(false);
+    //   //   //   return;
+    //   //   // } else {
+    //   //   //   router.replace(paths.onboarding.form);
+    //   //   //   setIsChecking(false);
+    //   //   //   return;
+    //   //   // }
+    //   // }
+    // }
 
     setIsChecking(false);
-  }, [userLogged, sellerDetails, createQueryString, pathname, router]);
+  }, [userLogged, createQueryString, pathname, router]);
 
   useEffect(() => {
     checkPermissions();

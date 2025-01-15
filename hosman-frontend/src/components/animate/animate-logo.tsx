@@ -104,8 +104,8 @@ export function AnimateLogo2({ logo, sx, ...other }: AnimateLogoProps) {
         animate={{ rotate: 360 }}
         transition={{ duration: 10, ease: 'linear', repeat: Infinity }}
         sx={{
-          width: 1,
-          height: 1,
+          width: 10,
+          height: 10,
           opacity: 0.16,
           borderRadius: '50%',
           position: 'absolute',

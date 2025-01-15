@@ -56,7 +56,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
       password: hashedPassword,
       role: role,
       regNumber:regNumber,
-      zipCode: zipCode
+      zipCode: zipCode,
 
     });
 
@@ -64,7 +64,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
 
 
     // Respond with the success message and token
-    res.status(200).json({ userWithRoleRequested: "true"
+    res.status(200).json({ userWithRoleRequested: true
     });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Internal Server Error', error });
@@ -74,7 +74,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
 
 export const login = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { email, password, deviceId, clientIP } = req.body;
+    const { email, password } = req.body;
 
     // Check if user exists
     const existingUser = await User.findOne({ email });
@@ -97,30 +97,23 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       { expiresIn: '1h' }
     );
 
-    // Create session for device tracking
-    await Session.create({
-      userId: existingUser._id,
-      deviceId: deviceId,
-      ipAddress: clientIP,
-      isActive: true,
-      loginTime: new Date(),
-    });
-
     // User response with token and basic info
-    const userResponse = {
-      token,
+    const data = {
+        userLogged: true,
+        accessToken:token,
       user: {
         id: existingUser._id,
         email: existingUser.email,
         username: existingUser.username,
         role: existingUser.role,
+        userLogged:true
       },
     };
 
     // Successful response
-    res.status(200).json({ success: true, message: 'Login successful', userResponse });
+    res.status(200).json({ success: true, message: 'Login successful', data});
   } catch (err) {
-    res.status(500).json({ success: false, message: 'Internal server error', error: err });
+    res.status(500).json({ success: false, message: 'Internal  error', error: err });
   }
 };
 

@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import { GuestGuard } from 'src/guard';
+import { AuthGuard, GuestGuard } from 'src/guard';
 import { AuthCenteredLayout } from 'src/layouts/auth-centered';
 import { AuthSplitLayout } from 'src/layouts/auth-split';
 
@@ -24,17 +24,17 @@ export const authRoutes = [
       {
         path: 'sign-in',
         element: (
-          <GuestGuard>
+          <AuthGuard>
             <AuthCenteredLayout>
               <SignInPage />
             </AuthCenteredLayout>
-          </GuestGuard>
+          </AuthGuard>
         ),
       },
       {
         path: 'sign-up',
         element: (
-          <GuestGuard>
+          <AuthGuard>
             <AuthSplitLayout
               section={{
                 title: 'Welcome to HosMan... For  yours!',
@@ -43,17 +43,17 @@ export const authRoutes = [
             >
               <SignUpPage />
             </AuthSplitLayout>
-          </GuestGuard>
+          </AuthGuard>
         ),
       },
       // {
       //   path: 'forgot-password',
       //   element: (
-      //     <GuestGuard>
+      //     <AuthGuard>
       //       <AuthSplitLayout>
       //         <ForgotPassword />
       //       </AuthSplitLayout>
-      //     </GuestGuard>
+      //     </AuthGuard>
       //   ),
       // },
       // {

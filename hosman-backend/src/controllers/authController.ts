@@ -6,39 +6,48 @@ import path from 'path';
 import User from '../models/user';
 import Session from '../models/session';
 const SECRET_KEY= "112eryt33"
-
+import nodemailer from 'nodemailer';
+import crypto from 'crypto';
 
 export const signup = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { username,role, regNumber,email, password ,zipCode} = req.body;
+    const { userName,role, userRegNum,userEmail, password ,zipCode} = req.body;
 
     // Check if all fields are provided
-    if (!username || !email || !password ) {
+    if (!userName || !userEmail || !password ) {
       res.status(400).json({ success: false, message: 'All fields are required' });
       return;
     }
+    if (!userEmail || userEmail.trim() === '') {
+      throw new Error('Email is required.');
+  }
+  
 
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(userEmail)) {
       res.status(400).json({ success: false, message: 'Invalid email format' });
       return;
     }
 
     // Validate password length
-    if (password.length < 6 && password.length>=8) {
+    if (password.length < 6) {
       res.status(400).json({ success: false, message: 'Password must be at least 6 characters not more than ' });
       return;
     }
   
 
     // Check if the email already exists
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ userEmail });
     if (existingUser) {
       res.status(400).json({ success: false, message: 'User exists with this email' });
       return;
     }
-    if(!regNumber){
+    if (!userName) {
+      res.status(400).json({ success: false, message: "Username is required" });
+      return;
+    }
+    if(!userRegNum){
       res.status(400).json({success: false, message:"regNumber is required"})
     }
 
@@ -49,18 +58,38 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
     // Hash the password
     const hashedPassword = await bcrypt.hash(password,10)
 
+    const verificationToken = crypto.randomBytes(32).toString('hex');
+
+
     // Create a new user and save it to the database
     const newUser = new User({
-      username,
-      email,
+      userName,
+      userEmail,
       password: hashedPassword,
       role: role,
-      regNumber:regNumber,
+      isVerified:false,
+      userRegNum:userRegNum,
       zipCode: zipCode,
 
     });
 
     await newUser.save();
+
+    const transporter = nodemailer.createTransport({
+      service: 'Gmail',  // Or your chosen email provider
+      auth: {
+        user: process.env.EMAIL_USER, // Use environment variables for security
+        pass: process.env.EMAIL_PASS, 
+      },
+    });
+    const mailOptions= {
+      from:process.env.EMAIL_USER,
+      to:userEmail,
+      subject:'userEmail verification',
+      text:`Please verify your email by clicking on the following link: 
+              http://localhost:5001/verify-email?token=${verificationToken}`
+    }
+    await transporter.sendMail(mailOptions)
 
 
     // Respond with the success message and token
@@ -70,16 +99,22 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
     res.status(500).json({ success: false, message: 'Internal Server Error', error });
   }
 };
+const verifyEmail= 
 
 
 export const login = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { email, password } = req.body;
+    const { userEmail, password} = req.body;
 
     // Check if user exists
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ userEmail });
+    console.log(existingUser)
     if (!existingUser) {
-      res.status(400).json({ success: false, message: 'Your email is not valid or available for login' });
+      res.status(400).json({ success: false, message: 'Your email is not valid or not available for login' });
+      return;
+    }
+    if (!existingUser.isVerified) {
+      res.status(400).json({ success: false, message: 'Please verify your email before logging in' });
       return;
     }
 
@@ -92,7 +127,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
     // Generate JWT Token
     const token = jwt.sign(
-      { id: existingUser._id, email: existingUser.email },
+      { id: existingUser._id, email: existingUser.userEmail },
       SECRET_KEY,
       { expiresIn: '1h' }
     );
@@ -103,8 +138,8 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         accessToken:token,
       user: {
         id: existingUser._id,
-        email: existingUser.email,
-        username: existingUser.username,
+        email: existingUser.userEmail,
+        username: existingUser.userName,
         role: existingUser.role,
         userLogged:true
       },

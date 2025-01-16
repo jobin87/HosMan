@@ -97,8 +97,9 @@ export function CenteredSignInView() {
             clientIP: ipaddress,
           })
         );
-        if(response.payload.userLogged){
+        if(response.payload){
           navigate(paths.dashboard.root)
+          console.log('1')
         }
       } catch (error) {
         console.error(error);

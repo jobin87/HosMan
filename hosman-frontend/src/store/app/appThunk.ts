@@ -39,10 +39,11 @@ export const requestSignInWithPassword = createAsyncThunk(
       url: ENDPOINT_ADMIN_LOGIN,
       data: params,
     });
+    console.log(response)
     const {userLogged} = response?.data?.data;
 
     if (userLogged) {
-      return response?.data?.data;
+      return response?.data;
     }
     console.log(userLogged)
 
@@ -61,7 +62,7 @@ export const requestUserRegistration = createAsyncThunk(
       data,
     });
     console.log(response)
-    return response?.data?.data;
+    return response?.data;
   }
 );
 

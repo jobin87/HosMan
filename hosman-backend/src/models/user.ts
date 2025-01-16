@@ -2,25 +2,23 @@ import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema(
   {
-    username: {
+    userName: {
       type: String,
       required: true,
-      unique: true,
       trim: true,
     },
-    email: {
+    userEmail: {
       type: String,
       required: true,
-      unique: true,
       trim: true,
     },
     password: {
       type: String,
       required: true,
     },
-    regNumber:{
+    userRegNum:{
       type:String,
-      default: false
+      required:true
 
     },
     role:{
@@ -31,9 +29,8 @@ const userSchema = new mongoose.Schema(
     zipCode:{
       type: String,
       required: true,
-      unique:true
-
-    }
+    },
+    isVerified: { type: Boolean, default: false }, 
 
 
    

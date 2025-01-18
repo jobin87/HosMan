@@ -8,10 +8,9 @@ import type { PhoneInputProps } from '../phone-input';
 
 type Props = Omit<PhoneInputProps, 'value' | 'onChange'> & {
   name: string;
-  countryPhoneNumber?: (data: string) => void;
 };
 
-export function RHFPhoneInput({ name, helperText, countryPhoneNumber, ...other }: Props) {
+export function RHFPhoneInput({ name, helperText, ...other }: Props) {
   const { control, setValue } = useFormContext();
 
   return (
@@ -26,7 +25,6 @@ export function RHFPhoneInput({ name, helperText, countryPhoneNumber, ...other }
           onChange={(newValue) => setValue(name, newValue, { shouldValidate: true })}
           error={!!error}
           helperText={error ? error?.message : helperText}
-          returnCountryPhoneNumber={countryPhoneNumber}
           {...other}
         />
       )}

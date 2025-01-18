@@ -1,18 +1,18 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 
 import Paper from '@mui/material/Paper';
 import Popover from '@mui/material/Popover';
 import { useTheme } from '@mui/material/styles';
 
 import { usePathname } from 'src/routes/hooks';
-import { useActiveLink } from 'src/routes/hooks/use-active-link';
 import { isExternalLink } from 'src/routes/utils';
+import { useActiveLink } from 'src/routes/hooks/use-active-link';
 
 import { paper } from 'src/theme/styles';
 
-import { navSectionClasses } from '../classes';
-import { NavLi, NavUl } from '../styles';
 import { NavItem } from './nav-item';
+import { NavUl, NavLi } from '../styles';
+import { navSectionClasses } from '../classes';
 
 import type { NavListProps, NavSubListProps } from '../types';
 
@@ -125,11 +125,7 @@ export function NavList({
         >
           <Paper
             className={navSectionClasses.paper}
-            sx={{
-              minWidth: 180,
-              ...paper({ theme, dropdown: true }),
-              ...slotProps?.paper,
-            }}
+            sx={{ minWidth: 180, ...paper({ theme, dropdown: true }), ...slotProps?.paper }}
           >
             <NavSubList
               data={data.children}

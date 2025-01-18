@@ -1,24 +1,23 @@
-import type { CheckboxProps } from '@mui/material/Checkbox';
 import type { ChipProps } from '@mui/material/Chip';
+import type { SelectProps } from '@mui/material/Select';
+import type { Theme, SxProps } from '@mui/material/styles';
+import type { CheckboxProps } from '@mui/material/Checkbox';
+import type { TextFieldProps } from '@mui/material/TextField';
+import type { InputLabelProps } from '@mui/material/InputLabel';
 import type { FormControlProps } from '@mui/material/FormControl';
 import type { FormHelperTextProps } from '@mui/material/FormHelperText';
-import type { InputLabelProps } from '@mui/material/InputLabel';
-import type { SelectProps } from '@mui/material/Select';
-import type { SxProps, Theme } from '@mui/material/styles';
-import type { TextFieldProps } from '@mui/material/TextField';
 
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { Skeleton } from '@mui/material';
 import Box from '@mui/material/Box';
-import Checkbox from '@mui/material/Checkbox';
 import Chip from '@mui/material/Chip';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import Checkbox from '@mui/material/Checkbox';
+import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-import TextField from '@mui/material/TextField';
 
 // ----------------------------------------------------------------------
 
@@ -29,7 +28,6 @@ type RHFSelectProps = TextFieldProps & {
   slotProps?: {
     paper?: SxProps<Theme>;
   };
-  loading?: boolean;
 };
 
 export function RHFSelect({
@@ -40,7 +38,6 @@ export function RHFSelect({
   helperText,
   inputProps,
   InputLabelProps,
-  loading,
   ...other
 }: RHFSelectProps) {
   const { control } = useFormContext();
@@ -51,31 +48,25 @@ export function RHFSelect({
     <Controller
       name={name}
       control={control}
-      render={({ field, fieldState: { error } }) =>
-        loading && !error ? (
-          <Skeleton variant="rounded" width="100%" height={56} sx={{ borderRadius: 1 }} />
-        ) : (
-          <TextField
-            {...field}
-            select
-            fullWidth
-            SelectProps={{
-              native,
-              MenuProps: {
-                PaperProps: { sx: { maxHeight: 220, ...slotProps?.paper } },
-              },
-              sx: { textTransform: 'capitalize' },
-            }}
-            InputLabelProps={{ htmlFor: labelId, ...InputLabelProps }}
-            inputProps={{ id: labelId, ...inputProps }}
-            error={!!error}
-            helperText={error ? error?.message : helperText}
-            {...other}
-          >
-            {children}
-          </TextField>
-        )
-      }
+      render={({ field, fieldState: { error } }) => (
+        <TextField
+          {...field}
+          select
+          fullWidth
+          SelectProps={{
+            native,
+            MenuProps: { PaperProps: { sx: { maxHeight: 220, ...slotProps?.paper } } },
+            sx: { textTransform: 'capitalize' },
+          }}
+          InputLabelProps={{ htmlFor: labelId, ...InputLabelProps }}
+          inputProps={{ id: labelId, ...inputProps }}
+          error={!!error}
+          helperText={error ? error?.message : helperText}
+          {...other}
+        >
+          {children}
+        </TextField>
+      )}
     />
   );
 }

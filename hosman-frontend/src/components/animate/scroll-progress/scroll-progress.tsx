@@ -1,5 +1,5 @@
-import type { BoxProps } from '@mui/material/Box';
 import type { MotionValue } from 'framer-motion';
+import type { BoxProps } from '@mui/material/Box';
 
 import { m, useSpring } from 'framer-motion';
 
@@ -24,11 +24,7 @@ export function ScrollProgress({
   sx,
   ...other
 }: ScrollProgressProps) {
-  const scaleX = useSpring(progress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
+  const scaleX = useSpring(progress, { stiffness: 100, damping: 30, restDelta: 0.001 });
 
   const progressSize = variant === 'circular' ? (size ?? 64) : (size ?? 3);
 

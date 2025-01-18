@@ -13,10 +13,10 @@ type InputProps = {
 };
 
 export const schemaHelper = {
-  // /**
-  //  * Phone number
-  //  * defaultValue === ''
-  //  */
+  /**
+   * Phone number
+   * defaultValue === ''
+   */
   phoneNumber: (props?: InputProps) =>
     zod
       .string({
@@ -65,9 +65,7 @@ export const schemaHelper = {
    * defaultValue === '' | <p></p>
    */
   editor: (props?: InputProps) =>
-    zod.string().min(8, {
-      message: props?.message?.required_error ?? 'Editor is required!',
-    }),
+    zod.string().min(8, { message: props?.message?.required_error ?? 'Editor is required!' }),
   /**
    * Object
    * defaultValue === null

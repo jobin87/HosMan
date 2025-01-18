@@ -9,6 +9,7 @@ import { countries } from 'src/assets/data/countries';
 export function getCountryCode(inputValue: string, countryCode?: Country) {
   if (inputValue) {
     const phoneNumber = parsePhoneNumber(inputValue);
+
     if (phoneNumber) {
       return phoneNumber?.country;
     }

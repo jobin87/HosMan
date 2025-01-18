@@ -1,6 +1,6 @@
-import type { SxProps, Theme } from '@mui/material/styles';
+import type { Theme, SxProps } from '@mui/material/styles';
 import type { TextFieldProps } from '@mui/material/TextField';
-import type { Country, Value } from 'react-phone-number-input/input';
+import type { Value, Country } from 'react-phone-number-input/input';
 
 // ----------------------------------------------------------------------
 
@@ -9,7 +9,6 @@ export type PhoneInputProps = Omit<TextFieldProps, 'onChange' | 'ref'> & {
   country?: Country;
   disableSelect?: boolean;
   onChange: (newValue: Value) => void;
-  returnCountryPhoneNumber?: (data: string) => void;
 };
 
 export type CountryListProps = {

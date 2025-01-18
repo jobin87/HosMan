@@ -8,9 +8,3 @@ export type ConfirmDialogProps = Omit<DialogProps, 'title' | 'content'> & {
   action: React.ReactNode;
   content?: React.ReactNode;
 };
-
-export type DocumentPreviewDialogProps = Omit<DialogProps, 'title' | 'content'> & {
-  onClose: () => void;
-  title: React.ReactNode;
-  file?: any | string | null;
-};

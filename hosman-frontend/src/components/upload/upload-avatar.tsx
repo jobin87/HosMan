@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 import Box from '@mui/material/Box';
@@ -6,8 +6,8 @@ import Typography from '@mui/material/Typography';
 
 import { varAlpha } from 'src/theme/styles';
 
-import { Iconify } from '../iconify';
 import { Image } from '../image';
+import { Iconify } from '../iconify';
 import { uploadClasses } from './classes';
 import { RejectionFiles } from './components/rejection-files';
 
@@ -68,9 +68,7 @@ export function UploadAvatar({
         justifyContent: 'center',
         bgcolor: (theme) => varAlpha(theme.vars.palette.grey['500Channel'], 0.08),
         transition: (theme) =>
-          theme.transitions.create(['opacity'], {
-            duration: theme.transitions.duration.shorter,
-          }),
+          theme.transitions.create(['opacity'], { duration: theme.transitions.duration.shorter }),
         '&:hover': { opacity: 0.72 },
         ...(hasError && {
           color: 'error.main',
@@ -138,7 +136,7 @@ export function UploadAvatar({
 
       {helperText && helperText}
 
-      <RejectionFiles files={[...fileRejections]} />
+      <RejectionFiles files={fileRejections} />
     </>
   );
 }

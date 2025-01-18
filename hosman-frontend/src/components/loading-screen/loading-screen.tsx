@@ -1,8 +1,8 @@
 import type { BoxProps } from '@mui/material/Box';
 
 import Box from '@mui/material/Box';
-import LinearProgress from '@mui/material/LinearProgress';
 import Portal from '@mui/material/Portal';
+import LinearProgress from '@mui/material/LinearProgress';
 
 // ----------------------------------------------------------------------
 

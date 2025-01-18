@@ -59,9 +59,7 @@ export function DeleteButton({ sx, ...other }: IconButtonProps) {
         position: 'absolute',
         color: (theme) => varAlpha(theme.vars.palette.common.whiteChannel, 0.8),
         bgcolor: (theme) => varAlpha(theme.vars.palette.grey['900Channel'], 0.72),
-        '&:hover': {
-          bgcolor: (theme) => varAlpha(theme.vars.palette.grey['900Channel'], 0.48),
-        },
+        '&:hover': { bgcolor: (theme) => varAlpha(theme.vars.palette.grey['900Channel'], 0.48) },
         ...sx,
       }}
       {...other}

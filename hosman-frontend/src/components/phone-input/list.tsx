@@ -1,22 +1,22 @@
 import type { Country } from 'react-phone-number-input/input';
 
 import Box from '@mui/material/Box';
+import Popover from '@mui/material/Popover';
+import MenuList from '@mui/material/MenuList';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
 import ButtonBase from '@mui/material/ButtonBase';
 import IconButton from '@mui/material/IconButton';
-import InputAdornment from '@mui/material/InputAdornment';
 import ListItemText from '@mui/material/ListItemText';
-import MenuItem from '@mui/material/MenuItem';
-import MenuList from '@mui/material/MenuList';
-import Popover from '@mui/material/Popover';
-import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
 
 import { countries } from 'src/assets/data/countries';
 
-import { FlagIcon, Iconify } from 'src/components/iconify';
+import { Iconify, FlagIcon } from 'src/components/iconify';
 import { SearchNotFound } from 'src/components/search-not-found';
 
 import { usePopover } from '../custom-popover';
-import { applyFilter, getCountry } from './utils';
+import { getCountry, applyFilter } from './utils';
 
 import type { CountryListProps } from './types';
 

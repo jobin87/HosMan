@@ -1,18 +1,18 @@
 import type { TextFieldProps } from '@mui/material/TextField';
-import type { Country, Value } from 'react-phone-number-input/input';
+import type { Value, Country } from 'react-phone-number-input/input';
 
-import { forwardRef, useCallback, useState } from 'react';
+import { useState, forwardRef, useCallback } from 'react';
 import PhoneNumberInput from 'react-phone-number-input/input';
 
 import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import { inputBaseClasses } from '@mui/material/InputBase';
-import TextField from '@mui/material/TextField';
 
 import { Iconify } from '../iconify';
+import { getCountryCode } from './utils';
 import { CountryListPopover } from './list';
-import { getCountry, getCountryCode } from './utils';
 
 import type { PhoneInputProps } from './types';
 
@@ -30,7 +30,6 @@ export const PhoneInput = forwardRef<HTMLDivElement, PhoneInputProps>(
       disableSelect,
       variant = 'outlined',
       country: inputCountryCode,
-      returnCountryPhoneNumber,
       ...other
     },
     ref
@@ -41,21 +40,13 @@ export const PhoneInput = forwardRef<HTMLDivElement, PhoneInputProps>(
 
     const [selectedCountry, setSelectedCountry] = useState(defaultCountryCode);
 
-    const getCountryNumber = () => {
-      returnCountryPhoneNumber!(getCountry(selectedCountry)?.phone);
-    };
-
     const hasLabel = !!label;
 
-    const cleanValue = (value || '').replace(/[\s-]+/g, ''); // Ensure value is a string
+    const cleanValue = value.replace(/[\s-]+/g, '');
 
     const handleClear = useCallback(() => {
       onChange('' as Value);
     }, [onChange]);
-
-    // useEffect(() => {
-    //   getCountryNumber()
-    // }, [selectedCountry])
 
     return (
       <Box

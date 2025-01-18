@@ -1,22 +1,22 @@
+import type { TextFieldProps } from '@mui/material/TextField';
 import type {
   AutocompleteProps,
-  AutocompleteRenderGetTagProps,
   AutocompleteRenderInputParams,
+  AutocompleteRenderGetTagProps,
 } from '@mui/material/Autocomplete';
-import type { TextFieldProps } from '@mui/material/TextField';
 
-import Autocomplete from '@mui/material/Autocomplete';
 import Chip from '@mui/material/Chip';
-import { filledInputClasses } from '@mui/material/FilledInput';
-import InputAdornment from '@mui/material/InputAdornment';
-import { outlinedInputClasses } from '@mui/material/OutlinedInput';
 import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+import InputAdornment from '@mui/material/InputAdornment';
+import { filledInputClasses } from '@mui/material/FilledInput';
+import { outlinedInputClasses } from '@mui/material/OutlinedInput';
 
 import { countries } from 'src/assets/data';
 
 import { FlagIcon, iconifyClasses } from 'src/components/iconify';
 
-import { displayValueByCountryCode, getCountry } from './utils';
+import { getCountry, displayValueByCountryCode } from './utils';
 
 // ----------------------------------------------------------------------
 
@@ -111,11 +111,7 @@ export function CountrySelect({
             [`& .${iconifyClasses.flag}`]: { ml: 0.5, mr: -0.5 },
           },
           [`& .${filledInputClasses.root}`]: {
-            [`& .${iconifyClasses.flag}`]: {
-              ml: 0.5,
-              mr: -0.5,
-              mt: hiddenLabel ? 0 : -2,
-            },
+            [`& .${iconifyClasses.flag}`]: { ml: 0.5, mr: -0.5, mt: hiddenLabel ? 0 : -2 },
           },
         }}
       />

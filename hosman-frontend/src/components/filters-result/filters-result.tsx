@@ -1,5 +1,5 @@
 import type { ChipProps } from '@mui/material/Chip';
-import type { SxProps, Theme } from '@mui/material/styles';
+import type { Theme, SxProps } from '@mui/material/styles';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';

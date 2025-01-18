@@ -11,32 +11,34 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
+      unique: true, // Prevent duplicate emails
     },
     password: {
       type: String,
       required: true,
     },
-    userRegNum:{
-      type:String,
-      required:true
-
-    },
-    role:{
-      type: String,
-      enum:['Manager','Doctor','Nurse'],
-      default:'Manager'
-    },
-    zipCode:{
+    userRegNum: {
       type: String,
       required: true,
     },
-    isVerified: { type: Boolean, default: false }, 
-
-
-   
+    role: {
+      type: String,
+      enum: ['Manager', 'Doctor', 'Nurse'],
+      default: 'Manager',
+    },
+    zipCode: {
+      type: String,
+      required: true,
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,  // <-- Add this field
+    },
   },
-  { timestamps: true },
-  
+  { timestamps: true }
 );
 
 const User = mongoose.model('User', userSchema);

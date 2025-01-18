@@ -1,17 +1,17 @@
-import type { FormHelperTextProps } from '@mui/material/FormHelperText';
-import type { FormLabelProps } from '@mui/material/FormLabel';
 import type { RadioProps } from '@mui/material/Radio';
+import type { Theme, SxProps } from '@mui/material/styles';
+import type { FormLabelProps } from '@mui/material/FormLabel';
 import type { RadioGroupProps } from '@mui/material/RadioGroup';
-import type { SxProps, Theme } from '@mui/material/styles';
+import type { FormHelperTextProps } from '@mui/material/FormHelperText';
 
 import { Controller, useFormContext } from 'react-hook-form';
 
-import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormHelperText from '@mui/material/FormHelperText';
-import FormLabel from '@mui/material/FormLabel';
 import Radio from '@mui/material/Radio';
+import FormLabel from '@mui/material/FormLabel';
 import RadioGroup from '@mui/material/RadioGroup';
+import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 // ----------------------------------------------------------------------
 
@@ -63,9 +63,7 @@ export function RHFRadioGroup({ name, label, options, helperText, slotProps, ...
                   <Radio
                     {...slotProps?.radio}
                     inputProps={{
-                      ...(!option.label && {
-                        'aria-label': ariaLabel(option.label),
-                      }),
+                      ...(!option.label && { 'aria-label': ariaLabel(option.label) }),
                       ...slotProps?.radio?.inputProps,
                     }}
                   />

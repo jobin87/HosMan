@@ -6,9 +6,9 @@ import { fData } from 'src/utils/format-number';
 
 import { varAlpha } from 'src/theme/styles';
 
-import { fileData, FileThumbnail } from '../../file-thumbnail';
 import { Iconify } from '../../iconify';
 import { uploadClasses } from '../classes';
+import { fileData, FileThumbnail } from '../../file-thumbnail';
 
 import type { MultiFilePreviewProps } from '../types';
 
@@ -113,10 +113,7 @@ export function MultiFilePreview({
             <ListItemText
               primary={name}
               secondary={fData(size)}
-              secondaryTypographyProps={{
-                component: 'span',
-                typography: 'caption',
-              }}
+              secondaryTypographyProps={{ component: 'span', typography: 'caption' }}
             />
 
             {onRemove && (

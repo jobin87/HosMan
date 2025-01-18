@@ -1,19 +1,19 @@
+import type { Theme, SxProps } from '@mui/material/styles';
 import type { CheckboxProps } from '@mui/material/Checkbox';
-import type { FormControlLabelProps } from '@mui/material/FormControlLabel';
 import type { FormGroupProps } from '@mui/material/FormGroup';
-import type { FormHelperTextProps } from '@mui/material/FormHelperText';
 import type { FormLabelProps } from '@mui/material/FormLabel';
-import type { SxProps, Theme } from '@mui/material/styles';
+import type { FormHelperTextProps } from '@mui/material/FormHelperText';
+import type { FormControlLabelProps } from '@mui/material/FormControlLabel';
 
 import { Controller, useFormContext } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
-import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
-import FormHelperText from '@mui/material/FormHelperText';
 import FormLabel from '@mui/material/FormLabel';
+import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 // ----------------------------------------------------------------------
 
@@ -118,24 +118,22 @@ export function RHFMultiCheckbox({
           )}
 
           <FormGroup {...other}>
-            {options?.map((option) => (
+            {options.map((option) => (
               <FormControlLabel
-                key={option?.value}
+                key={option.value}
                 control={
                   <Checkbox
-                    checked={field?.value?.includes(option?.value)}
-                    onChange={() => field.onChange(getSelected(field?.value, option?.value))}
-                    name={accessibility(option?.label)}
+                    checked={field.value.includes(option.value)}
+                    onChange={() => field.onChange(getSelected(field.value, option.value))}
+                    name={accessibility(option.label)}
                     {...slotProps?.checkbox}
                     inputProps={{
-                      ...(!option?.label && {
-                        'aria-label': ariaLabel(option?.label),
-                      }),
+                      ...(!option.label && { 'aria-label': ariaLabel(option.label) }),
                       ...slotProps?.checkbox?.inputProps,
                     }}
                   />
                 }
-                label={option?.label}
+                label={option.label}
               />
             ))}
           </FormGroup>

@@ -15,7 +15,6 @@ export function SplashScreen({ portal = true, sx, ...other }: Props) {
   const content = (
     <Box sx={{ overflow: 'hidden' }}>
       <Box
-      
         sx={{
           right: 0,
           width: 1,

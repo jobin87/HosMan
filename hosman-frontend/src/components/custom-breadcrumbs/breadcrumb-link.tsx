@@ -20,11 +20,7 @@ export function BreadcrumbsLink({ link, activeLast, disabled }: Props) {
     color: 'text.primary',
     display: 'inline-flex',
     ...(disabled &&
-      !activeLast && {
-        cursor: 'default',
-        pointerEvents: 'none',
-        color: 'text.disabled',
-      }),
+      !activeLast && { cursor: 'default', pointerEvents: 'none', color: 'text.disabled' }),
   };
 
   const renderContent = (

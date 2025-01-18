@@ -1,6 +1,5 @@
 import type { BoxProps } from '@mui/material/Box';
-import type { SxProps, Theme } from '@mui/material/styles';
-// @ts-ignore
+import type { Theme, SxProps } from '@mui/material/styles';
 import type { LazyLoadImageProps } from 'react-lazy-load-image-component';
 
 // ----------------------------------------------------------------------

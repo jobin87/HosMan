@@ -1,16 +1,16 @@
 import { forwardRef } from 'react';
 
 import Box from '@mui/material/Box';
-import ButtonBase from '@mui/material/ButtonBase';
 import Tooltip from '@mui/material/Tooltip';
 import { styled } from '@mui/material/styles';
+import ButtonBase from '@mui/material/ButtonBase';
 
 import { stylesMode } from 'src/theme/styles';
 
+import { useNavItem } from '../hooks';
 import { Iconify } from '../../iconify';
 import { navSectionClasses } from '../classes';
-import { useNavItem } from '../hooks';
-import { sharedStyles, stateClasses } from '../styles';
+import { stateClasses, sharedStyles } from '../styles';
 
 import type { NavItemProps, NavItemStateProps } from '../types';
 
@@ -153,10 +153,7 @@ const StyledNavItem = styled(ButtonBase, {
         ...baseStyles.icon,
         margin: 'var(--nav-icon-root-margin)',
       },
-      [`& .${navSectionClasses.item.title}`]: {
-        ...baseStyles.title,
-        whiteSpace: 'nowrap',
-      },
+      [`& .${navSectionClasses.item.title}`]: { ...baseStyles.title, whiteSpace: 'nowrap' },
       [`& .${navSectionClasses.item.caption}`]: {
         ...baseStyles.caption,
         marginLeft: theme.spacing(0.75),
@@ -192,10 +189,7 @@ const StyledNavItem = styled(ButtonBase, {
         ...baseStyles.icon,
         margin: 'var(--nav-icon-sub-margin)',
       },
-      [`& .${navSectionClasses.item.title}`]: {
-        ...baseStyles.title,
-        flexGrow: 1,
-      },
+      [`& .${navSectionClasses.item.title}`]: { ...baseStyles.title, flexGrow: 1 },
       [`& .${navSectionClasses.item.caption}`]: { ...baseStyles.caption },
       [`& .${navSectionClasses.item.arrow}`]: {
         ...baseStyles.arrow,

@@ -15,14 +15,14 @@ import PRIMARY_COLOR from 'src/theme/with-settings/primary-color.json';
 import { Iconify } from '../../iconify';
 import { BaseOption } from './base-option';
 import { NavOptions } from './nav-options';
+import { Scrollbar } from '../../scrollbar';
+import { FontOptions } from './font-options';
 import { useSettingsContext } from '../context';
 import { PresetsOptions } from './presets-options';
 import { defaultSettings } from '../config-settings';
 import { FullScreenButton } from './fullscreen-button';
 
 import type { SettingsDrawerProps } from '../types';
-import { FontOptions } from './font-options';
-import { Scrollbar } from '../scrollbar';
 
 // ----------------------------------------------------------------------
 
@@ -168,7 +168,7 @@ export function SettingsDrawer({
         [`& .${drawerClasses.paper}`]: {
           ...paper({
             theme,
-            color: varAlpha(theme.vars.palette.background.paperChannel, 0.1),
+            color: varAlpha(theme.vars.palette.background.defaultChannel, 0.9),
           }),
           width: 360,
           ...sx,

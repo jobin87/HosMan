@@ -1,8 +1,8 @@
-import type { TypographyProps } from '@mui/material/Typography';
 import type { UseInViewOptions } from 'framer-motion';
+import type { TypographyProps } from '@mui/material/Typography';
 
-import { animate, m, useInView, useMotionValue, useTransform } from 'framer-motion';
-import { useEffect, useRef } from 'react';
+import { useRef, useEffect } from 'react';
+import { m, animate, useInView, useTransform, useMotionValue } from 'framer-motion';
 
 import Typography from '@mui/material/Typography';
 

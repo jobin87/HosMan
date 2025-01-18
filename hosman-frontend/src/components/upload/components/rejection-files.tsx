@@ -1,32 +1,24 @@
-import type { PaperProps } from '@mui/material/Paper';
-import type { SxProps } from '@mui/material/styles';
-import { Theme } from '@mui/material/styles'; // Import Theme
 import type { FileRejection } from 'react-dropzone';
+import type { PaperProps } from '@mui/material/Paper';
 
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 
-import { varAlpha } from 'src/theme/styles';
 import { fData } from 'src/utils/format-number';
 
-import { fileData } from '../../file-thumbnail';
+import { varAlpha } from 'src/theme/styles';
+
 import { uploadClasses } from '../classes';
+import { fileData } from '../../file-thumbnail';
 
 // ----------------------------------------------------------------------
 
 type RejectionFilesProps = PaperProps & {
   files: FileRejection[];
-  sx?: SxProps<Theme>; // Ensure the correct type for sx
-  className?: string;
 };
 
-export function RejectionFiles({
-  files,
-  sx = {},
-  className = '',
-  ...other
-}: RejectionFilesProps): JSX.Element | null {
+export function RejectionFiles({ files, sx, className, ...other }: RejectionFilesProps) {
   if (!files.length) {
     return null;
   }
@@ -34,7 +26,7 @@ export function RejectionFiles({
   return (
     <Paper
       variant="outlined"
-      className={`${uploadClasses.uploadRejectionFiles}${className ? ` ${className}` : ''}`}
+      className={uploadClasses.uploadRejectionFiles.concat(className ? ` ${className}` : '')}
       sx={{
         py: 1,
         px: 2,
@@ -42,10 +34,10 @@ export function RejectionFiles({
         textAlign: 'left',
         borderStyle: 'dashed',
         borderColor: 'error.main',
-        bgcolor: (theme: Theme) => varAlpha(theme.palette.error.main, 0.08), // Ensure this is correctly typed
-        ...sx, // Ensure sx is correctly typed
+        bgcolor: (theme) => varAlpha(theme.vars.palette.error.mainChannel, 0.08),
+        ...sx,
       }}
-      {...other} // Spread other props that conform to PaperProps
+      {...other}
     >
       {files.map(({ file, errors }) => {
         const { path, size } = fileData(file);

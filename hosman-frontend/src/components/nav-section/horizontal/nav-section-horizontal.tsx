@@ -1,11 +1,11 @@
 import Stack from '@mui/material/Stack';
 import { useTheme } from '@mui/material/styles';
 
+import { NavList } from './nav-list';
+import { NavUl, NavLi } from '../styles';
 import { Scrollbar } from '../../scrollbar';
 import { navSectionClasses } from '../classes';
 import { navSectionCssVars } from '../css-vars';
-import { NavLi, NavUl } from '../styles';
-import { NavList } from './nav-list';
 
 import type { NavGroupProps, NavSectionProps } from '../types';
 

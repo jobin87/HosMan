@@ -1,5 +1,5 @@
 import express from 'express';
-import {  login, signup } from '../controllers/authController';
+import {  login, signup, verifyEmail } from '../controllers/authController';
 
 const authRoutes = express.Router();
 
@@ -115,6 +115,7 @@ const authRoutes = express.Router();
  *         description: Internal server error
  */
 authRoutes.post('/registration', signup);
+authRoutes.get('/verify-email', verifyEmail);
 authRoutes.post('/login', login);
 
 // authRoutes.post('/checkemail', checkEmailExist);

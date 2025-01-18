@@ -2,7 +2,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 
 import FormHelperText from '@mui/material/FormHelperText';
 
-import { Upload, UploadAvatar, UploadBox } from '../upload';
+import { Upload, UploadBox, UploadAvatar } from '../upload';
 
 import type { UploadProps } from '../upload';
 
@@ -72,7 +72,7 @@ export function RHFUpload({ name, multiple, helperText, ...other }: Props) {
       render={({ field, fieldState: { error } }) => {
         const uploadProps = {
           multiple,
-          accept: { '': [] },
+          accept: { 'image/*': [] },
           error: !!error,
           helperText: error?.message ?? helperText,
         };

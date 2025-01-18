@@ -1,5 +1,5 @@
 import type { PopoverProps } from '@mui/material/Popover';
-import type { SxProps, Theme } from '@mui/material/styles';
+import type { Theme, SxProps } from '@mui/material/styles';
 
 // ----------------------------------------------------------------------
 

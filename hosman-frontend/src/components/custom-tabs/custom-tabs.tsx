@@ -1,5 +1,5 @@
 import type { TabsProps } from '@mui/material/Tabs';
-import type { SxProps, Theme } from '@mui/material/styles';
+import type { Theme, SxProps } from '@mui/material/styles';
 
 import NoSsr from '@mui/material/NoSsr';
 import { tabClasses } from '@mui/material/Tab';

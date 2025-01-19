@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -8,9 +8,8 @@ export type UseTabsReturn = {
   onChange: (event: React.SyntheticEvent, newValue: string) => void;
 };
 
-// Initialize with a single string from an array of default values
-export function useTabs(defaultValues: string): UseTabsReturn {
-  const [value, setValue] = useState(defaultValues[0] || ''); // Default to first item in array or empty string
+export function useTabs(defaultValue: string): UseTabsReturn {
+  const [value, setValue] = useState(defaultValue);
 
   const onChange = useCallback((event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);

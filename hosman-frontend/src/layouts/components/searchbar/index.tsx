@@ -133,18 +133,6 @@ export function Searchbar({ data: navItems = [], sx, ...other }: SearchbarProps)
           />
         </SvgIcon>
       </IconButton>
-
-      <Label
-        sx={{
-          fontSize: 12,
-          color: 'grey.800',
-          bgcolor: 'common.white',
-          boxShadow: theme.customShadows.z1,
-          display: { xs: 'none', sm: 'inline-flex' },
-        }}
-      >
-        ⌘K
-      </Label>
     </Box>
   );
 

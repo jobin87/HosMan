@@ -5,7 +5,7 @@ import { paths } from 'src/routes/paths';
 
 import { SplashScreen } from 'src/components/loading-screen';
 import { useUser } from 'src/hooks/use-user';
-import { SERVICE_STATUS } from 'src/constants/service.constants';
+// import { SERVICE_STATUS } from 'src/constants/service.constants';
 
 // ----------------------------------------------------------------------
 
@@ -20,7 +20,7 @@ export function AuthGuard({ children }: Props) {
 
   const searchParams = useSearchParams();
 
-  const { loading, userLogged, sellerDetails } = useUser();
+  const { loading, userLogged } = useUser();
 
   const [isChecking, setIsChecking] = useState<boolean>(true);
 

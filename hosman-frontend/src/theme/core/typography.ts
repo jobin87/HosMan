@@ -1,6 +1,6 @@
 import type { TypographyOptions } from '@mui/material/styles/createTypography';
 
-import { pxToRem, responsiveFontSizes, setFont } from '../styles/utils';
+import { setFont, pxToRem, responsiveFontSizes } from '../styles/utils';
 
 // ----------------------------------------------------------------------
 
@@ -20,7 +20,7 @@ declare module '@mui/material/styles' {
 
 // ----------------------------------------------------------------------
 
-export const defaultFont = 'DM Sans Variable';
+export const defaultFont = 'Public Sans Variable';
 
 export const primaryFont = setFont(defaultFont);
 

@@ -8,7 +8,7 @@ import { RouterLink } from 'src/routes/components';
 import { paths } from 'src/routes/paths';
 
 import { CONFIG } from 'src/config-global';
-import { stylesMode } from 'src/theme/styles';
+// import { stylesMode } from 'src/theme/styles';
 
 import { Logo } from 'src/components/logo';
 
@@ -18,6 +18,7 @@ import { SignOutButton } from '../components/sign-out-button';
 import { HeaderSection } from '../core/header-section';
 import { LayoutSection } from '../core/layout-section';
 import { Main } from './main';
+import { stylesMode } from 'src/theme/styles';
 
 // ----------------------------------------------------------------------
 

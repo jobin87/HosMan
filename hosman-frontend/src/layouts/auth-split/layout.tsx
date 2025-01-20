@@ -7,7 +7,7 @@ import Alert from '@mui/material/Alert';
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
-import { CONFIG } from 'src/config-global';
+// import { CONFIG } from 'src/config-global';
 
 import { Logo } from 'src/components/logo';
 

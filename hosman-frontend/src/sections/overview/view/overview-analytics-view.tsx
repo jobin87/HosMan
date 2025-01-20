@@ -1,6 +1,6 @@
 import Typography from "@mui/material/Typography";
 
-import { DashboardContent } from "src/layouts/dashboard";
+import { DashboardContent} from "src/layouts/dashboard";
 
 import { AnalyticsCurrentVisits } from "../analytics-current-visits";
 import { AnalyticsTrafficBySite } from "../analytics-traffic-by-site";

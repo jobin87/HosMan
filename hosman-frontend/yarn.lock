@@ -425,6 +425,11 @@
   resolved "https://registry.yarnpkg.com/@fontsource-variable/nunito-sans/-/nunito-sans-5.1.1.tgz#b15b9569e79aa60fcc1e9d5401759c3c8a661564"
   integrity sha512-BjtLqBKa+ZwxkZf7mAwZSEmX6VOC9Bvri1hXAAHPjkrwq6rXBG9THX3kl4hZQE+U0rT3febuSxSa84zAvzZUQg==
 
+"@fontsource-variable/open-sans@^5.1.1":
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/@fontsource-variable/open-sans/-/open-sans-5.1.1.tgz#73f84c8146ebb02321e3b0e755283ae06b19c1a1"
+  integrity sha512-5YCCAAt6t8b9T1UehgGuD0z1mZ8orrygrWC8PrA7hAIDdyQRZXYmT6A+9qG7hnhFRHR3KTSIcvBodO0EsRxZrA==
+
 "@fontsource-variable/public-sans@^5.1.2":
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/@fontsource-variable/public-sans/-/public-sans-5.1.2.tgz#84444654be6f5f63831bcb0d17a682d3db3dd9b9"

@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "@fontsource-variable/open-sans": "^5.1.1",
     "@types/uuid": "^10.0.0",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",

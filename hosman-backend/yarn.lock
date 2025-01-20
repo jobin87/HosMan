@@ -9,6 +9,11 @@
   dependencies:
     "@jridgewell/trace-mapping" "0.3.9"
 
+"@fontsource-variable/open-sans@^5.1.1":
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/@fontsource-variable/open-sans/-/open-sans-5.1.1.tgz#73f84c8146ebb02321e3b0e755283ae06b19c1a1"
+  integrity sha512-5YCCAAt6t8b9T1UehgGuD0z1mZ8orrygrWC8PrA7hAIDdyQRZXYmT6A+9qG7hnhFRHR3KTSIcvBodO0EsRxZrA==
+
 "@jridgewell/resolve-uri@^3.0.3":
   version "3.1.2"
   resolved "https://registry.npmjs.org/@jridgewell/resolve-uri/-/resolve-uri-3.1.2.tgz"

@@ -1,6 +1,6 @@
 import Typography from "@mui/material/Typography";
 
-import { DashboardContent} from "src/layouts/dashboard";
+import { DashboardContent } from "src/layouts/dashboard";
 
 import { AnalyticsCurrentVisits } from "../analytics-current-visits";
 import { AnalyticsTrafficBySite } from "../analytics-traffic-by-site";
@@ -18,27 +18,56 @@ export function OverviewAnalyticsView() {
         variant="h4"
         sx={{ mb: { xs: 6, md: 5 }, color: "primary.main" }}
       >
-                HosMan is your perfect hospital partner here it shows how to manage 
-
+        HosMan is your perfect hospital partner here it shows how to manage
       </Typography>
-      
 
-      <Grid container spacing={3} >
-      <Grid item sx={{ backgroundColor: red }} xs={12} md={6} lg={6} xl={7} mb={3}>
-        <HospitalInfo 
-          message="treating hearts so you can be better"  // Replace with actual message
-        />
-      </Grid>
-      <Grid item sx={{ backgroundColor: red }} xs={12} md={6} lg={4} mb={3} >
-        <HospitalFlipping
-          message="treating hearts so you can be better"  // Replace with actual message
-        />
-      </Grid>
+      <Grid container spacing={3}>
+        <Grid
+          item
+          sx={{ backgroundColor: red }}
+          xs={12}
+          md={6}
+          lg={8}
+          xl={7}
+          mb={3}
+        >
+          <HospitalInfo
+            message="treating hearts so you can be better" // Replace with actual message
+          />
+        </Grid>
+        <Grid
+          item
+          sx={{
+            backgroundColor: red,
+            ml: {
+              xs: 0,
+              lg: 0,
+            },
+          }}
+          xs={12}
+          md={6}
+          lg={4}
+          mb={3}
+        >
+          <HospitalFlipping
+            nurseName="Nurse Jane"
+            tasks={[
+              "Check patient vitals",
+              "Administer medications",
+              "Prepare reports",
+              "Attend team meeting",
+            ]}
+          />
+        </Grid>
         <Grid item xs={12} md={6} lg={12}>
           <AnalyticsTrafficBySite
             title="Statistics"
             list={[
-              { value: "Appointments", label: "Appointments- {check details}", total: 234 },
+              {
+                value: "Appointments",
+                label: "Appointments- {check details}",
+                total: 234,
+              },
               { value: "Reports", label: "Reports", total: 34 },
               { value: "New-Patients", label: "New-Patients", total: 23 },
               { value: "Total-Beds", label: "Total-Beds", total: 834 },
@@ -72,9 +101,6 @@ export function OverviewAnalyticsView() {
             }}
           />
         </Grid>
-        
-
-
       </Grid>
     </DashboardContent>
   );

@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import {  AuthGuard, GuestGuard } from 'src/guard';
+import {  AuthGuard} from 'src/guard';
 
 
 
@@ -32,7 +32,7 @@ const UserAccountPage = lazy(() => import('src/pages/dashboard/user/account'));
 const UserSecurityPage = lazy(() => import('src/pages/dashboard/user/account-security'));
 const DeviceSessionPage = lazy(() => import('src/pages/dashboard/user/device-sessions'));
 // const GeneralPage = lazy(() => import('src/pages/dashboard/user/general-account'));
-const HomePage = lazy(()=>import('src/pages/home'))
+const HomePage = lazy(()=>import('src/pages/onboarding/onboarding'))
 
 // ----------------------------------------------------------------------
 

@@ -5,6 +5,7 @@ import { authRoutes} from './auth';
 import { mainRoutes } from './main';
 import { CONFIG } from 'src/config-global';
 import { dashboardRoutes } from './dashboard';
+import { onboardingRoutes } from './onboarding';
 
 // ----------------------------------------------------------------------
 
@@ -17,6 +18,9 @@ export function Router() {
 
     // Auth
     ...authRoutes,
+
+    // Onboarding
+    ...onboardingRoutes,
 
     // Dashboard
     ...dashboardRoutes,

@@ -18,21 +18,20 @@ import { Main } from './main';
 import { NavMobile } from './nav-mobile';
 import { layoutClasses } from '../classes';
 import { NavVertical } from './nav-vertical';
-// import { NavHorizontal } from './nav-horizontal';
+import { NavHorizontal } from './nav-horizontal';
 import { _account } from '../config-nav-account';
 import { Searchbar } from '../components/searchbar';
 import { _workspaces } from '../config-nav-workspace';
 import { MenuButton } from '../components/menu-button';
 import { LayoutSection } from '../core/layout-section';
 import { HeaderSection } from '../core/header-section';
-import { StyledDivider, useNavColorVars } from './styles';
+import { StyledDivider, useNavColorVars } from '../../layouts/dashboard/styles';
 import { AccountDrawer } from '../components/account-drawer';
 import { SettingsButton } from '../components/settings-button';
 // import { LanguagePopover } from '../components/language-popover';
 // import { ContactsPopover } from '../components/contacts-popover';
 // import { WorkspacesPopover } from '../components/workspaces-popover';
 import { navData as dashboardNavData } from '../config-nav-dashboard';
-import { NavHorizontal } from './nav-horizontal';
 // import { NotificationsDrawer } from '../components/notifications-drawer';
 
 // ----------------------------------------------------------------------
@@ -48,7 +47,7 @@ export type DashboardLayoutProps = {
   };
 };
 
-export function DashboardLayout({ sx, children, header, data }: DashboardLayoutProps) {
+export function OnBoardingLayout({ sx, children, header, data }: DashboardLayoutProps) {
   const theme = useTheme();
 
   const mobileNavOpen = useBoolean();
@@ -127,66 +126,15 @@ export function DashboardLayout({ sx, children, header, data }: DashboardLayoutP
                   cssVars={navColorVars.section}
                 />
                 {/* -- Logo -- */}
-                {isNavHorizontal && (
-                  <Logo
-                    sx={{
-                      display: 'none',
-                      [theme.breakpoints.up(layoutQuery)]: { display: 'inline-flex' },
-                    }}
-                  />
-                )}
-                {/* -- Divider -- */}
-                {isNavHorizontal && (
-                  <StyledDivider
-                    sx={{ [theme.breakpoints.up(layoutQuery)]: { display: 'flex' } }}
-                  />
-                )}
-                {/* -- Workspace popover -- */}
                 
-               <Searchbar data={navData} />
+              
               </>
             ),
-            rightArea: (
-              <Box display="flex" alignItems="center" gap={{ xs: 0, sm: 0.75 }}>
-                {/* -- Searchbar -- */}
-                {/* -- Language popover -- */}
-                {/* <LanguagePopover data={allLangs} /> */}
-                {/* -- Notifications popover -- */}
-                {/* <NotificationsDrawer data={_notifications} /> */}
-                {/* -- Contacts popover -- */}
-                {/* <ContactsPopover data={_contacts} /> */}
-                {/* -- Settings button -- */}
-                <SettingsButton />
-                {/* -- Account drawer -- */}
-                <AccountDrawer data={_account} />
-              </Box>
-            ),
+           
           }}
         />
       }
-      /** **************************************
-       * Sidebar
-       *************************************** */
-      sidebarSection={
-        isNavHorizontal ? null : (
-          <NavVertical
-            data={navData}
-            isNavMini={isNavMini}
-            layoutQuery={layoutQuery}
-            cssVars={navColorVars.section}
-            onToggleNav={() =>
-              settings.onUpdateField(
-                'navLayout',
-                settings.navLayout === 'vertical' ? 'mini' : 'vertical'
-              )
-            }
-          />
-        )
-      }
-      /** **************************************
-       * Footer
-       *************************************** */
-      footerSection={null}
+      
       /** **************************************
        * Style
        *************************************** */

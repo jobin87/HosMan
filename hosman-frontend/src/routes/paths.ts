@@ -37,13 +37,7 @@ export const paths = {
     welcome:`${ROOTS.DASHBOARD}/one`,
     two: `${ROOTS.DASHBOARD}/account`,
     three: `${ROOTS.DASHBOARD}/three`,
-
-    doctor: {
-      root: `${ROOTS.DASHBOARD}/doctors`,
-      profile: `${ROOTS.DASHBOARD}/doctors/doctors-profile`,
-      security: `${ROOTS.DASHBOARD}/user/security`,
-      general: `${ROOTS.DASHBOARD}/user/general`,
-    },
+    
     patients: {
       root: `${ROOTS.DASHBOARD}/patients`,
       profile: `${ROOTS.DASHBOARD}/doctors/doctors-profile`,

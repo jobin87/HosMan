@@ -98,7 +98,7 @@ export function CenteredSignInView() {
           })
         );
         if(response.payload){
-          navigate(paths.dashboard.root)
+          navigate(paths.onboarding.root)
           console.log('1')
         }
       } catch (error) {

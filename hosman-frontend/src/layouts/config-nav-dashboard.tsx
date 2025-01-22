@@ -43,30 +43,24 @@ const ICONS = {
 
 export const navData = [
   /**
-   * Overview
-   */
-  {
-    subheader: 'Overview',
-    items: [{ title: 'Hospital-Info', path: paths.dashboard.root, icon: ICONS.dashboard }],
-  },
-  /*
    * Management
    */
   {
     subheader: 'diagnosis-data',
     items: [
       {
+        title: 'Appointment',
+        path: paths.dashboard.Appointment.root,
+      },
+      {
         title: 'Doctors',
-        path: paths.dashboard.doctor.root,
+        path: paths.dashboard.root,
       },
       {
         title: 'patients',
         path: paths.dashboard.patients.root
       },
-      {
-        title: 'Appointment',
-        path: paths.dashboard.Appointment.root,
-      },
+      
       {
         title: 'treatments',
         path: paths.dashboard.Treatment.root,

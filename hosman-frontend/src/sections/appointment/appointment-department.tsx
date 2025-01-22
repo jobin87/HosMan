@@ -6,9 +6,8 @@ import {
   List,
   ListItem,
   ListItemText,
-  Divider,
   Paper,
-  Chip,
+  Button,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,6 +16,9 @@ const departmentsData = [
   { id: 1, name: 'Cardiology', appointments: 12 },
   { id: 2, name: 'Neurology', appointments: 8 },
   { id: 3, name: 'Orthopedics', appointments: 15 },
+  { id: 4, name: 'Physician', appointments: 19 },
+  { id: 5, name: 'Dermatologist', appointments: 6 },
+  { id: 6, name: 'Psychiatrist', appointments: 4 },
 ];
 
 export default function DepartmentDoctorList() {
@@ -28,7 +30,10 @@ export default function DepartmentDoctorList() {
     dept.name.toLowerCase().includes(searchDepartment.toLowerCase())
   );
 
-  // Navigate to the doctor page
+  // Calculate total appointments
+  const totalAppointments = filteredDepartments.reduce((total, dept) => total + dept.appointments, 0);
+
+  // Navigate to the department page
   const handleDepartmentClick = (id: number) => {
     navigate(`/departments/${id}`);
   };
@@ -39,14 +44,18 @@ export default function DepartmentDoctorList() {
         Departments
       </Typography>
 
+      {/* Total Appointments Count */}
+      <Typography variant="h6" sx={{ mb: 2 }}>
+        Total Appointments: {totalAppointments}
+      </Typography>
+
       {/* Search Input */}
       <TextField
         label="Search Department"
         variant="outlined"
         value={searchDepartment}
         onChange={(e) => setSearchDepartment(e.target.value)}
-        fullWidth
-        sx={{ mb: 3 }}
+        sx={{ mb: 3, width: '50%' }}
       />
 
       {/* Department List */}
@@ -54,23 +63,31 @@ export default function DepartmentDoctorList() {
         <Paper>
           <List>
             {filteredDepartments.map((dept) => (
-              <ListItem >
-                {/* Department Name */}
-                <ListItemText
-                  primary={dept.name}
-                  secondary={
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      {/* Appointment Count */}
-                      <Chip
-                        label={`${dept.appointments} Appointments`}
-                        color="primary"
-                        size="small"
-                        sx={{ marginLeft: 2 }}
-                      />
-                    </Box>
-                  }
-                />
-                <Divider />
+              <ListItem
+                key={dept.id}
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  borderBottom: '1px solid #ddd',
+                  py: 1,
+                }}
+              >
+                <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                  {dept.name}
+                </Typography>
+
+                <Typography variant="body2" sx={{ color: 'gray' }}>
+                  {dept.appointments} Appointments
+                </Typography>
+
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => handleDepartmentClick(dept.id)}
+                >
+                  View
+                </Button>
               </ListItem>
             ))}
           </List>

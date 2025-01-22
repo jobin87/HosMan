@@ -1,10 +1,9 @@
-import { lazy, Suspense } from "react";
+import { Suspense } from "react";
 import { Outlet } from "react-router-dom";
 import { AuthGuard } from "src/auth/guard/auth-guard";
 import { LoadingScreen } from "src/components/loading-screen";
 import { OnBoardingLayout } from "src/layouts/onboarding/layout";
-
-const HomePage = lazy(()=>import('src/pages/onboarding/onboarding'))
+import HomePage from "src/pages/onboarding/onboarding";  // Import directly
 
 const layoutContent = (
   <OnBoardingLayout>
@@ -14,14 +13,12 @@ const layoutContent = (
   </OnBoardingLayout>
 );
 
-
 export const onboardingRoutes = [
-    {
-      path: 'onboarding',
-      element: <AuthGuard>{layoutContent}</AuthGuard>,
-      children: [
-        { element: <HomePage />, index: true }
-      ],
-    },
-  ];
-  
+  {
+    path: 'onboarding',
+    element: <AuthGuard>{layoutContent}</AuthGuard>,
+    children: [
+      { element: <HomePage />, index: true }  // Use HomePage component correctly
+    ],
+  },
+];

@@ -32,7 +32,6 @@ const UserAccountPage = lazy(() => import('src/pages/dashboard/user/account'));
 const UserSecurityPage = lazy(() => import('src/pages/dashboard/user/account-security'));
 const DeviceSessionPage = lazy(() => import('src/pages/dashboard/user/device-sessions'));
 // const GeneralPage = lazy(() => import('src/pages/dashboard/user/general-account'));
-const HomePage = lazy(()=>import('src/pages/onboarding/onboarding'))
 
 // ----------------------------------------------------------------------
 
@@ -49,14 +48,7 @@ export const dashboardRoutes = [
     path: 'dashboard',
     element: <AuthGuard>{layoutContent}</AuthGuard>,
     children: [
-      { element: <HomePage/>, index: true },
-      {
-        path: 'doctors',
-        children: [
-          { element: <DoctorListPage/>, index: true },
-          { path: 'Doctors-profile', element: <UserProfilePage /> },
-        ],
-      },
+      { element: <DoctorListPage/>, index: true },
       {
         path: 'patients',
         children: [

@@ -47,7 +47,7 @@ export function OnboardingContent({
   sx,
   children,
   disablePadding,
-  maxWidth = 'lg',
+  maxWidth = 'xl',
   ...other
 }: DashboardContentProps) {
   const theme = useTheme();
@@ -64,6 +64,7 @@ export function OnboardingContent({
         display: 'flex',
         flex: '1 1 auto',
         flexDirection: 'column',
+        bgcolor: '#CDE9FD',
         pt: 'var(--layout-dashboard-content-pt)',
         pb: 'var(--layout-dashboard-content-pb)',
         [theme.breakpoints.up(layoutQuery)]: {

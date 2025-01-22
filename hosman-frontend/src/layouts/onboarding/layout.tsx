@@ -69,72 +69,7 @@ export function OnBoardingLayout({ sx, children, header, data }: DashboardLayout
       /** **************************************
        * Header
        *************************************** */
-      headerSection={
-        <HeaderSection
-          layoutQuery={layoutQuery}
-          disableElevation={isNavVertical}
-          slotProps={{
-            toolbar: {
-              sx: {
-                ...(isNavHorizontal && {
-                  bgcolor: 'var(--layout-nav-bg)',
-                  [`& .${iconButtonClasses.root}`]: {
-                    color: 'var(--layout-nav-text-secondary-color)',
-                  },
-                  [theme.breakpoints.up(layoutQuery)]: {
-                    height: 'var(--layout-nav-horizontal-height)',
-                  },
-                }),
-              },
-            },
-            container: {
-              maxWidth: false,
-              sx: {
-                ...(isNavVertical && { px: { [layoutQuery]: 5 } }),
-              },
-            },
-          }}
-          sx={header?.sx}
-          slots={{
-            topArea: (
-              <Alert severity="info" sx={{ display: 'none', borderRadius: 0 }}>
-                This is an info Alert.
-              </Alert>
-            ),
-            bottomArea: isNavHorizontal ? (
-              <NavHorizontal
-                data={navData}
-                layoutQuery={layoutQuery}
-                cssVars={navColorVars.section}
-              />
-            ) : null,
-            leftArea: (
-              <>
-                {/* -- Nav mobile -- */}
-                <MenuButton
-                  onClick={mobileNavOpen.onTrue}
-                  sx={{
-                    mr: 1,
-                    ml: -1,
-                    [theme.breakpoints.up(layoutQuery)]: { display: 'none' },
-                  }}
-                />
-                <NavMobile
-                  data={navData}
-                  open={mobileNavOpen.value}
-                  onClose={mobileNavOpen.onFalse}
-                  cssVars={navColorVars.section}
-                />
-                {/* -- Logo -- */}
-                
-              
-              </>
-            ),
-           
-          }}
-        />
-      }
-      
+     
       /** **************************************
        * Style
        *************************************** */

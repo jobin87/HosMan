@@ -82,10 +82,10 @@ export function useNavColorVars(
             // caption
             '--nav-item-caption-color': palette.grey[600],
             // subheader
-            '--nav-subheader-color': palette.grey[600],
+            '--nav-subheader-color': palette.error.darker,
             '--nav-subheader-hover-color': palette.common.white,
             // item
-            '--nav-item-color': palette.grey[500],
+            '--nav-item-color': palette.warning.main,
             '--nav-item-root-active-color': palette.primary.light,
             '--nav-item-root-open-color': palette.common.white,
             // bullet
@@ -101,7 +101,7 @@ export function useNavColorVars(
         throw new Error(`Invalid color: ${settings.navColor}`);
     }
   }, [
-    palette.background.default,
+    palette.background.paperChannel,
     palette.background.defaultChannel,
     palette.common.white,
     palette.grey,

@@ -7,7 +7,6 @@ export const useUser = () => {
   const userDetails: IUserDetails = auth?.data;
 
   console.log('authdata : ', userDetails)
-  console.log(userDetails.photoURL)
 
   return {
     ...userDetails,

@@ -202,7 +202,12 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       SECRET_KEY,
       { expiresIn: "1h" }
     );
-
+    res.cookie("authToken", token, {
+      httpOnly: true, // Prevents client-side JavaScript access
+      secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+      sameSite: "strict", // Prevent CSRF attacks
+      maxAge: 60 * 60 * 1000, // 1 hour expiration
+    });
     res.status(200).json({
       success: true,
       message: "Login successful",
@@ -212,7 +217,8 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       email: existingUser.userEmail,
       username: existingUser.userName,
       role: existingUser.role,
-      photoURL:"https://i.pinimg.com/736x/3b/33/47/3b3347c6e29f5b364d7b671b6a799943.jpg"
+      photoURL:
+        "https://i.pinimg.com/736x/3b/33/47/3b3347c6e29f5b364d7b671b6a799943.jpg",
     });
   } catch (err) {
     console.error("Login Error:", err);
@@ -222,27 +228,39 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
 export const logout = async (req: Request, res: Response): Promise<void> => {
   try {
+    // Check if token is provided in the authorization header or cookie
     const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      res.status(400).json({ success: false, message: "No token provided" });
-      return;
+    const token =
+      authHeader && authHeader.startsWith("Bearer ")
+        ? authHeader.split(" ")[1]
+        : req.cookies.authToken;
+
+    if (!token) {
+       res
+        .status(400)
+        .json({ success: false, message: "No token provided" });
     }
 
-    const token = authHeader.split(" ")[1];
+    // Optional: You can check the token's validity here if needed (optional depending on your setup)
+    // jwt.verify(token, SECRET_KEY); // This step may not be necessary for simple logout
 
-    // Find and deactivate session
+    // Clear the token in the cookie
+    res.clearCookie("authToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // Ensure secure cookies in production
+      sameSite: "strict",
+    });
+
+    // Optionally deactivate the session if you're storing sessions in your database (optional)
     const session = await Session.findOne({ token });
-    console.log(session);
-    if (!session) {
-      res.status(404).json({ success: false, message: "Session not found" });
-      return;
+    if (session) {
+      session.isActive = false;
+      session.logoutTime = new Date();
+      await session.save();
     }
 
-    session.isActive = false;
-    session.logoutTime = new Date();
-    await session.save();
-
-    res.status(200).json({ success: true, message: "Logout successful" });
+    // Respond with success message
+    res.status(200).json({ success: true, message: "Logout successful", loggedOut:true });
   } catch (error: any) {
     res
       .status(500)

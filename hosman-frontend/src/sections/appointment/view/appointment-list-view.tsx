@@ -3,7 +3,7 @@ import AppointmentList from "../appointment-department";
 
 export default function doctorListView() {
   return (
-    <Grid>
+    <Grid >
         <AppointmentList/>
 
     </Grid>

@@ -152,6 +152,7 @@ export type IUserDetails = {
   userDetails: IUserDetails;
   sessions?: IUserSessionProps[];
   permissionId: string;
+  photoURL:string;
   newsAndAnnouncementsEnabled: boolean;
   weeklyUpdatesEnabled: boolean;
   generalNotificationsEnabled: boolean;

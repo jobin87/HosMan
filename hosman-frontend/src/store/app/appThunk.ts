@@ -40,7 +40,7 @@ export const requestSignInWithPassword = createAsyncThunk(
       data: params,
     });
     console.log(response)
-    const {userLogged} = response?.data?.data;
+    const {userLogged} = response?.data;
 
     if (userLogged) {
       return response?.data;

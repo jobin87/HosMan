@@ -28,6 +28,7 @@ import { useMockedUser } from 'src/auth/hooks';
 import { UpgradeBlock } from './nav-upgrade';
 import { AccountButton } from './account-button';
 import { SignOutButton } from './sign-out-button';
+import { useUser } from 'src/hooks/use-user';
 
 // ----------------------------------------------------------------------
 
@@ -47,7 +48,7 @@ export function AccountDrawer({ data = [], sx, ...other }: AccountDrawerProps) {
 
   const pathname = usePathname();
 
-  const { user } = useMockedUser();
+  const { username,email,photoURL} = useUser();
 
   const [open, setOpen] = useState(false);
 
@@ -71,7 +72,7 @@ export function AccountDrawer({ data = [], sx, ...other }: AccountDrawerProps) {
     <AnimateAvatar
       width={96}
       slotProps={{
-        avatar: { src: user?.photoURL, alt: user?.displayName },
+        avatar: { src: photoURL, alt: username },
         overlay: {
           border: 2,
           spacing: 3,
@@ -79,7 +80,7 @@ export function AccountDrawer({ data = [], sx, ...other }: AccountDrawerProps) {
         },
       }}
     >
-      {user?.displayName?.charAt(0).toUpperCase()}
+      {username?.charAt(0).toUpperCase()}
     </AnimateAvatar>
   );
 
@@ -87,8 +88,8 @@ export function AccountDrawer({ data = [], sx, ...other }: AccountDrawerProps) {
     <>
       <AccountButton
         onClick={handleOpenDrawer}
-        photoURL={user?.photoURL}
-        displayName={user?.displayName}
+        photoURL={photoURL}
+        displayName={username}
         sx={sx}
         {...other}
       />
@@ -112,11 +113,11 @@ export function AccountDrawer({ data = [], sx, ...other }: AccountDrawerProps) {
             {renderAvatar}
 
             <Typography variant="subtitle1" noWrap sx={{ mt: 2 }}>
-              {user?.displayName}
+              {username}
             </Typography>
 
             <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }} noWrap>
-              {user?.email}
+              {email}
             </Typography>
           </Stack>
 

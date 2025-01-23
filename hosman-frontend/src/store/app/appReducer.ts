@@ -70,7 +70,7 @@ export const appReducer = createSlice({
 
         if (userLogged) {
           state.accessToken = accessToken;
-          state.userLogged = userLogged;
+          state.userLogged = true;
         }
       })
       .addCase(requestSignInWithPassword.pending, (state, action) => {

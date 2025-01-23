@@ -212,6 +212,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       email: existingUser.userEmail,
       username: existingUser.userName,
       role: existingUser.role,
+      photoURL:"https://i.pinimg.com/736x/3b/33/47/3b3347c6e29f5b364d7b671b6a799943.jpg"
     });
   } catch (err) {
     console.error("Login Error:", err);

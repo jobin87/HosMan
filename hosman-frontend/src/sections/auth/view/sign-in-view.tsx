@@ -97,6 +97,7 @@ export function CenteredSignInView() {
             clientIP: ipaddress,
           })
         );
+        console.log("response:",response)
         if(response.payload){
           navigate(paths.onboarding.root)
           console.log('1')

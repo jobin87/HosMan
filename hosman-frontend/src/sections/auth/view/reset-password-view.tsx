@@ -12,7 +12,7 @@ import { paths } from 'src/routes/paths';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { SentIcon } from 'src/assets/icons';
+// import { SentIcon } from 'src/assets/icons';
 
 import { Field, Form } from 'src/components/hook-form';
 import { Iconify } from 'src/components/iconify';
@@ -140,7 +140,7 @@ export function ResetPasswordView() {
   return (
     <Box sx={{ textAlign: 'center', width: '100%' }}>
       <FormHead
-        icon={<SentIcon />}
+        // icon={<SentIcon />}
         title="Reset Password!"
         // description={`We've sent a 6-digit confirmation email to your email. \nPlease enter the code in below box to verify your email.`}
       />

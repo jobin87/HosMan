@@ -116,6 +116,7 @@ const authRoutes = express.Router();
  */
 authRoutes.post('/registration', signup);
 authRoutes.get('/verify-email', verifyEmail);
+authRoutes.delete('/logout-current-session', verifyEmail);
 authRoutes.post('/login', login);
 
 // authRoutes.post('/checkemail', checkEmailExist);

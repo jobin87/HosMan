@@ -1,19 +1,21 @@
-import { Box, Grid, Paper } from "@mui/material";
-import { OnboardingContent } from "src/layouts/onboarding/main";
-import AnimatedPC from "../pcwithdata";
+import { Box, Grid} from "@mui/material";
+// import { BoardData } from "../board-data";
 import { BoardData } from "../board-data";
-import { SmallBoardData } from "../small-board";
-import { TopBoardData } from "../top-board";
+import AnimatedPC from "../pcwithdata";
 
 export default function OnBoardingView() {
   return (
-    <OnboardingContent>
-       <Grid>
-        <BoardData/>
-       </Grid>
-       <Grid>
-        <BoardData/>
-       </Grid>
-    </OnboardingContent>
+    <Box sx={{
+      bgcolor:"cadetblue",
+      height:"100vh"
+    }}>
+      <Grid sx={{
+        
+      }}>
+
+      <AnimatedPC/>
+      </Grid>
+
+    </Box>
   );
 }

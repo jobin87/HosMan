@@ -39,7 +39,7 @@ export function LayoutSection({
       }}
     />
   );
-
+  
   return (
     <>
       {inputGlobalStyles}

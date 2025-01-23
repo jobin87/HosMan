@@ -36,7 +36,9 @@ export function SignOutButton({
         method: API_METHODS.DELETE,
         url: ENDPOINT_ADMIN_USER_LOGOUT_CURRENT_SESSION,
       });
-      if (response?.data?.data?.loggedOut) {
+      console.log(response)
+      if (response?.data?.loggedOut) {
+        console.log("1")
         dispatch(requestSignOut(onClose));
       }
     } catch (error) {

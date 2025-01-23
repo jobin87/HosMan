@@ -48,7 +48,7 @@ export const dashboardRoutes = [
     path: 'dashboard',
     element: <AuthGuard>{layoutContent}</AuthGuard>,
     children: [
-      { element: <DoctorListPage/>, index: true },
+      { element: <AppointMentListPage/>, index: true },
       {
         path: 'patients',
         children: [
@@ -57,12 +57,13 @@ export const dashboardRoutes = [
         ],
       },
       {
-        path: 'appointment',
+        path: 'doctor',
         children: [
-          { element: <AppointMentListPage/>, index: true },
+          { element: <DoctorListPage/>, index: true },
           { path: 'Patients-profile', element: <UserProfilePage /> },
         ],
       },
+      
       {
         path: 'treatment',
         children: [

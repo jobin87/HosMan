@@ -7,7 +7,7 @@ export const ENDPOINT_RESET_PASSWORD = '/api/admin-auth/v1/forget-password-verif
 // Users Service
 export const ENDPOINT_ADMIN_USER_DETAILS = '/api/admin-user/v1/user-details/'; // + userId
 export const ENDPOINT_ADMIN_USER_LOGOUT_CURRENT_SESSION =
-  '/api/admin-user/v1/logout-current-session';
+  '/api/auth/v1/logout-current-session';
 export const ENDPOINT_ADMIN_USER_LOGOUT_SESSION = '/api/admin-user/v1/logout-session/'; // + sessionId
 export const ENDPOINT_ADMIN_USER_LOGOUT_ALL_SESSION = '/api/admin-user/v1/logout-all-sessions';
 export const ENDPOINT_ADMIN_USER_UPDATE_PROFILE = '/api/admin-user/v1/update-profile/'; // + userId

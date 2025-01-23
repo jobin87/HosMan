@@ -1,18 +1,20 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { LazyMotion, domAnimation, m } from "framer-motion";
 import tv from "../../../public/assets/onboardinggg.png";
 import { useNavigate } from "react-router-dom";
 import { paths } from "src/routes/paths";
 
 const AnimatedPC = () => {
-  const navigate= useNavigate()
+  const navigate = useNavigate();
   return (
     <Box
       sx={{
-        height: "40vh",
+        height: "70vh",
         display: "flex",
+        flexDirection:"column",
         justifyContent: "center",
         alignItems: "center",
+        mt: 10,
       }}
     >
       <LazyMotion features={domAnimation}>
@@ -27,8 +29,7 @@ const AnimatedPC = () => {
           }}
         >
           <Box sx={{ position: "relative" }}>
-
-            <Box component="img" src={tv} alt="TV"  />
+            <Box component="img" src={tv} alt="TV" />
           </Box>
 
           {/* Animated Content Inside the Screen */}
@@ -43,7 +44,7 @@ const AnimatedPC = () => {
               transform: "translate(-50%, -50%)",
               width: "80%",
             }}
-            onClick={()=>navigate(paths.dashboard.root)}
+            
           >
             <Typography
               variant="h5"
@@ -78,6 +79,13 @@ const AnimatedPC = () => {
           </m.div>
         </m.div>
       </LazyMotion>
+      <Box sx={{
+        position:"absolute",
+        top:"56%"
+
+      }}>
+      <Button onClick={() => navigate(paths.dashboard.root)}>click</Button>
+      </Box>
     </Box>
   );
 };

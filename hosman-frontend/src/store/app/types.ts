@@ -4,7 +4,8 @@ export type SignInParams = {
   email: string;
   password: string;
   deviceId: string;
-  clientIP: string
+  clientIP: string;
+  
 
 };
 

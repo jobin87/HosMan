@@ -1,5 +1,5 @@
 import type { IDateValue, ISocialLink } from './common';
-import type { ISellerDetails } from './seller';
+// import type { ISellerDetails } from './seller';
 
 // ----------------------------------------------------------------------
 
@@ -142,25 +142,26 @@ export type IUserDetails = {
   sellerId: string;
   email: string;
   permissions: string[];
-  isSellerSuperAdmin: boolean;
+  isStaffSuperAdmin: boolean;
   superAdmin: boolean;
-  isSellerApproved: boolean;
+  isUserApproved: boolean;
   countryCode: string;
   phone: string;
   defaultPassword: boolean;
   fullPhoneNumber: string;
-  sellerDetails: ISellerDetails;
+  userDetails: IUserDetails;
   sessions?: IUserSessionProps[];
   permissionId: string;
   newsAndAnnouncementsEnabled: boolean;
   weeklyUpdatesEnabled: boolean;
   generalNotificationsEnabled: boolean;
-  sellerNotificationsEnabled: boolean;
-  kaartxUpdatesEnabled: boolean;
+  StaffNotificationsEnabled: boolean;
+  HosmanUpdatesEnabled: boolean;
   browserNotificationsEnabled: boolean;
   createdAt: IDateValue;
   updatedAt: IDateValue;
-  name: string;
+  username: string;
+  role:string;
   profileImage: string;
   approvalStatus: string;
 };

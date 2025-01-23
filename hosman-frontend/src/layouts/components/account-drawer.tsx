@@ -104,7 +104,7 @@ export function AccountDrawer({ data = [], sx, ...other }: AccountDrawerProps) {
           onClick={handleCloseDrawer}
           sx={{ top: 12, left: 12, zIndex: 9, position: 'absolute' }}
         >
-          <Iconify icon="mingcute:close-line" />
+          {/* <Iconify icon="mingcute:close-line" /> */}
         </IconButton>
 
         <Scrollbar>

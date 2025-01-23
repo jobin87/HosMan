@@ -1,10 +1,22 @@
-import mongoose from 'mongoose';
+import mongoose, { Document, Schema } from 'mongoose';
 
-const sessionSchema = new mongoose.Schema(
+// Define session document interface
+interface ISession extends Document {
+  userId: mongoose.Schema.Types.ObjectId;
+  token: string;  // JWT token for session tracking
+  deviceId: string;
+  ipAddress: string;
+  isActive: boolean;
+  loginTime: Date;
+  logoutTime?: Date;
+}
+
+// Session schema
+const sessionSchema = new Schema<ISession>(
   {
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',  // References the User model
+    
+    token: {
+      type: String,
       required: true,
     },
     deviceId: {
@@ -30,6 +42,7 @@ const sessionSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Session = mongoose.model('Session', sessionSchema);
+// Create the session model
+const Session = mongoose.model<ISession>('Session', sessionSchema);
 
 export default Session;

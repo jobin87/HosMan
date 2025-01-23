@@ -20,7 +20,7 @@ export type SettingsState = {
   compactLayout: boolean;
   direction: ThemeDirection;
   colorScheme: ThemeColorScheme;
-  contrast: 'default' | 'hight';
+  contrast: 'default' | 'high';
   navColor: 'integrate' | 'apparent';
   navLayout: 'vertical' | 'horizontal' | 'mini';
   primaryColor: 'default' | 'cyan' | 'purple' | 'blue' | 'orange' | 'red';

@@ -43,12 +43,10 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
 
     // Validate password length
     if (password.length < 6) {
-      res
-        .status(400)
-        .json({
-          success: false,
-          message: "Password must be at least 6 characters not more than ",
-        });
+      res.status(400).json({
+        success: false,
+        message: "Password must be at least 6 characters not more than ",
+      });
       return;
     }
 
@@ -110,15 +108,13 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
     await transporter.sendMail(mailOptions);
 
     // Respond with the success message and token
-    res
-      .status(200)
-      .json({
-        success: true,
-        message:
-          "Signup successful! Please check your email to verify your account.",
-        userWithRoleRequested: true,
-        verificationToken,
-      });
+    res.status(200).json({
+      success: true,
+      message:
+        "Signup successful! Please check your email to verify your account.",
+      userWithRoleRequested: true,
+      verificationToken,
+    });
   } catch (error) {
     res
       .status(500)
@@ -145,12 +141,10 @@ export const verifyEmail = async (
     const user = await User.findOne({ verificationToken: token });
 
     if (!user) {
-      res
-        .status(400)
-        .json({
-          success: false,
-          message: "Invalid or expired verification token",
-        });
+      res.status(400).json({
+        success: false,
+        message: "Invalid or expired verification token",
+      });
       return;
     }
 
@@ -176,8 +170,8 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     console.log("Login Attempt:", email);
 
     // Check if user exists
-    const existingUser = await User.findOne({ userEmail: email  });
-    console.log("existingUse:",existingUser)
+    const existingUser = await User.findOne({ userEmail: email });
+    console.log("existingUse:", existingUser);
     if (!existingUser) {
       console.log("User not found");
       res.status(400).json({ success: false, message: "Invalid email" });
@@ -191,7 +185,10 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     }
 
     // Validate password
-    const isPasswordCorrect = await bcrypt.compare(password, existingUser.password);
+    const isPasswordCorrect = await bcrypt.compare(
+      password,
+      existingUser.password
+    );
     console.log("Password Match:", isPasswordCorrect);
 
     if (!isPasswordCorrect) {
@@ -209,16 +206,12 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     res.status(200).json({
       success: true,
       message: "Login successful",
-      data: {
-        userLogged: true,
-        accessToken: token,
-        user: {
-          id: existingUser._id,
-          email: existingUser.userEmail,
-          username: existingUser.userName,
-          role: existingUser.role,
-        },
-      },
+      userLogged: true,
+      accessToken: token,
+      id: existingUser._id,
+      email: existingUser.userEmail,
+      username: existingUser.userName,
+      role: existingUser.role,
     });
   } catch (err) {
     console.error("Login Error:", err);
@@ -226,6 +219,35 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+export const logout = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      res.status(400).json({ success: false, message: "No token provided" });
+      return;
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    // Find and deactivate session
+    const session = await Session.findOne({ token });
+    console.log(session);
+    if (!session) {
+      res.status(404).json({ success: false, message: "Session not found" });
+      return;
+    }
+
+    session.isActive = false;
+    session.logoutTime = new Date();
+    await session.save();
+
+    res.status(200).json({ success: true, message: "Logout successful" });
+  } catch (error: any) {
+    res
+      .status(500)
+      .json({ success: false, message: "Logout failed", error: error.message });
+  }
+};
 
 // export const checkEmailExist = async (req: Request, res: Response): Promise<void> => {
 //   try {

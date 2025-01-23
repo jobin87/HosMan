@@ -1,5 +1,5 @@
 import express from 'express';
-import {  login, signup, verifyEmail } from '../controllers/authController';
+import {  login, logout, signup, verifyEmail } from '../controllers/authController';
 
 const authRoutes = express.Router();
 
@@ -116,7 +116,7 @@ const authRoutes = express.Router();
  */
 authRoutes.post('/registration', signup);
 authRoutes.get('/verify-email', verifyEmail);
-authRoutes.delete('/logout-current-session', verifyEmail);
+authRoutes.delete('/logout-current-session', logout);
 authRoutes.post('/login', login);
 
 // authRoutes.post('/checkemail', checkEmailExist);

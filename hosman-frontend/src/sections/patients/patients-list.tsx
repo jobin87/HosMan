@@ -102,7 +102,7 @@ export default function PatientList() {
       <Box
         sx={{
           display: "flex",
-          flexDirection: { xs: "column", sm: "row" },
+          flexDirection: { xs: "row", sm: "row" },
           justifyContent: "space-between",
           alignItems: "center",
           p: 2,

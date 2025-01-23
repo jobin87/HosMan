@@ -3,10 +3,10 @@ import {
   Box,
   Typography,
   TextField,
-  List,
-  ListItem,
-  ListItemText,
-  Paper,
+  Grid,
+  Card,
+  CardContent,
+  CardActions,
   Button,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
@@ -31,7 +31,10 @@ export default function DepartmentDoctorList() {
   );
 
   // Calculate total appointments
-  const totalAppointments = filteredDepartments.reduce((total, dept) => total + dept.appointments, 0);
+  const totalAppointments = filteredDepartments.reduce(
+    (total, dept) => total + dept.appointments,
+    0
+  );
 
   // Navigate to the department page
   const handleDepartmentClick = (id: number) => {
@@ -40,11 +43,6 @@ export default function DepartmentDoctorList() {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        Departments
-      </Typography>
-
-      {/* Total Appointments Count */}
       <Typography variant="h6" sx={{ mb: 2 }}>
         Total Appointments: {totalAppointments}
       </Typography>
@@ -55,46 +53,39 @@ export default function DepartmentDoctorList() {
         variant="outlined"
         value={searchDepartment}
         onChange={(e) => setSearchDepartment(e.target.value)}
-        sx={{ mb: 3, width: '50%' }}
+        sx={{ mb: 3, width: '100%' }}
       />
 
-      {/* Department List */}
-      {filteredDepartments.length > 0 ? (
-        <Paper>
-          <List>
-            {filteredDepartments.map((dept) => (
-              <ListItem
-                key={dept.id}
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  borderBottom: '1px solid #ddd',
-                  py: 1,
-                }}
-              >
-                <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                  {dept.name}
-                </Typography>
-
-                <Typography variant="body2" sx={{ color: 'gray' }}>
-                  {dept.appointments} Appointments
-                </Typography>
-
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => handleDepartmentClick(dept.id)}
-                >
-                  View
-                </Button>
-              </ListItem>
-            ))}
-          </List>
-        </Paper>
-      ) : (
-        <Typography>No departments found.</Typography>
-      )}
+      {/* Department Grid */}
+      <Grid container spacing={3}>
+        {filteredDepartments.length > 0 ? (
+          filteredDepartments.map((dept) => (
+            <Grid item xs={12} sm={6} md={4} key={dept.id}>
+              <Card sx={{ textAlign: 'center' }}>
+                <CardContent>
+                  <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                    {dept.name}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: 'gray' }}>
+                    {dept.appointments} Appointments
+                  </Typography>
+                </CardContent>
+                <CardActions sx={{ justifyContent: 'center' }}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => handleDepartmentClick(dept.id)}
+                  >
+                    View
+                  </Button>
+                </CardActions>
+              </Card>
+            </Grid>
+          ))
+        ) : (
+          <Typography sx={{ mt: 2 }}>No departments found.</Typography>
+        )}
+      </Grid>
     </Box>
   );
 }

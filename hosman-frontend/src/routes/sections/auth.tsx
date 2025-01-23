@@ -24,17 +24,14 @@ export const authRoutes = [
       {
         path: 'sign-in',
         element: (
-          <AuthGuard>
             <AuthCenteredLayout>
               <SignInPage />
             </AuthCenteredLayout>
-          </AuthGuard>
         ),
       },
       {
         path: 'sign-up',
         element: (
-          <AuthGuard>
             <AuthSplitLayout
               section={{
                 title: 'Welcome to HosMan... For  yours!',
@@ -43,7 +40,6 @@ export const authRoutes = [
             >
               <SignUpPage />
             </AuthSplitLayout>
-          </AuthGuard>
         ),
       },
       // {

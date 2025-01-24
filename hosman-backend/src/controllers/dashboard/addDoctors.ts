@@ -48,10 +48,12 @@ export const getDoctors = async (req: Request, res: Response): Promise<void> => 
       }
     } else {
       // If no `doctorRegId` provided, return all doctors
-      const data = await Doctor.find();
+      const doctorsdata=  await Doctor.find();
+    
+    
       res.status(200).json({ 
         message: "All doctors fetched successfully",
-       data
+       doctorsdata
       });
     }
   } catch (error) {

@@ -1,3 +1,4 @@
+import { string } from 'zod';
 import type { IDateValue, ISocialLink } from './common';
 // import type { ISellerDetails } from './seller';
 
@@ -132,6 +133,11 @@ export interface IUserSessionProps {
     area: number;
   };
   isCurrentSession: false;
+};
+export type Idoctorslist= {
+  doctorName: String
+
+
 }
 
 export type IUserDetails = {
@@ -147,6 +153,7 @@ export type IUserDetails = {
   isUserApproved: boolean;
   countryCode: string;
   phone: string;
+  doctorsList: Idoctorslist[];
   defaultPassword: boolean;
   fullPhoneNumber: string;
   userDetails: IUserDetails;

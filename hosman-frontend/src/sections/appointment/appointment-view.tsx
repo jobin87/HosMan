@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { TextField, Button, MenuItem, Select, FormControl, InputLabel, Typography, Box } from '@mui/material';
+import { useAppSelector } from 'src/store';
 
 export const AppointmentForm = () => {
   const [formData, setFormData] = useState({
@@ -12,7 +13,8 @@ export const AppointmentForm = () => {
   });
 
   const departments = ['Cardiology', 'Neurology', 'Orthopedics', 'Physician', 'Dermatology', 'Psychiatry'];
-  const Doctors = ['JOBIN','GOUTHAM','ATHUN','AKASH','ANSAF','JIBI']
+  const Doctors = useAppSelector((state)=>state.allstaff.doctorsList)
+  console.log("doctors:",Doctors)
   const availableDates = [
     'Tomorrow',
     ...Array.from({ length: 6 }, (_, i) => new Date(Date.now() + (i + 2) * 86400000).toLocaleDateString()),
@@ -56,13 +58,13 @@ export const AppointmentForm = () => {
         </FormControl>
         <FormControl fullWidth sx={{ mb: 2 }}>
           <InputLabel>Doctors</InputLabel>
-          <Select name="doctor" value={formData.doctor} onChange={handleChange} required>
+          {/* <Select name="doctor" value={formData.doctor} onChange={handleChange} required>
             {Doctors.map((doc) => (
               <MenuItem key={doc} value={doc}>
                 {doc}
               </MenuItem>
             ))}
-          </Select>
+          </Select> */}
         </FormControl>
        
         <TextField

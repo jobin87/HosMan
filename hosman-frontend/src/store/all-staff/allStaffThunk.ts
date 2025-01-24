@@ -26,7 +26,7 @@ export const requestAllDoctorsList = createAsyncThunk('all-staff/alldoctorsList'
     url: ENDPOINT_STAFF_MANAGEMENT_LIST,
   });
   console.log(response)
-  return response?.data?.data
+  return response?.data?.doctorsdata
 });
 
 // Staff Permission Details

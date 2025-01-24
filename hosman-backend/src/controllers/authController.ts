@@ -9,6 +9,7 @@ const SECRET_KEY = "112eryt33";
 import nodemailer from "nodemailer";
 import crypto from "crypto";
 import { promises } from "readline";
+import Doctor from "../models/doctor";
 
 const transporter = nodemailer.createTransport({
   service: "Gmail",
@@ -202,6 +203,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       SECRET_KEY,
       { expiresIn: "1h" }
     );
+    const doctorsdata = await Doctor.find();
     res.cookie("authToken", token, {
       httpOnly: true, // Prevents client-side JavaScript access
       secure: process.env.NODE_ENV === "production", // Use secure cookies in production
@@ -219,6 +221,8 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       role: existingUser.role,
       photoURL:
         "https://i.pinimg.com/736x/3b/33/47/3b3347c6e29f5b364d7b671b6a799943.jpg",
+      doctorsdata
+      
     });
   } catch (err) {
     console.error("Login Error:", err);

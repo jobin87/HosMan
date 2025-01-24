@@ -17,13 +17,18 @@ import { useAppSelector } from "src/store";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { requestAllDoctorsList } from "src/store/all-staff/allStaffThunk";
+import { useNavigate } from "react-router-dom";
+import { paths } from "src/routes/paths";
 
 
 export default function DoctorList() {
   const dispatch = useDispatch();
+  const navigate= useNavigate()
   const doctors = useAppSelector((state) => state.allstaff.doctorsList.data) || [];
   
-
+const handledoctoradding = ()=>{
+  navigate(paths.dashboard.Treatment.root)
+}
   // Fetch doctors list on component mount
   useEffect(() => {
     dispatch(requestAllDoctorsList());
@@ -33,14 +38,20 @@ export default function DoctorList() {
 
   return (
     <Box sx={{ p: 3 }}>
+      <Box sx={{display:"flex",flexDirection:{
+        xs:"row"
+      },
+      justifyContent:"space-between"
+      }}>
       <Typography variant="h4" gutterBottom>Doctor List</Typography>
       <Button
         variant="contained"
         color="primary"
-        sx={{ textTransform: "none" }}
+        onClick={handledoctoradding}
       >
         Add Doctor
       </Button>
+      </Box>
 
       <TableContainer component={Paper}>
         <Table>

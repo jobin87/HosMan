@@ -1,6 +1,6 @@
 import { Box, Button, Typography } from "@mui/material";
 import { LazyMotion, domAnimation, m } from "framer-motion";
-import tv from "../../../public/assets/onboardinggg.png";
+import tv from "src/assets/onboardinggg.png";
 import { useNavigate } from "react-router-dom";
 import { paths } from "src/routes/paths";
 

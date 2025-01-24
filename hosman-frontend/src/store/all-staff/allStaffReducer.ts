@@ -1,15 +1,17 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { basicInitialState, networkCallInitialState } from '../types';
+import { createSlice } from "@reduxjs/toolkit";
+import { basicInitialState, networkCallInitialState } from "../types";
 import {
+  requestAllDoctorsList,
   requestAllStaffDetails,
   requestAllStaffList,
   requestCreateAllStaff,
   requestDeleteAllStaff,
   requestEditAllStaff,
-} from './allStaffThunk';
+} from "./allStaffThunk";
 
 const initialState = {
   list: basicInitialState,
+  doctorsList: basicInitialState,
   details: basicInitialState,
   create: networkCallInitialState,
   edit: networkCallInitialState,
@@ -17,11 +19,14 @@ const initialState = {
 };
 
 export const allStaffReducer = createSlice({
-  name: 'allstaff',
+  name: "allstaff",
   initialState,
   reducers: {
     setAllStaffList: (state, action) => {
       state.list = action.payload;
+    },
+    setDoctorsList: (state, action) => {
+      state.doctorsList = action.payload;
     },
     setAllStaffDetails: (state, action) => {
       state.details = action.payload;
@@ -43,12 +48,25 @@ export const allStaffReducer = createSlice({
         state.list.loading = false;
         state.list.data = action.payload;
       })
-      .addCase(requestAllStaffList.pending, (state, action) => {
+      .addCase(requestAllStaffList.pending, (state) => {
         state.list.loading = true;
       })
       .addCase(requestAllStaffList.rejected, (state, action) => {
         state.list.loading = false;
         state.list.error = action.error;
+      })
+
+      //Doctors
+      .addCase(requestAllDoctorsList.fulfilled, (state, action) => {
+        state.doctorsList.loading = false;
+        state.doctorsList.data = action.payload;
+      })
+      .addCase(requestAllDoctorsList.pending, (state) => {
+        state.doctorsList.loading = true;
+      })
+      .addCase(requestAllDoctorsList.rejected, (state, action) => {
+        state.doctorsList.loading = false;
+        state.doctorsList.error = action.error;
       })
 
       // DETAILS

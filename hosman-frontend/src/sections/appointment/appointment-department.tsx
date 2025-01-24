@@ -1,91 +1,62 @@
-import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import {
   Box,
   Typography,
-  TextField,
-  Grid,
-  Card,
-  CardContent,
-  CardActions,
-  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 
-// Updated sample data with appointment counts
+// Sample department data
 const departmentsData = [
-  { id: 1, name: 'Cardiology', appointments: 12 },
-  { id: 2, name: 'Neurology', appointments: 8 },
-  { id: 3, name: 'Orthopedics', appointments: 15 },
-  { id: 4, name: 'Physician', appointments: 19 },
-  { id: 5, name: 'Dermatologist', appointments: 6 },
-  { id: 6, name: 'Psychiatrist', appointments: 4 },
+  { id: 1, name: 'Cardiology', appointments: 12, patients: ['John', 'Sarah', 'Mark'] },
+  { id: 2, name: 'Neurology', appointments: 8, patients: ['Alice', 'Bob'] },
+  { id: 3, name: 'Orthopedics', appointments: 15, patients: ['Emma', 'Liam', 'Sophia'] },
+  { id: 4, name: 'Physician', appointments: 19, patients: ['Michael', 'Olivia', 'James'] },
+  { id: 5, name: 'Dermatologist', appointments: 6, patients: ['William', 'Isabella'] },
+  { id: 6, name: 'Psychiatrist', appointments: 4, patients: ['Mason', 'Amelia'] },
 ];
 
-export default function DepartmentDoctorList() {
-  const [searchDepartment, setSearchDepartment] = useState('');
-  const navigate = useNavigate();
+export default function DepartmentDetailsPage() {
+  const { id } = useParams<{ id: string }>(); // Get department ID from URL
+  const departmentId = parseInt(id || '0'); // Convert ID to number
 
-  // Filter departments based on search input
-  const filteredDepartments = departmentsData.filter((dept) =>
-    dept.name.toLowerCase().includes(searchDepartment.toLowerCase())
-  );
+  const department = departmentsData.find((dept) => dept.id === departmentId);
 
-  // Calculate total appointments
-  const totalAppointments = filteredDepartments.reduce(
-    (total, dept) => total + dept.appointments,
-    0
-  );
-
-  // Navigate to the department page
-  const handleDepartmentClick = (id: number) => {
-    navigate(`/departments/${id}`);
-  };
+  if (!department) {
+    return <Typography>Department not found</Typography>;
+  }
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h6" sx={{ mb: 2 }}>
-        Total Appointments: {totalAppointments}
+      <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 2 }}>
+        {department.name} - Appointments
       </Typography>
 
-      {/* Search Input */}
-      <TextField
-        label="Search Department"
-        variant="outlined"
-        value={searchDepartment}
-        onChange={(e) => setSearchDepartment(e.target.value)}
-        sx={{ mb: 3, width: '100%' }}
-      />
-
-      {/* Department Grid */}
-      <Grid container spacing={3}>
-        {filteredDepartments.length > 0 ? (
-          filteredDepartments.map((dept) => (
-            <Grid item xs={12} sm={6} md={4} key={dept.id}>
-              <Card sx={{ textAlign: 'center' }}>
-                <CardContent>
-                  <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                    {dept.name}
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: 'gray' }}>
-                    {dept.appointments} Appointments
-                  </Typography>
-                </CardContent>
-                <CardActions sx={{ justifyContent: 'center' }}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => handleDepartmentClick(dept.id)}
-                  >
-                    View
-                  </Button>
-                </CardActions>
-              </Card>
-            </Grid>
-          ))
-        ) : (
-          <Typography sx={{ mt: 2 }}>No departments found.</Typography>
-        )}
-      </Grid>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell><strong>Patient Name</strong></TableCell>
+              <TableCell><strong>Doctor</strong></TableCell>
+              <TableCell><strong>Time</strong></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {department.patients.map((patient, index) => (
+              <TableRow key={index}>
+                <TableCell>{patient}</TableCell>
+                <TableCell>Dr. Smith</TableCell>  {/* Placeholder doctor name */}
+                <TableCell>10:00 AM</TableCell>   {/* Placeholder time */}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </Box>
   );
 }

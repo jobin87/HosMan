@@ -19,8 +19,12 @@ const UploadDocuments = lazy(() => import('src/pages/dashboard/upload-documents'
 // ----------------------------------------------------------------------
 const DoctorListPage = lazy(() => import('src/pages/dashboard/doctors/doctors-list'));
 const PatientsListPage = lazy(() => import('src/pages/dashboard/patients/patients-list'));
-const AppointMentListPage = lazy(() => import('src/pages/dashboard/appointment/appointment-admi-list'));
+const AppointMentListPage = lazy(() => import('src/pages/dashboard/appointment/appointment-user-list'));
 const TreatmentListPage = lazy(() => import('src/pages/dashboard/treatment/treatment'));
+const DepartmentDetails = lazy(() => import('src/sections/appointment/appointment-department'));
+const FormDetails = lazy(() => import('src/pages/dashboard/appointment/form'));
+
+
 const ReportPage = lazy(() => import('src/pages/dashboard/reports/reports'));
 
 
@@ -49,6 +53,14 @@ export const dashboardRoutes = [
     element: <AuthGuard>{layoutContent}</AuthGuard>,
     children: [
       { element: <AppointMentListPage/>, index: true },
+      {
+        path: 'Appointment',
+        children: [
+          { path: 'department/:id', element: <DepartmentDetails/> },
+          { path: 'form', element: <FormDetails/> },
+
+        ],
+      },
       {
         path: 'patients',
         children: [

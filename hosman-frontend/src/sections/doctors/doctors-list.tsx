@@ -27,7 +27,7 @@ export default function DoctorList() {
   const doctors = useAppSelector((state) => state.allstaff.doctorsList.data) || [];
   
 const handledoctoradding = ()=>{
-  navigate(paths.dashboard.Treatment.root)
+  navigate(paths.dashboard.doctors.doctorform)
 }
   // Fetch doctors list on component mount
   useEffect(() => {

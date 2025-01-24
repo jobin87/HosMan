@@ -1,29 +1,41 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
   API_METHODS,
+  ENDPOINT_DOCTOR_ADD,
+  ENDPOINT_DOCTOR_LIST,
   ENDPOINT_STAFF_MANAGEMENT_CREATE,
   ENDPOINT_STAFF_MANAGEMENT_DELETE,
   ENDPOINT_STAFF_MANAGEMENT_DETAILS,
   ENDPOINT_STAFF_MANAGEMENT_EDIT,
-  ENDPOINT_STAFF_MANAGEMENT_LIST,
   makeNetworkCall,
 } from 'src/network';
 
 import type { IAllStaffCreateTypes, IAllStaffEditTypes } from './types';
 
 // Staff Permissions List
-export const requestAllStaffList = createAsyncThunk('all-staff/allStaffList', async () => {
-  const response = await makeNetworkCall({
-    method: API_METHODS.GET,
-    url: ENDPOINT_STAFF_MANAGEMENT_LIST,
-  });
-  return response?.data?.data;
-});
+// export const requestAllStaffList = createAsyncThunk('all-staff/allStaffList', async () => {
+//   const response = await makeNetworkCall({
+//     method: API_METHODS.GET,
+//     url: ENDPOINT_DOCTOR_LIST,
+//   });
+//   return response?.data?.data;
+// });
 
+export const addDoctor = createAsyncThunk('addDoctor',
+  async()=>{
+    const response = await makeNetworkCall({
+      method: API_METHODS.POST,
+      url:ENDPOINT_DOCTOR_ADD,
+    })
+    console.log(response)
+  return response?.data?.doctorsdata
+  }
+
+)
 export const requestAllDoctorsList = createAsyncThunk('all-staff/alldoctorsList', async (doctorId: string) => {
   const response = await makeNetworkCall({
     method: API_METHODS.GET,
-    url: ENDPOINT_STAFF_MANAGEMENT_LIST,
+    url: ENDPOINT_DOCTOR_LIST,
   });
   console.log(response)
   return response?.data?.doctorsdata

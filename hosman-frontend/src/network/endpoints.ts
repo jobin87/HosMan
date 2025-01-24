@@ -41,8 +41,10 @@ export const ENDPOINT_PERMISSION_EDIT = '/api/permission/v1/update/';
 export const ENDPOINT_PERMISSION_DELETE = '/api/permission/v1/delete/';
 export const ENDPOINT_PERMISSION_DETAILS = '/api/permission/v1/details/';
 
-// Staff Management
-export const ENDPOINT_STAFF_MANAGEMENT_LIST = '/api/staff/v1/getDoctor'; //
+// Doctor Management
+export const ENDPOINT_DOCTOR_LIST = '/api/staff/v1/getDoctor'; //
+export const ENDPOINT_DOCTOR_ADD = '/api/staff/v1/addDoctor'; //
+
 export const ENDPOINT_STAFF_MANAGEMENT_CREATE = '/api/staff/v1/create';
 export const ENDPOINT_STAFF_MANAGEMENT_EDIT = '/api/staff/v1/edit/';
 export const ENDPOINT_STAFF_MANAGEMENT_DELETE = '/api/staff/v1/delete/';

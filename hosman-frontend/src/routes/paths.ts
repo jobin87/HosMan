@@ -37,8 +37,9 @@ export const paths = {
 
     doctors: {
       root: `${ROOTS.DASHBOARD}/doctor`,
+      doctorform:`${ROOTS.DASHBOARD}/doctor/doctor-form`
     },
-    
+
     patients: {
       root: `${ROOTS.DASHBOARD}/patients`,
       profile: `${ROOTS.DASHBOARD}/doctors/doctors-profile`,

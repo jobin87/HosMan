@@ -1,5 +1,5 @@
 // Auth
-export const ENDPOINT_ADMIN_LOGIN = '/api/auth/v1/login';
+export const ENDPOINT_ADMIN_LOGIN = '/api/auth/v1/login'; //
 export const ENDPOINT_UPDATE_PASSWORD = '/api/admin-auth/v1/update-default-password';
 export const ENDPOINT_FORGOT_PASSWORD = '/api/admin-auth/v1/forget-password';
 export const ENDPOINT_RESET_PASSWORD = '/api/admin-auth/v1/forget-password-verify';
@@ -16,7 +16,7 @@ export const ENDPOINT_ADMIN_USER_UPDATE_PASSWORD = '/api/admin-user/v1/update-pa
 
 // Seller Onboarding
 
-export const ENDPOINT_USER_ONBOARDING_REGISTRATION = '/api/auth/v1/registration';
+export const ENDPOINT_USER_ONBOARDING_REGISTRATION = '/api/auth/v1/registration'; //
 export const ENDPOINT_SELLER_ONBOARDING_STATUS = '/api/seller-onboarding/v1/status/'; // + sellerId
 export const ENDPOINT_SELLER_ONBOARDING_REGISTRATION_SUBMIT =
   '/api/seller-onboarding/v1/registration-submit';
@@ -42,7 +42,7 @@ export const ENDPOINT_PERMISSION_DELETE = '/api/permission/v1/delete/';
 export const ENDPOINT_PERMISSION_DETAILS = '/api/permission/v1/details/';
 
 // Staff Management
-export const ENDPOINT_STAFF_MANAGEMENT_LIST = '/api/staff/v1/all-staff-list';
+export const ENDPOINT_STAFF_MANAGEMENT_LIST = '/api/staff/v1/getDoctor'; //
 export const ENDPOINT_STAFF_MANAGEMENT_CREATE = '/api/staff/v1/create';
 export const ENDPOINT_STAFF_MANAGEMENT_EDIT = '/api/staff/v1/edit/';
 export const ENDPOINT_STAFF_MANAGEMENT_DELETE = '/api/staff/v1/delete/';

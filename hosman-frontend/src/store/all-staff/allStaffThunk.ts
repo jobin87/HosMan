@@ -20,6 +20,15 @@ export const requestAllStaffList = createAsyncThunk('all-staff/allStaffList', as
   return response?.data?.data;
 });
 
+export const requestAllDoctorsList = createAsyncThunk('all-staff/alldoctorsList', async (doctorId: string) => {
+  const response = await makeNetworkCall({
+    method: API_METHODS.GET,
+    url: ENDPOINT_STAFF_MANAGEMENT_LIST,
+  });
+  console.log(response)
+  return response?.data?.data
+});
+
 // Staff Permission Details
 export const requestAllStaffDetails = createAsyncThunk(
   'all-staff/allStaffDetails',
@@ -28,7 +37,7 @@ export const requestAllStaffDetails = createAsyncThunk(
       method: API_METHODS.GET,
       url: `${ENDPOINT_STAFF_MANAGEMENT_DETAILS}${params.staffId}`,
     });
-    return response?.data?.data;
+    return response?.data;
   }
 );
 

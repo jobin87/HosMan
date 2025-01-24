@@ -46,10 +46,11 @@ export const paths = {
       general: `${ROOTS.DASHBOARD}/user/general`,
     },
     Appointment: {
-      root: `${ROOTS.DASHBOARD}/appointment`,
-      profile: `${ROOTS.DASHBOARD}/doctors/doctors-profile`,
-      security: `${ROOTS.DASHBOARD}/user/security`,
-      general: `${ROOTS.DASHBOARD}/user/general`,
+      department: `${ROOTS.DASHBOARD}/appointment/department/:id`,
+      form: `${ROOTS.DASHBOARD}/appointment/form`,
+
+      
+    
     },
     Treatment: {
       root: `${ROOTS.DASHBOARD}/treatment`,

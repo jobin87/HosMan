@@ -268,6 +268,13 @@ export const logout = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+
+// export const AppointmentBookingForm = async (req:Request,res:Response):Promise<void>=>{
+//   try{
+//     const{}
+//   }
+// }
+
 // export const checkEmailExist = async (req: Request, res: Response): Promise<void> => {
 //   try {
 //     const { email } = req.body;

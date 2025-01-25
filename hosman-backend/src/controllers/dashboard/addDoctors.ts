@@ -20,7 +20,7 @@ export const DoctorsAdded = async(req:Request,res:Response):Promise<void>=>{
     else{ 
         const newDoctor = new Doctor({doctorName,doctorRegId,specialization,experience,contactNumber})
         await newDoctor.save();
-        res.status(201).json({ message: "Doctor added successfully", doctor: newDoctor });
+        res.status(201).json({ message: "Doctor added successfully", doctor: newDoctor, dcotorAdded:true });
     }
 
   }

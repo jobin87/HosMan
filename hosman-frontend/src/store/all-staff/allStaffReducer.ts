@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { basicInitialState, networkCallInitialState } from "../types";
 import {
-  addDoctor,
+  requestaddDoctor,
   requestAllDoctorsList,
   requestAllStaffDetails,
   requestCreateAllStaff,
@@ -45,14 +45,14 @@ export const allStaffReducer = createSlice({
     builder
 
       //Doctors
-      .addCase(addDoctor.fulfilled, (state, action) => {
+      .addCase(requestaddDoctor.fulfilled, (state, action) => {
         state.doctorsList.loading = false;
         state.doctorsList.data = action.payload;
       })
-      .addCase(addDoctor.pending, (state) => {
+      .addCase(requestaddDoctor.pending, (state) => {
         state.doctorsList.loading = true;
       })
-      .addCase(addDoctor.rejected, (state, action) => {
+      .addCase(requestaddDoctor.rejected, (state, action) => {
         state.doctorsList.loading = false;
         state.doctorsList.error = action.error;
       })

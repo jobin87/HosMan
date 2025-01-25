@@ -10,7 +10,7 @@ import {
   makeNetworkCall,
 } from 'src/network';
 
-import type { IAllStaffCreateTypes, IAllStaffEditTypes } from './types';
+import type { adddoctorTypes, IAllStaffCreateTypes, IAllStaffEditTypes } from './types';
 
 // Staff Permissions List
 // export const requestAllStaffList = createAsyncThunk('all-staff/allStaffList', async () => {
@@ -21,14 +21,15 @@ import type { IAllStaffCreateTypes, IAllStaffEditTypes } from './types';
 //   return response?.data?.data;
 // });
 
-export const addDoctor = createAsyncThunk('addDoctor',
-  async()=>{
+export const requestaddDoctor = createAsyncThunk('addDoctor',
+  async(params:adddoctorTypes)=>{
     const response = await makeNetworkCall({
       method: API_METHODS.POST,
       url:ENDPOINT_DOCTOR_ADD,
+      data:params
     })
-    console.log(response)
-  return response?.data?.doctorsdata
+    console.log("response:",response)
+  return response?.data?.data
   }
 
 )

@@ -38,6 +38,15 @@ export interface IAllStaffCreateTypes {
   permissionId: string;
 }
 
+export interface adddoctorTypes {
+  doctorName: string;
+  specialization: string;
+  experience: string;
+  contactNumber: string;
+  doctorRegId: string;
+ 
+}
+
 export interface IAllStaffEditTypes {
   staffId: string;
   name: string;

@@ -11,6 +11,7 @@ const StaffRolesList = lazy(() => import('src/pages/dashboard/settings/staff/rol
 import { LoadingScreen } from 'src/components/loading-screen';
 
 import { DashboardLayout } from 'src/layouts/dashboard/layout';
+import { AddDoctorForm } from 'src/sections/doctors/add-doctor';
 
 const IndexPage = lazy(() => import('src/pages/dashboard/six'));
 
@@ -18,7 +19,6 @@ const UploadDocuments = lazy(() => import('src/pages/dashboard/upload-documents'
 
 // ----------------------------------------------------------------------
 const DoctorListPage = lazy(() => import('src/pages/dashboard/doctors/doctors-list'));
-const DoctorFormPage = lazy(() => import('src/sections/doctors/add-doctor'));
 const PatientsListPage = lazy(() => import('src/pages/dashboard/patients/patients-list'));
 const AppointMentListPage = lazy(() => import('src/pages/dashboard/appointment/appointment-user-list'));
 const TreatmentListPage = lazy(() => import('src/pages/dashboard/treatment/treatment'));
@@ -73,7 +73,7 @@ export const dashboardRoutes = [
         path: 'doctor',
         children: [
           { element: <DoctorListPage/>, index: true },
-          { path: 'doctor-form', element: <DoctorFormPage/> },
+          { path: 'doctor-form', element: <AddDoctorForm/> },
 
         ],
       },

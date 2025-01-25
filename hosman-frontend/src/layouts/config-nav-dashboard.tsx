@@ -1,10 +1,9 @@
 import { paths } from 'src/routes/paths';
-
 import { CONFIG } from 'src/config-global';
-
 import { SvgColor } from 'src/components/svg-color';
 
-// ----------------------------------------------------------------------
+// Assuming the user role is available in a context or state
+const userRole = 'manager'; // Example, this would be dynamic based on the logged-in user
 
 const icon = (name: string) => (
   <SvgColor src={`${CONFIG.assetsDir}/assets/icons/navbar/${name}.svg`} />
@@ -39,8 +38,7 @@ const ICONS = {
   parameter: icon('ic-parameter'),
 };
 
-// ----------------------------------------------------------------------
-
+// Role-based navigation data
 export const navData = [
   /**
    * Management
@@ -52,26 +50,25 @@ export const navData = [
         title: 'Appointment',
         path: paths.dashboard.root,
       },
-      {
-        title: 'Doctors',
-        path: paths.dashboard.doctors.root,
-      },
+      // Conditionally show Doctors based on the role
+      ...(userRole === 'manager' ? [
+        {
+          title: 'Doctors',
+          path: paths.dashboard.doctors.root,
+        }
+      ] : []),
       {
         title: 'patients',
-        path: paths.dashboard.patients.root
+        path: paths.dashboard.patients.root,
       },
-      
       {
         title: 'treatments',
         path: paths.dashboard.Treatment.root,
       },
-      
       {
         title: 'Reports',
         path: paths.dashboard.Reports.root,
-
       },
-     
     ],
   },
   {
@@ -79,7 +76,7 @@ export const navData = [
     items: [
       {
         title: 'Staff Management',
-        path: paths.dashboard.settings.root,      
+        path: paths.dashboard.settings.root,
       },
       {
         title: 'Hospital-files',

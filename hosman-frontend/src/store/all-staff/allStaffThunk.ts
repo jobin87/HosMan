@@ -10,7 +10,7 @@ import {
   makeNetworkCall,
 } from 'src/network';
 
-import type { adddoctorTypes, IAllStaffCreateTypes, IAllStaffEditTypes } from './types';
+import type { adddoctorTypes, DoctorsList, IAllStaffCreateTypes, IAllStaffEditTypes } from './types';
 
 // Staff Permissions List
 // export const requestAllStaffList = createAsyncThunk('all-staff/allStaffList', async () => {
@@ -33,10 +33,11 @@ export const requestaddDoctor = createAsyncThunk('addDoctor',
   }
 
 )
-export const requestAllDoctorsList = createAsyncThunk('all-staff/alldoctorsList', async (doctorId: string) => {
+export const requestAllDoctorsList = createAsyncThunk('all-staff/alldoctorsList', async (params:DoctorsList) => {
   const response = await makeNetworkCall({
     method: API_METHODS.GET,
     url: ENDPOINT_DOCTOR_LIST,
+    data:params
   });
   console.log(response)
   return response?.data?.doctorsdata

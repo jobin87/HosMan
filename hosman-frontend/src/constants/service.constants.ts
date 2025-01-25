@@ -1,8 +1,8 @@
 
 export const USER_TYPES =[
-  { value:'DOCTOR', label:'Doctor'},
-  { value:'MANAGER', label:'Manager'},
-  { value:'NURSE', label:'Nurse'},
+  { value:'Doctor', label:'Doctor'},
+  { value:'Manager', label:'Manager'},
+  { value:'Nurse', label:'Nurse'},
 
 ]
 

@@ -48,7 +48,7 @@ export const paths = {
     },
     Appointment: {
       department: `${ROOTS.DASHBOARD}/appointment/department/:id`,
-      form: `${ROOTS.DASHBOARD}/appointment/form`,
+      form: `${ROOTS.DASHBOARD}/appointment/appointment-form`,
 
       
     

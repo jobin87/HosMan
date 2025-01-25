@@ -58,7 +58,7 @@ export const dashboardRoutes = [
         path: 'Appointment',
         children: [
           { path: 'department/:id', element: <DepartmentDetails/> },
-          { path: 'doctor-form', element: <FormDetails/> },
+          { path: 'appointment-form', element: <FormDetails/> },
 
         ],
       },

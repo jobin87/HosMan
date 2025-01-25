@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema(
     role: {
       type: String,
       enum: ['Manager', 'Doctor', 'Nurse'],
-      default: 'Manager',
+      required:true
     },
     zipCode: {
       type: String,

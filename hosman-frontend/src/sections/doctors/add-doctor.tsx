@@ -9,11 +9,11 @@ import Stack from "@mui/material/Stack";
 
 import {  MenuItem, Typography } from "@mui/material";
 import { Field, Form, } from "src/components/hook-form";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { requestaddDoctor } from "src/store/all-staff/allStaffThunk";
 import { paths } from "src/routes/paths";
+import { useAppDispatch } from "src/store";
 
 export type NewDoctorSchemaType = zod.infer<typeof NewDoctorSchema>;
 
@@ -23,10 +23,12 @@ export const NewDoctorSchema = zod.object({
   experience: zod.string().min(1, { message: "Experience is required!" }),
   contactNumber: zod.string().min(1, { message: "Contact Number is required!" }),
   doctorRegId: zod.string().min(1, { message: "Doctor Registration ID is required!" }),
+  status: zod.string().min(1, { message: "Contact Number is required!" }),
+
 });
 
 export function AddDoctorForm() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const defaultValues = {
@@ -36,6 +38,7 @@ export function AddDoctorForm() {
     contactNumber: "",
     doctorRegId: "",
     password: "",
+    status:""
   };
 
   const methods = useForm<NewDoctorSchemaType>({
@@ -53,7 +56,7 @@ export function AddDoctorForm() {
     try {
       const response = await dispatch(requestaddDoctor(data));
       // console.log(response)
-      if (response?.data) {
+      if (response?.payload) {
         toast.success("Doctor added successfully!");
         navigate(paths.dashboard.doctors.root);
       } 

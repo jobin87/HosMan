@@ -41,6 +41,10 @@ export const ENDPOINT_PERMISSION_EDIT = '/api/permission/v1/update/';
 export const ENDPOINT_PERMISSION_DELETE = '/api/permission/v1/delete/';
 export const ENDPOINT_PERMISSION_DETAILS = '/api/permission/v1/details/';
 
+//appointment 
+export const ENDPOINT_ADD_APPOINTMENT = '/api/staff/v1/addappointment'; //
+
+
 // Doctor Management
 export const ENDPOINT_DOCTOR_LIST = '/api/staff/v1/getDoctor'; //
 export const ENDPOINT_DOCTOR_ADD = '/api/staff/v1/addDoctor'; //

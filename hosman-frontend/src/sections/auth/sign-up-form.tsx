@@ -30,7 +30,7 @@ export const NewUserSchema = zod.object({
   userRegNum: zod
     .string()
     .min(1, { message: "Cannot leave this field empty!" }),
-  userType: schemaHelper.objectOrNull<string | null>({
+  role: schemaHelper.objectOrNull<string | null>({
     message: { required_error: "Type is required!" },
   }),
   zipCode: zod
@@ -59,7 +59,7 @@ export function SignUpForm(data: any) {
     userName: "",
     userEmail: "",
     userRegNum: "",
-    userType: "MANAGER",
+    role: "Manager",
     address: "",
     password: "",
     zipcode: "",
@@ -83,16 +83,16 @@ export function SignUpForm(data: any) {
   const values = watch();
 
   useEffect(() => {
-    switch (values.userType) {
-      case "DOCTOR":
+    switch (values.role) {
+      case "Doctor":
         setIdentityPlaceHolder("Doctor ID");
         setFullnamePlaceHolder("Doctor Name");
         break;
-      case "MANAGER":
+      case "Manager":
         setIdentityPlaceHolder("Hospital Registration Number");
         setFullnamePlaceHolder("Manager Name");
         break;
-      case "NURSE":
+      case "Nurse":
         setIdentityPlaceHolder("Nurse ID");
         setFullnamePlaceHolder("Nurse Name");
         break;
@@ -101,7 +101,7 @@ export function SignUpForm(data: any) {
         setFullnamePlaceHolder("Manager Name");
         break;
     }
-  }, [values.userType]);
+  }, [values.role]);
 
   const onSubmit = handleSubmit(async (data) => {
     const formData = methods.getValues();
@@ -148,7 +148,7 @@ export function SignUpForm(data: any) {
           >
             <Field.Select
               fullWidth
-              name="userType"
+              name="role"
               label="Role"
               {...methods.register}
               children={USER_TYPES.map((option) => (
@@ -156,7 +156,7 @@ export function SignUpForm(data: any) {
                   {option.label}
                 </MenuItem>
               ))}
-              defaultValue={"MANAGER"}
+              defaultValue={"Manager"}
             />
             <Field.Text
               {...methods.register}

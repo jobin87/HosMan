@@ -44,8 +44,20 @@ export interface adddoctorTypes {
   experience: string;
   contactNumber: string;
   doctorRegId: string;
+  status: string
  
 }
+
+export interface DoctorsList  {
+  doctorName: string;
+  specialization: string;
+  experience: string;
+  contactNumber: string;
+  doctorRegId: string;
+  status: string
+ 
+}
+
 
 export interface IAllStaffEditTypes {
   staffId: string;

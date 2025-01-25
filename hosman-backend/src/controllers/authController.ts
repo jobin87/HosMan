@@ -9,7 +9,7 @@ const SECRET_KEY = "112eryt33";
 import nodemailer from "nodemailer";
 import crypto from "crypto";
 import { promises } from "readline";
-import Doctor from "../models/doctor";
+import Doctor from "../models/dashboard/doctor";
 
 const transporter = nodemailer.createTransport({
   service: "Gmail",
@@ -273,11 +273,7 @@ export const logout = async (req: Request, res: Response): Promise<void> => {
 };
 
 
-// export const AppointmentBookingForm = async (req:Request,res:Response):Promise<void>=>{
-//   try{
-//     const{}
-//   }
-// }
+
 
 // export const checkEmailExist = async (req: Request, res: Response): Promise<void> => {
 //   try {

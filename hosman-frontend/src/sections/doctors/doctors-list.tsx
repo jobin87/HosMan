@@ -11,15 +11,14 @@ import {
   Box,
   Button,
 } from "@mui/material";
-import { useAppSelector } from "src/store";
+import { useAppDispatch, useAppSelector } from "src/store";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { requestAllDoctorsList } from "src/store/all-staff/allStaffThunk";
 import { useNavigate } from "react-router-dom";
 import { paths } from "src/routes/paths";
 
 export default function DoctorList() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const doctors = useAppSelector((state) => state.allstaff.doctorsList.data) || [];
 
@@ -29,7 +28,16 @@ export default function DoctorList() {
 
   // Fetch doctors list on component mount
   useEffect(() => {
-    dispatch(requestAllDoctorsList());
+    const doctorData = {
+      contactNumber: "",
+      createdAt: "",
+      doctorName: "",
+      doctorRegId: "",
+      experience: "",
+      specialization: "",
+      status: ""
+    };
+    dispatch(requestAllDoctorsList(doctorData));
   }, [dispatch]);
 
   console.log("Doctors List:", doctors);

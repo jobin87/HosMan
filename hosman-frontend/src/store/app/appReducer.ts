@@ -4,15 +4,17 @@ import { basicInitialState, networkCallInitialState } from '../types';
 import {
   changeDefaultPassword,
   getAllUserDocuments,
-  requestForgetPassword,
+  // requestForgetPassword,
   requestResetPassword,
   requestSignInWithPassword,
   requestUserDetails,
-  requestUserRegistration,
+  // requestUserRegistration,
 } from './appThunk';
 
 const initialState = {
-  auth: basicInitialState,
+  auth: {
+    ...basicInitialState,role:null
+  },
   accessToken: null,
   userLogged: false,
   forgetpassword: networkCallInitialState,
@@ -45,7 +47,7 @@ export const appReducer = createSlice({
       state.auth.data = action.payload;
     },
     setUserLoggedOut: (state) => {
-      state.auth = basicInitialState;
+      state.auth.data = basicInitialState;
       state.accessToken = null;
       state.userLogged = false;
     },
@@ -66,14 +68,16 @@ export const appReducer = createSlice({
         state.auth.loading = false;
         state.auth.data = action.payload;
 
-        const { userLogged, accessToken } = action.payload;
+        const { userLogged, accessToken,role } = action.payload;
 
         if (userLogged) {
+          state.auth.role = role
           state.accessToken = accessToken;
           state.userLogged = true;
         }
+        console.log(accessToken)
       })
-      .addCase(requestSignInWithPassword.pending, (state, action) => {
+      .addCase(requestSignInWithPassword.pending, (state) => {
         state.auth.loading = true;
       })
       .addCase(requestSignInWithPassword.rejected, (state, action) => {
@@ -82,36 +86,36 @@ export const appReducer = createSlice({
       })
 
       // Seller Registration
-      .addCase(requestUserRegistration.fulfilled, (state, action) => {
-        state.auth.loading = true;
-      })
-      .addCase(requestUserRegistration.pending, (state, action) => {
-        state.auth.loading = true;
-      })
-      .addCase(requestUserRegistration.rejected, (state, action) => {
-        state.auth.error = action.error;
-        state.auth.loading = false;
-      })
+      // .addCase(requestUserRegistration.fulfilled, (state, action) => {
+      //   state.auth.loading = true;
+      // })
+      // .addCase(requestUserRegistration.pending, (state, action) => {
+      //   state.auth.loading = true;
+      // })
+      // .addCase(requestUserRegistration.rejected, (state, action) => {
+      //   state.auth.error = action.error;
+      //   state.auth.loading = false;
+      // })
 
       // Forget Password
-      .addCase(requestForgetPassword.fulfilled, (state, action) => {
-        state.forgetpassword.loading = false;
-        state.forgetpassword.data = action.payload;
-      })
-      .addCase(requestForgetPassword.pending, (state, action) => {
-        state.forgetpassword.loading = true;
-      })
-      .addCase(requestForgetPassword.rejected, (state, action) => {
-        state.forgetpassword.error = action.error;
-        state.forgetpassword.loading = false;
-      })
+      // .addCase(requestForgetPassword.fulfilled, (state, action) => {
+      //   state.forgetpassword.loading = false;
+      //   state.forgetpassword.data = action.payload;
+      // })
+      // .addCase(requestForgetPassword.pending, (state, action) => {
+      //   state.forgetpassword.loading = true;
+      // })
+      // .addCase(requestForgetPassword.rejected, (state, action) => {
+      //   state.forgetpassword.error = action.error;
+      //   state.forgetpassword.loading = false;
+      // })
 
       // Reset Password
       .addCase(requestResetPassword.fulfilled, (state, action) => {
         state.forgetpassword.loading = false;
         state.forgetpassword.data = action.payload;
       })
-      .addCase(requestResetPassword.pending, (state, action) => {
+      .addCase(requestResetPassword.pending, (state) => {
         state.forgetpassword.loading = true;
       })
       .addCase(requestResetPassword.rejected, (state, action) => {

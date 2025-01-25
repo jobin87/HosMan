@@ -1,5 +1,12 @@
 // Loading is true by default. Use case: When needed to call an api on page load.
-export const basicInitialState: basicInitialStateProps = {
+export const basicInitialState:  basicInitialStateProps  = {
+  data: null,
+  loading: false,
+  error: {},
+};
+
+export const basicInitialStateWithRole:  basicInitialStatePropsWithRole  = {
+  role:null,
   data: null,
   loading: false,
   error: {},
@@ -13,6 +20,13 @@ export const networkCallInitialState: basicInitialStateProps = {
 };
 
 export interface basicInitialStateProps {
+  data: null | object | any;
+  loading: boolean;
+  error: null | object;
+}
+
+export interface basicInitialStatePropsWithRole {
+  role:null| String;
   data: null | object | any;
   loading: boolean;
   error: null | object;

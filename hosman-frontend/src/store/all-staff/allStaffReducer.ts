@@ -3,11 +3,12 @@ import { basicInitialState, networkCallInitialState } from "../types";
 import {
   requestaddDoctor,
   requestAllDoctorsList,
-  requestAllStaffDetails,
-  requestCreateAllStaff,
-  requestDeleteAllStaff,
-  requestEditAllStaff,
+  // requestAllStaffDetails,
+  // requestCreateAllStaff,
+  // requestDeleteAllStaff,
+  // requestEditAllStaff,
 } from "./allStaffThunk";
+import DoctorList from "src/sections/doctors/doctors-list";
 
 const initialState = {
   list: basicInitialState,
@@ -59,6 +60,13 @@ export const allStaffReducer = createSlice({
       .addCase(requestAllDoctorsList.fulfilled, (state, action) => {
         state.doctorsList.loading = false;
         state.doctorsList.data = action.payload;
+
+        const { doctorsdata } = action.payload;
+
+        if (doctorsdata) {
+          state.doctorsList.data = doctorsdata;
+        }
+        console.log("yes:",doctorsdata);
       })
       .addCase(requestAllDoctorsList.pending, (state) => {
         state.doctorsList.loading = true;
@@ -66,68 +74,68 @@ export const allStaffReducer = createSlice({
       .addCase(requestAllDoctorsList.rejected, (state, action) => {
         state.doctorsList.loading = false;
         state.doctorsList.error = action.error;
-      })
-
-      // DETAILS
-      .addCase(requestAllStaffDetails.fulfilled, (state, action) => {
-        state.details.loading = false;
-        state.details.data = action.payload;
-      })
-      .addCase(requestAllStaffDetails.pending, (state, action) => {
-        state.details.loading = true;
-      })
-      .addCase(requestAllStaffDetails.rejected, (state, action) => {
-        state.details.loading = false;
-        state.details.error = action.error;
-      })
-
-      // CREATE
-      .addCase(requestCreateAllStaff.fulfilled, (state, action) => {
-        state.create.loading = false;
-        state.create.data = action.payload;
-        if (action.payload?.staffCreated) {
-          state.list = basicInitialState;
-        }
-      })
-      .addCase(requestCreateAllStaff.pending, (state, action) => {
-        state.create.loading = true;
-      })
-      .addCase(requestCreateAllStaff.rejected, (state, action) => {
-        state.create.loading = false;
-        state.create.error = action.error;
-      })
-
-      // EDIT
-      .addCase(requestEditAllStaff.fulfilled, (state, action) => {
-        state.edit.loading = false;
-        state.edit.data = action.payload;
-        if (action.payload?.staffUpdated || action.payload?.staffCreated) {
-          state.list = basicInitialState;
-        }
-      })
-      .addCase(requestEditAllStaff.pending, (state, action) => {
-        state.edit.loading = true;
-      })
-      .addCase(requestEditAllStaff.rejected, (state, action) => {
-        state.edit.loading = false;
-        state.edit.error = action.error;
-      })
-
-      // DELETE
-      .addCase(requestDeleteAllStaff.fulfilled, (state, action) => {
-        state.delete.loading = false;
-        state.delete.data = action.payload;
-        if (action.payload?.staffDeleted) {
-          state.list = basicInitialState;
-        }
-      })
-      .addCase(requestDeleteAllStaff.pending, (state, action) => {
-        state.delete.loading = true;
-      })
-      .addCase(requestDeleteAllStaff.rejected, (state, action) => {
-        state.delete.loading = false;
-        state.delete.error = action.error;
       });
+
+    // DETAILS
+    // .addCase(requestAllStaffDetails.fulfilled, (state, action) => {
+    //   state.details.loading = false;
+    //   state.details.data = action.payload;
+    // })
+    // .addCase(requestAllStaffDetails.pending, (state, action) => {
+    //   state.details.loading = true;
+    // })
+    // .addCase(requestAllStaffDetails.rejected, (state, action) => {
+    //   state.details.loading = false;
+    //   state.details.error = action.error;
+    // })
+
+    // CREATE
+    // .addCase(requestCreateAllStaff.fulfilled, (state, action) => {
+    //   state.create.loading = false;
+    //   state.create.data = action.payload;
+    //   if (action.payload?.staffCreated) {
+    //     state.list = basicInitialState;
+    //   }
+    // })
+    // .addCase(requestCreateAllStaff.pending, (state, action) => {
+    //   state.create.loading = true;
+    // })
+    // .addCase(requestCreateAllStaff.rejected, (state, action) => {
+    //   state.create.loading = false;
+    //   state.create.error = action.error;
+    // })
+
+    // EDIT
+    // .addCase(requestEditAllStaff.fulfilled, (state, action) => {
+    //   state.edit.loading = false;
+    //   state.edit.data = action.payload;
+    //   if (action.payload?.staffUpdated || action.payload?.staffCreated) {
+    //     state.list = basicInitialState;
+    //   }
+    // })
+    // .addCase(requestEditAllStaff.pending, (state, action) => {
+    //   state.edit.loading = true;
+    // })
+    // .addCase(requestEditAllStaff.rejected, (state, action) => {
+    //   state.edit.loading = false;
+    //   state.edit.error = action.error;
+    // })
+
+    // DELETE
+    // .addCase(requestDeleteAllStaff.fulfilled, (state, action) => {
+    //   state.delete.loading = false;
+    //   state.delete.data = action.payload;
+    //   if (action.payload?.staffDeleted) {
+    //     state.list = basicInitialState;
+    //   }
+    // })
+    // .addCase(requestDeleteAllStaff.pending, (state, action) => {
+    //   state.delete.loading = true;
+    // })
+    // .addCase(requestDeleteAllStaff.rejected, (state, action) => {
+    //   state.delete.loading = false;
+    //   state.delete.error = action.error;
+    // });
   },
 });
 

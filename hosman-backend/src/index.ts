@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import { connectDb } from './config/db';
 import authRoutes from './routes/authRoutes';
 import cors from 'cors'
-import { doctorRoutes } from './routes/dashboard';
+import { dashboardRoutes } from './routes/dashboardRoutes';
 
 dotenv.config({ path: '.env.development' });
 const app = express();
@@ -17,7 +17,7 @@ app.use(cors({
 app.use(express.json());
 connectDb()
 app.use('/api/auth/v1/',authRoutes);
-app.use('/api/staff/v1',doctorRoutes)
+app.use('/api/staff/v1',dashboardRoutes)
 
 
 

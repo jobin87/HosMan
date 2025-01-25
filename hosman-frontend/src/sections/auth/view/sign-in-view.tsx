@@ -64,7 +64,7 @@ export function CenteredSignInView() {
     handleSubmit,
     formState: { isSubmitting, errors },
   } = methods;
-  console.log(errors);
+  // console.log(errors);
 
   const getClientIp = async () => {
     try {
@@ -88,7 +88,6 @@ export function CenteredSignInView() {
     console.log(ipaddress)
     if (await ipaddress) {
       try {
-        console.log("Device ID:", data);
         const response = await dispatch(
           requestSignInWithPassword({
             email: data.email,
@@ -97,7 +96,6 @@ export function CenteredSignInView() {
             clientIP: ipaddress,
           })
         );
-        console.log("response:",response)
         if(response.payload){
           navigate(paths.onboarding.root)
           console.log('1')

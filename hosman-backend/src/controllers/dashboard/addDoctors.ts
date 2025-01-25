@@ -7,7 +7,7 @@ const SECRET_KEY = "112eryt33";
 import nodemailer from "nodemailer";
 import crypto from "crypto";
 import { promises } from "readline"
-import Doctor from "../../models/doctor";
+import Doctor from "../../models/dashboard/doctor";
 
 export const DoctorsAdded = async(req:Request,res:Response):Promise<void>=>{
   try{
@@ -20,7 +20,7 @@ export const DoctorsAdded = async(req:Request,res:Response):Promise<void>=>{
     else{ 
         const newDoctor = new Doctor({doctorName,doctorRegId,specialization,experience,contactNumber})
         await newDoctor.save();
-        res.status(201).json({ message: "Doctor added successfully", doctor: newDoctor, dcotorAdded:true });
+        res.status(201).json({ message: "Doctor added successfully", doctor: newDoctor, doctorAdded:true });
     }
 
   }

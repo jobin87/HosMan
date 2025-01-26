@@ -8,6 +8,14 @@ export const ENDPOINT_RESET_PASSWORD = '/api/admin-auth/v1/forget-password-verif
 export const ENDPOINT_ADMIN_USER_DETAILS = '/api/admin-user/v1/user-details/'; // + userId
 export const ENDPOINT_ADMIN_USER_LOGOUT_CURRENT_SESSION =
   '/api/auth/v1/logout-current-session';
+
+//appointment 
+export const ENDPOINT_ADD_APPOINTMENT = '/api/staff/v1/addappointment'; //
+export const ENDPOINT_GET_APPOINTMENT = '/api/staff/v1/getAppointments'; //
+
+
+
+// logout 
 export const ENDPOINT_ADMIN_USER_LOGOUT_SESSION = '/api/admin-user/v1/logout-session/'; // + sessionId
 export const ENDPOINT_ADMIN_USER_LOGOUT_ALL_SESSION = '/api/admin-user/v1/logout-all-sessions';
 export const ENDPOINT_ADMIN_USER_UPDATE_PROFILE = '/api/admin-user/v1/update-profile/'; // + userId
@@ -15,6 +23,7 @@ export const ENDPOINT_ADMIN_USER_NOTIFICATION_SETTINGS = '/api/admin-user/v1/not
 export const ENDPOINT_ADMIN_USER_UPDATE_PASSWORD = '/api/admin-user/v1/update-password';
 
 // Seller Onboarding
+
 
 export const ENDPOINT_USER_ONBOARDING_REGISTRATION = '/api/auth/v1/registration'; //
 export const ENDPOINT_SELLER_ONBOARDING_STATUS = '/api/seller-onboarding/v1/status/'; // + sellerId
@@ -41,8 +50,7 @@ export const ENDPOINT_PERMISSION_EDIT = '/api/permission/v1/update/';
 export const ENDPOINT_PERMISSION_DELETE = '/api/permission/v1/delete/';
 export const ENDPOINT_PERMISSION_DETAILS = '/api/permission/v1/details/';
 
-//appointment 
-export const ENDPOINT_ADD_APPOINTMENT = '/api/staff/v1/addappointment'; //
+
 
 
 // Doctor Management

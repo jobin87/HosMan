@@ -29,7 +29,7 @@ export const requestaddDoctor = createAsyncThunk('addDoctor',
       data:params
     })
     console.log("response:",response)
-  return response?.data?.data
+  return response?.data
   }
 
 )

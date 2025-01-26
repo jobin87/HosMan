@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Box,
   Typography,
@@ -11,29 +11,37 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { paths } from 'src/routes/paths';
+import { useAppDispatch, useAppSelector } from 'src/store';
+import { getAppointmentData} from 'src/store/appointment/appointmentThunk';
 
-// Updated sample data with appointment counts
-const departmentsData = [
-  { id: 1, name: 'Cardiology', appointments: 12 },
-  { id: 2, name: 'Neurology', appointments: 8 },
-  { id: 3, name: 'Orthopedics', appointments: 15 },
-  { id: 4, name: 'Physician', appointments: 19 },
-  { id: 5, name: 'Dermatologist', appointments: 6 },
-  { id: 6, name: 'Psychiatrist', appointments: 4 },
-];
-
-export default function AppointmentListView()  {
-  const [searchDepartment, setSearchDepartment] = useState('');
+export default function AppointmentListView() {
+  const { data } = useAppSelector((state) => state.appointment.appointmentData); // Access data directly
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+  const [searchDepartment, setSearchDepartment] = useState('');
+  const [refresh, setRefresh] = useState(false);
+
+  useEffect(() => {
+    // Fetch appointment data on component mount
+    dispatch(getAppointmentData(data)).then(() => setRefresh((prev) => !prev));
+  },[dispatch,location.pathname]);
+
+  useEffect(() => {
+    console.log("Fetched data:", data);  // Check the structure of the data object
+  }, [data]);
+
+  // Check if data is available and if it is an array, otherwise default to an empty array
+  const departments = Array.isArray(data?.departments) ? data.departments : [];
+
   // Filter departments based on search input
-  const filteredDepartments = departmentsData.filter((dept) =>
+  const filteredDepartments = departments.filter((dept:any) =>
     dept.name.toLowerCase().includes(searchDepartment.toLowerCase())
   );
 
   // Calculate total appointments
   const totalAppointments = filteredDepartments.reduce(
-    (total, dept) => total + dept.appointments,
+    (total:any, dept:any) => total + dept.count,
     0
   );
 
@@ -60,7 +68,7 @@ export default function AppointmentListView()  {
       {/* Department Grid */}
       <Grid container spacing={3}>
         {filteredDepartments.length > 0 ? (
-          filteredDepartments.map((dept) => (
+          filteredDepartments.map((dept:any) => (
             <Grid item xs={12} sm={6} md={4} key={dept.id}>
               <Card sx={{ textAlign: 'center' }}>
                 <CardContent>
@@ -68,7 +76,7 @@ export default function AppointmentListView()  {
                     {dept.name}
                   </Typography>
                   <Typography variant="body2" sx={{ color: 'gray' }}>
-                    {dept.appointments} Appointments
+                    {dept.count} Appointments {/* Use the count from API data */}
                   </Typography>
                 </CardContent>
                 <CardActions sx={{ justifyContent: 'center' }}>

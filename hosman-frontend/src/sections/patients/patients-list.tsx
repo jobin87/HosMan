@@ -11,92 +11,28 @@ import {
   Box,
   Button,
 } from "@mui/material";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { paths } from "src/routes/paths";
+import { useAppDispatch, useAppSelector } from "src/store";
+import { requestGetPatient } from "src/store/patient/patientThunk";
 
 // Sample data for patients
-const patients = [
-  {
-    id: 1,
-    name: "Alice Williams",
-    age: 45,
-    disease: "Diabetes",
-    contact: "123-456-7890",
-    status: "Active",
-  },
-  {
-    id: 2,
-    name: "Bob Johnson",
-    age: 67,
-    disease: "Hypertension",
-    contact: "234-567-8901",
-    status: "Inactive",
-  },
-  {
-    id: 3,
-    name: "Charlie Smith",
-    age: 33,
-    disease: "Asthma",
-    contact: "345-678-9012",
-    status: "Active",
-  },
-  {
-    id: 4,
-    name: "Diana Brown",
-    age: 50,
-    disease: "Arthritis",
-    contact: "456-789-0123",
-    status: "Inactive",
-  },
-  {
-    id: 5,
-    name: "Eva Davis",
-    age: 27,
-    disease: "COVID-19",
-    contact: "567-890-1234",
-    status: "Active",
-  },
-  {
-    id: 6,
-    name: "Frank Miller",
-    age: 60,
-    disease: "Cancer",
-    contact: "678-901-2345",
-    status: "Inactive",
-  },
-  {
-    id: 7,
-    name: "Grace Moore",
-    age: 40,
-    disease: "Heart Disease",
-    contact: "789-012-3456",
-    status: "Active",
-  },
-  {
-    id: 8,
-    name: "Hank Taylor",
-    age: 55,
-    disease: "Kidney Failure",
-    contact: "890-123-4567",
-    status: "Inactive",
-  },
-  {
-    id: 9,
-    name: "Ivy Anderson",
-    age: 65,
-    disease: "Alzheimer's",
-    contact: "901-234-5678",
-    status: "Active",
-  },
-  {
-    id: 10,
-    name: "Jack Wilson",
-    age: 72,
-    disease: "Stroke",
-    contact: "012-345-6789",
-    status: "Inactive",
-  },
-];
 
 export default function PatientList() {
+  const dispatch = useAppDispatch();
+  const navigate= useNavigate()
+  const { data } = useAppSelector((state) => state.patients.patientlist);
+
+  useEffect(() => {
+    dispatch(requestGetPatient(data));
+    console.log("data:ss:", data);
+  },[dispatch,data?.length]);
+
+  const handleAddPatientClick = () => {
+    navigate(paths.dashboard.patients.patientForm); // Navigate to patient form page
+  };
+
   return (
     <Box sx={{ p: 3 }}>
       <Box
@@ -120,6 +56,7 @@ export default function PatientList() {
           variant="contained"
           color="primary"
           sx={{ textTransform: "none" }}
+          onClick={handleAddPatientClick}
         >
           Add Patient
         </Button>
@@ -139,22 +76,32 @@ export default function PatientList() {
           </TableHead>
 
           <TableBody>
-            {patients.map((patient) => (
-              <TableRow key={patient.id}>
-                <TableCell>{patient.id}</TableCell>
-                <TableCell>{patient.name}</TableCell>
-                <TableCell>{patient.age}</TableCell>
-                <TableCell>{patient.disease}</TableCell>
-                <TableCell>{patient.contact}</TableCell>
-                <TableCell>
-                  <Chip
-                    label={patient.status}
-                    color={patient.status === "Active" ? "success" : "error"}
-                    variant="outlined"
-                  />
+            {data && Array.isArray(data) && data.length > 0 ? (
+              data.map((patientList: any) => (
+                <TableRow key={patientList.patientRegId}>
+                  <TableCell>{patientList.patientRegId}</TableCell>
+                  <TableCell>{patientList.patientName}</TableCell>
+                  <TableCell>{patientList.age}</TableCell>
+                  <TableCell>{patientList.disease}</TableCell>
+                  <TableCell>{patientList.contactNumber}</TableCell>
+                  <TableCell>
+                    <Chip
+                      label={patientList.status}
+                      color={
+                        patientList.status === "Active" ? "success" : "error"
+                      }
+                      variant="outlined"
+                    />
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={6} align="center">
+                  No patients found.
                 </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </TableContainer>

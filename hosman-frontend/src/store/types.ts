@@ -4,6 +4,11 @@ export const basicInitialState:  basicInitialStateProps  = {
   loading: false,
   error: {},
 };
+export const basicInitialArrayState:  basicInitialStateProps  = {
+  data: [],
+  loading: false,
+  error: {},
+};
 
 export const basicInitialStateWithRole:  basicInitialStatePropsWithRole  = {
   role:null,

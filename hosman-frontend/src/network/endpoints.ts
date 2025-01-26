@@ -13,6 +13,11 @@ export const ENDPOINT_ADMIN_USER_LOGOUT_CURRENT_SESSION =
 export const ENDPOINT_ADD_APPOINTMENT = '/api/staff/v1/addappointment'; //
 export const ENDPOINT_GET_APPOINTMENT = '/api/staff/v1/getAppointments'; //
 
+//patient
+export const ENDPOINT_ADD_PATIENT = '/api/staff/v1/addPatient'; //
+export const ENDPOINT_GET_PATIENT = '/api/staff/v1/getPatient'; //
+
+
 
 
 // logout 

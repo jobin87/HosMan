@@ -64,7 +64,10 @@ export default function DoctorList() {
         <Box sx={{
           display:"flex",
           gap:1,
-          mr:8
+          mr:{
+            xs:5,
+            lg:8
+          }
         }}>
         {role=="Manager"&&(
          <>

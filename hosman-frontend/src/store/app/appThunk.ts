@@ -18,7 +18,7 @@ import {
 } from 'src/network';
 import { paths } from 'src/routes/paths';
 import { persistor } from '..';
-import { requestSellerOnboardingStatus } from '../sellers/sellersThunk';
+// import { requestSellerOnboardingStatus } from '../patient/patientThunk';
 import { setUserLoggedOut } from './appReducer';
 import type {
   docUrlUpdateProps,
@@ -140,51 +140,51 @@ export const getAllUserDocuments = createAsyncThunk(
   }
 );
 
-export const uploadPresignedUrl = createAsyncThunk(
-  'app/uploadDocument',
-  async (params: docUrlUpdateProps, { dispatch }): Promise<boolean | undefined> => {
-    try {
-      const response = await makeNetworkCall({
-        method: API_METHODS.POST,
-        url: ENDPOINT_DOCUMENT_CREATE,
-        data: [params],
-      });
+// export const uploadPresignedUrl = createAsyncThunk(
+//   'app/uploadDocument',
+//   async (params: docUrlUpdateProps, { dispatch }): Promise<boolean | undefined> => {
+//     try {
+//       const response = await makeNetworkCall({
+//         method: API_METHODS.POST,
+//         url: ENDPOINT_DOCUMENT_CREATE,
+//         data: [params],
+//       });
 
-      const Files: any = await dispatch(requestSellerOnboardingStatus(params?.ownerId));
-      if (Files?.length > 0) {
-        return response?.data?.documentAdded;
-      }
-    } catch (error) {
-      console.error('Error during sending document-url in:', error);
-      throw error;
-    }
-  }
-);
+//       const Files: any = await dispatch(requestSellerOnboardingStatus(params?.ownerId));
+//       if (Files?.length > 0) {
+//         return response?.data?.documentAdded;
+//       }
+//     } catch (error) {
+//       console.error('Error during sending document-url in:', error);
+//       throw error;
+//     }
+//   }
+// );
 
 // Document Update
-export const requestDocumentUpdate = createAsyncThunk(
-  'document/requestDocumentUpdate',
-  async (params: IDocumentUpdateProps, { dispatch }): Promise<boolean | undefined> => {
-    try {
-      const response = await makeNetworkCall({
-        method: API_METHODS.PATCH,
-        url: `${ENDPOINT_DOCUMENT_UPDATE}${params.id}`,
-        data: {
-          comment: params?.comment,
-          status: params?.status,
-          docName: params?.docName,
-          docSize: params?.docSize,
-          lock: params?.lock,
-        },
-      });
-      dispatch(requestSellerOnboardingStatus(params?.sellerId));
-      return response?.data?.data;
-    } catch (error) {
-      console.error('Error during sending document-url in:', error);
-      throw error;
-    }
-  }
-);
+// export const requestDocumentUpdate = createAsyncThunk(
+//   'document/requestDocumentUpdate',
+//   async (params: IDocumentUpdateProps, { dispatch }): Promise<boolean | undefined> => {
+//     try {
+//       const response = await makeNetworkCall({
+//         method: API_METHODS.PATCH,
+//         url: `${ENDPOINT_DOCUMENT_UPDATE}${params.id}`,
+//         data: {
+//           comment: params?.comment,
+//           status: params?.status,
+//           docName: params?.docName,
+//           docSize: params?.docSize,
+//           lock: params?.lock,
+//         },
+//       });
+//       dispatch(requestSellerOnboardingStatus(params?.sellerId));
+//       return response?.data?.data;
+//     } catch (error) {
+//       console.error('Error during sending document-url in:', error);
+//       throw error;
+//     }
+//   }
+// );
 
 // -----------------------------------------------------------------------
 

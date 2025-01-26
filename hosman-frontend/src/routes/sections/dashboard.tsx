@@ -12,6 +12,7 @@ import { LoadingScreen } from 'src/components/loading-screen';
 
 import { DashboardLayout } from 'src/layouts/dashboard/layout';
 import { AddDoctorForm } from 'src/sections/doctors/add-doctor';
+import { AddpatientsData } from 'src/sections/patients/addpatients';
 
 const IndexPage = lazy(() => import('src/pages/dashboard/six'));
 
@@ -66,7 +67,7 @@ export const dashboardRoutes = [
         path: 'patients',
         children: [
           { element: <PatientsListPage/>, index: true },
-          { path: 'Patients-profile', element: <UserProfilePage /> },
+          { path: 'Patient-form', element: <AddpatientsData /> },
         ],
       },
       {

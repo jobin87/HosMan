@@ -42,7 +42,7 @@ export const paths = {
 
     patients: {
       root: `${ROOTS.DASHBOARD}/patients`,
-      profile: `${ROOTS.DASHBOARD}/doctors/doctors-profile`,
+      patientForm: `${ROOTS.DASHBOARD}/patients/patient-Form`,
       security: `${ROOTS.DASHBOARD}/user/security`,
       general: `${ROOTS.DASHBOARD}/user/general`,
     },

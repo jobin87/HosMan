@@ -59,6 +59,7 @@ export interface DoctorsList  {
 }
 
 
+
 export interface IAllStaffEditTypes {
   staffId: string;
   name: string;

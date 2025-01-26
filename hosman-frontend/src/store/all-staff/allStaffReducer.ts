@@ -8,7 +8,6 @@ import {
   // requestDeleteAllStaff,
   // requestEditAllStaff,
 } from "./allStaffThunk";
-import DoctorList from "src/sections/doctors/doctors-list";
 
 const initialState = {
   list: basicInitialState,
@@ -59,14 +58,10 @@ export const allStaffReducer = createSlice({
       })
       .addCase(requestAllDoctorsList.fulfilled, (state, action) => {
         state.doctorsList.loading = false;
-        state.doctorsList.data = action.payload;
+        state.doctorsList.data = action.payload || {};
+       
 
-        const { doctorsdata } = action.payload;
-
-        if (doctorsdata) {
-          state.doctorsList.data = doctorsdata;
-        }
-        console.log("yes:",doctorsdata);
+        console.log("action:",action.payload)
       })
       .addCase(requestAllDoctorsList.pending, (state) => {
         state.doctorsList.loading = true;

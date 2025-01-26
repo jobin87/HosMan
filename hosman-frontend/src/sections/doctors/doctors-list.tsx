@@ -20,7 +20,10 @@ import { paths } from "src/routes/paths";
 export default function DoctorList() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const doctors = useAppSelector((state) => state.allstaff.doctorsList.data) || [];
+  const doctors =
+    useAppSelector((state) => state.allstaff.doctorsList.data) || [];
+  const role = useAppSelector((state) => state.app.auth.role);
+  console.log(role)
 
   const handledoctoradding = () => {
     navigate(paths.dashboard.doctors.doctorform);
@@ -35,7 +38,7 @@ export default function DoctorList() {
       doctorRegId: "",
       experience: "",
       specialization: "",
-      status: ""
+      status: "",
     };
     dispatch(requestAllDoctorsList(doctorData));
   }, [dispatch]);
@@ -57,9 +60,25 @@ export default function DoctorList() {
         <Typography variant="h4" gutterBottom>
           Doctor List
         </Typography>
-        <Button variant="contained" color="primary" onClick={handledoctoradding}>
-          Add Doctor
-        </Button>
+        {role && 
+        <Box sx={{
+          display:"flex",
+          gap:1,
+          mr:8
+        }}>
+        {role=="Manager"&&(
+         <>
+           <Button variant="contained" color="info" size="small"  onClick={handledoctoradding}>
+           Add Doctor
+         </Button>
+          <Button variant="contained" color="error" size="small"  onClick={handledoctoradding}>
+           Delete Doctor
+         </Button>
+         </>
+         
+        )}
+
+        </Box>}
       </Box>
 
       <TableContainer component={Paper}>

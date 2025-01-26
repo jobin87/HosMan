@@ -44,7 +44,7 @@ export interface adddoctorTypes {
   experience: string;
   contactNumber: string;
   doctorRegId: string;
-  status: string
+  // status: string
  
 }
 

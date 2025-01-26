@@ -1,7 +1,7 @@
 import { combineReducers } from '@reduxjs/toolkit';
 import allStaffReducer from './all-staff/allStaffReducer';
 import appReducer from './app/appReducer';
-import productReducer from './products/productReducer';
+import  appointmentReducer  from './appointment/appointmentReducer';
 import rolesReducer from './roles/rolesReducer';
 import sellersReducer from './sellers/sellersReducer';
 
@@ -10,5 +10,5 @@ export const rootReducer = combineReducers({
   roles: rolesReducer,
   allstaff: allStaffReducer,
   sellers: sellersReducer,
-  products: productReducer,
+  appointment: appointmentReducer,
 });

@@ -21,9 +21,11 @@ export const NewDoctorSchema = zod.object({
   doctorName: zod.string().min(1, { message: "Doctor Name is required!" }),
   specialization: zod.string().min(1, { message: "Specialization is required!" }),
   experience: zod.string().min(1, { message: "Experience is required!" }),
-  contactNumber: zod.string().min(1, { message: "Contact Number is required!" }),
-  doctorRegId: zod.string().min(1, { message: "Doctor Registration ID is required!" }),
-  status: zod.string().min(1, { message: "Contact Number is required!" }),
+  contactNumber: zod.string().min(10, { message: "Contact Number should be 10 digits!" })
+  .length(10, { message: "Contact Number must be exactly 10 digits!" })
+
+  .regex(/^\d{10}$/, { message: "Contact Number must contain only numbers!" }),doctorRegId: zod.string().min(1, { message: "Doctor Registration ID is required!" }),
+  // status: zod.string().min(1, { message: "status is required!" }),
 
 });
 
@@ -38,7 +40,6 @@ export function AddDoctorForm() {
     contactNumber: "",
     doctorRegId: "",
     password: "",
-    status:""
   };
 
   const methods = useForm<NewDoctorSchemaType>({
@@ -49,9 +50,9 @@ export function AddDoctorForm() {
 
   const {
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting ,errors},
   } = methods;
-
+ console.log(errors)
   const onSubmit = handleSubmit(async (data) => {
     try {
       const response = await dispatch(requestaddDoctor(data));
@@ -74,17 +75,19 @@ export function AddDoctorForm() {
           Register a New Doctor
         </Typography>
         <Box display="grid" gridTemplateColumns={{ xs: "1fr", sm: "1fr 1fr" }} gap={2}>
-          <Field.Text name="doctorName" label="Doctor Name" {...methods.register} />
-          <Field.Select name="specialization" label="Specialization" {...methods.register}>
-            {["Cardiology", "Neurology", "Orthopedics", "Physician", "Dermatology", "Psychiatry"].map((option) => (
+          <Field.Text  label="Doctor Name" {...methods.register("doctorName")} />
+          <Field.Select label="Specialization" {...methods.register("specialization")}>
+            {["Cardiology", "Neurology", "Orthopedics", "Physician", "Dermatologist", "Psychiatrist"].map((option) => (
               <MenuItem key={option} value={option}>
                 {option}
               </MenuItem>
             ))}
           </Field.Select>
-          <Field.Text name="experience" label="Experience" {...methods.register} />
-          <Field.Text name="contactNumber" label="Contact Number" {...methods.register} />
-          <Field.Text name="doctorRegId" label="Doctor Registration ID" {...methods.register} />
+          <Field.Text  label="Experience" {...methods.register("experience")} />
+          <Field.Text label="Contact Number" {...methods.register("contactNumber")} />
+          {errors.contactNumber && <span>{errors.contactNumber.message}</span>}
+
+          <Field.Text label="Doctor Registration ID" {...methods.register("doctorRegId" )} />
           
         </Box>
         <Stack alignItems="flex-end" sx={{ mt: 3 }}>

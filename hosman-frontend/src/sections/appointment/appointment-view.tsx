@@ -1,94 +1,139 @@
 import { useState, useEffect } from 'react';
-import { TextField, Button, MenuItem, Select, FormControl, InputLabel, Typography, Box } from '@mui/material';
-import { useAppSelector } from 'src/store';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z as zod } from 'zod';
 
-export const AppointmentForm = () => {
-  const [formData, setFormData] = useState({
+import LoadingButton from '@mui/lab/LoadingButton';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import Stack from '@mui/material/Stack';
+import { MenuItem, Typography } from '@mui/material';
+import { Field, Form } from 'src/components/hook-form';
+// import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { useAppDispatch, useAppSelector } from 'src/store';
+import { getAppointmentData, requestAppointmentSaved } from 'src/store/appointment/appointmentThunk';
+import { requestAllDoctorsList } from 'src/store/all-staff/allStaffThunk';
+
+// Validation schema using Zod
+const AppointmentSchema = zod.object({
+  patientName: zod.string().min(1, { message: 'Patient Name is required!' }),
+  department: zod.string().min(1, { message: 'Department is required!' }),
+  doctor: zod.string().min(1, { message: 'Doctor is required!' }),
+  appointmentTime: zod.string().min(1, { message: 'Appointment Time is required!' }),
+  appointmentDate: zod.string().min(1, { message: 'Appointment Date is required!' }),
+  payment: zod.string().min(1, { message: 'Appointment Date is required!' }),
+});
+
+export type AppointmentFormSchemaType = zod.infer<typeof AppointmentSchema>;
+
+export function AppointmentForm() {
+  const dispatch = useAppDispatch()
+
+
+  const defaultValues = {
     department: '',
     doctor: '',
     patientName: '',
     appointmentTime: '',
     appointmentDate: '',
     payment: '5',
-  });
+  };
 
-  // Get doctor data from Redux store
-  const { data } = useAppSelector((state) => state.allstaff.doctorsList);
-  console.log('Doctors from Redux:', data); // Log doctor data from Redux store
+  useEffect(() => {
+    // Define an async function inside the useEffect
+    const fetchDoctorData = async (data:any) => {
+      try {
+        // Dispatch the action to fetch doctor data
+        await dispatch(requestAllDoctorsList(data));
+      } catch (error) {
+        console.error("Error fetching doctors data:", error);
+      }
+    };
+  
+    // Call the async function
+    fetchDoctorData(data);
+  }, [dispatch]);
+  
 
-  // List of available appointment dates
+  // Default form values
+
+
+  // Selecting doctors list from Redux store
+  const { data } = useAppSelector((state) => state.allstaff.doctorsList) || { data: [] };
+  console.log("Doctors data from store:", data);
+
+  // Generate available dates
   const availableDates = [
     'Tomorrow',
     ...Array.from({ length: 6 }, (_, i) => new Date(Date.now() + (i + 2) * 86400000).toLocaleDateString()),
   ];
 
-  // Store filtered doctors based on department
+  // State to hold filtered doctors
   const [filteredDoctors, setFilteredDoctors] = useState<any[]>([]);
 
-  // Filter doctors based on selected department
+  // React Hook Form setup
+  const methods = useForm<AppointmentFormSchemaType>({
+    mode: 'onSubmit',
+    resolver: zodResolver(AppointmentSchema),
+    defaultValues,
+  });
+
+  const {
+    watch,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = methods;
+
+  // Watching department field changes
+  const selectedDepartment = watch('department');
+
+  // Effect to filter doctors based on selected department
   useEffect(() => {
-    if (data && formData.department) {
-      const filtered = data.filter((doctor: any) => doctor.specialization === formData.department);
+    if (data && Array.isArray(data) && selectedDepartment) {
+      const filtered = data.filter((doctor: any) => doctor.specialization === selectedDepartment);
       setFilteredDoctors(filtered);
     } else {
       setFilteredDoctors([]);
     }
-  }, [data, formData.department]);
+  }, [data, selectedDepartment]);
 
-  console.log('Filtered Doctors:', filteredDoctors); // Log filtered doctors
+  // Form submission handler
+  const onSubmit = handleSubmit(async (formData) => {
+    try {
+      const response = await dispatch(requestAppointmentSaved(formData))
+      if(response?.payload){
 
-  // Handle form input changes
-  const handleChange = (e: any) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  // Handle form submission
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    console.log('Appointment Booked:', formData);
-    alert('Appointment booked successfully!');
-  };
-
-  // Reset doctor field when department is changed
-  useEffect(() => {
-    setFormData((prevData) => ({
-      ...prevData,
-      doctor: '', // Reset doctor field when department changes
-    }));
-  }, [formData.department]);
+        console.log('Appointment Booked:', response);
+        dispatch(getAppointmentData(data)), 
+        toast.success('Appointment booked successfully!');
+        // Add logic to save the appointment
+        // navigate('/doctors');
+      }
+    } catch (error) {
+      toast.error('An error occurred while booking the appointment.');
+    }
+  });
 
   return (
-    <Box sx={{ p: 3, maxWidth: 900, mx: 'auto' }}>
-      <Typography variant="h5" gutterBottom sx={{ mb: 4 }}>
-        Book an Appointment
-      </Typography>
-      <form onSubmit={handleSubmit}>
-        <TextField
-          label="Patient Name"
-          name="patientName"
-          value={formData.patientName}
-          onChange={handleChange}
-          fullWidth
-          required
-          sx={{ mb: 2 }}
-        />
+    <Form methods={methods} onSubmit={onSubmit}>
+      <Card sx={{ p: 3, boxShadow: 0 }} elevation={0}>
+        <Typography variant="h4" sx={{ mb: 2, fontWeight: 'bold', color: 'primary.main' }}>
+          Book an Appointment
+        </Typography>
+        
+        <Box display="grid" gridTemplateColumns={{ xs: '1fr', sm: '1fr 1fr' }} gap={2}>
+          <Field.Text label="Patient Name" {...methods.register('patientName')} />
 
-        <FormControl fullWidth sx={{ mb: 2 }}>
-          <InputLabel>Department</InputLabel>
-          <Select name="department" value={formData.department} onChange={handleChange} required>
-            {['Cardiology', 'Neurology', 'Orthopedics', 'Physician', 'Dermatology', 'Psychiatry'].map((dept) => (
-              <MenuItem key={dept} value={dept}>
-                {dept}
+          <Field.Select label="Department" {...methods.register('department')}>
+            {['Cardiology', 'Neurology', 'Orthopedics', 'Physician', 'Dermatologist', 'Psychiatrist'].map((option) => (
+              <MenuItem key={option} value={option}>
+                {option}
               </MenuItem>
             ))}
-          </Select>
-        </FormControl>
+          </Field.Select>
 
-        <FormControl fullWidth sx={{ mb: 2 }}>
-          <InputLabel>Doctors</InputLabel>
-          <Select name="doctor" value={formData.doctor} onChange={handleChange} required>
-            {/* Filtered doctors based on the department */}
+          <Field.Select label="Doctor" {...methods.register('doctor')}>
             {filteredDoctors.length > 0 ? (
               filteredDoctors.map((doctor: any) => (
                 <MenuItem key={doctor.doctorRegId} value={doctor.doctorRegId}>
@@ -98,44 +143,25 @@ export const AppointmentForm = () => {
             ) : (
               <MenuItem disabled>No doctors available in this department</MenuItem>
             )}
-          </Select>
-        </FormControl>
+          </Field.Select>
 
-        <TextField
-          label="Appointment Time"
-          name="appointmentTime"
-          type="time"
-          value={formData.appointmentTime}
-          onChange={handleChange}
-          fullWidth
-          required
-          sx={{ mb: 2 }}
-        />
+          <Field.Text label="Appointment Time" type="time" {...methods.register('appointmentTime')} />
 
-        <FormControl fullWidth sx={{ mb: 2 }}>
-          <InputLabel>Date</InputLabel>
-          <Select name="appointmentDate" value={formData.appointmentDate} onChange={handleChange} required>
+          <Field.Select label="Appointment Date" {...methods.register('appointmentDate')}>
             {availableDates.map((date, index) => (
               <MenuItem key={index} value={date}>
                 {date}
               </MenuItem>
             ))}
-          </Select>
-        </FormControl>
+          </Field.Select>
+        </Box>
 
-        <TextField
-          label="Payment Amount (Rs)"
-          name="payment"
-          value={formData.payment}
-          fullWidth
-          disabled
-          sx={{ mb: 2 }}
-        />
-
-        <Button type="submit" variant="contained" color="primary" fullWidth>
-          Book Appointment
-        </Button>
-      </form>
-    </Box>
+        <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+          <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+            Book Appointment
+          </LoadingButton>
+        </Stack>
+      </Card>
+    </Form>
   );
-};
+}

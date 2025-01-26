@@ -115,8 +115,8 @@ export function SignUpForm(data: any) {
         toast.success("Registration completed successfully");
         setIsSignUpSuccess(true);
         reset();
-      } else {
-        toast.error("Sign Up Failed");
+      } else {    
+        toast.error("Sign Up Failed");              
       }
     } catch (error) {
       console.error(error);

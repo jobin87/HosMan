@@ -1,8 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { basicInitialState, networkCallInitialState } from "../types";
+import { basicInitialArrayState, basicInitialState, networkCallInitialState } from "../types";
 import {
   requestaddDoctor,
   requestAllDoctorsList,
+  requestGetTreatment,
+  updateTreatment,
   // requestAllStaffDetails,
   // requestCreateAllStaff,
   // requestDeleteAllStaff,
@@ -12,6 +14,7 @@ import {
 const initialState = {
   list: basicInitialState,
   doctorsList: basicInitialState,
+  treatmentDetails: basicInitialArrayState,
   details: basicInitialState,
   create: networkCallInitialState,
   edit: networkCallInitialState,
@@ -69,7 +72,50 @@ export const allStaffReducer = createSlice({
       .addCase(requestAllDoctorsList.rejected, (state, action) => {
         state.doctorsList.loading = false;
         state.doctorsList.error = action.error;
+      })
+
+      //treatment 
+      .addCase(requestGetTreatment.fulfilled, (state, action) => {
+        state.treatmentDetails.loading = false;
+        state.treatmentDetails.data = action.payload || {};
+       
+
+        console.log("treatmentavailable:",action.payload)
+      })
+      .addCase(requestGetTreatment.pending, (state) => {
+        state.treatmentDetails.loading = true;
+      })
+      .addCase(requestGetTreatment.rejected, (state, action) => {
+        state.treatmentDetails.loading = false;
+        state.treatmentDetails.error = action.error;
+      })
+      .addCase(updateTreatment.fulfilled, (state, action) => {
+        const updatedTreatment = action.payload;
+      
+        // Check if the updated treatment is undefined or malformed
+        if (!updatedTreatment) {
+          console.error("Updated treatment is undefined:", updatedTreatment);
+          return; // Exit early if the data is invalid
+        }
+      
+        if (Array.isArray(state.treatmentDetails.data)) {
+          const index = state.treatmentDetails.data.findIndex(
+            (treatment) => treatment._id === updatedTreatment._id
+          );
+      
+          if (index !== -1) {
+            state.treatmentDetails.data[index] = updatedTreatment; // Update the treatment in the state
+          } else {
+            console.error("Treatment with _id not found:", updatedTreatment._id);
+          }
+        } else {
+          console.error("treatmentDetails.data is not an array", state.treatmentDetails.data);
+        }
       });
+      
+      
+      
+
 
     // DETAILS
     // .addCase(requestAllStaffDetails.fulfilled, (state, action) => {

@@ -55,8 +55,8 @@ export const paths = {
     },
     Treatment: {
       root: `${ROOTS.DASHBOARD}/treatment`,
-      profile: `${ROOTS.DASHBOARD}/doctors/doctors-profile`,
-      security: `${ROOTS.DASHBOARD}/user/security`,
+      newTreatMents: `${ROOTS.DASHBOARD}/treatment/add-treatments`,
+      edit: `${ROOTS.DASHBOARD}/treatment/edit-treatments`,
       general: `${ROOTS.DASHBOARD}/user/general`,
     },
     Reports: {

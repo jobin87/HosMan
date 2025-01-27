@@ -18,6 +18,18 @@ export const ENDPOINT_ADD_PATIENT = '/api/staff/v1/addPatient'; //
 export const ENDPOINT_GET_PATIENT = '/api/staff/v1/getPatient'; //
 
 
+// Doctor Management
+export const ENDPOINT_DOCTOR_LIST = '/api/staff/v1/getDoctor'; //
+export const ENDPOINT_DOCTOR_ADD = '/api/staff/v1/addDoctor'; //
+
+
+
+// /updateTreatmentById/:id
+//
+export const ENDPOINT_TREATMENT_ADD= '/api/staff/v1/addTreatment'; //
+export const  ENDPOINT_TREATMENT_GET= '/api/staff/v1/getTreatment';//
+export const  ENDPOINT_TREATMENT_DELETE= '/api/staff/v1/deleteTreatmentById/';//
+export const ENDPOINT_TREATMENT_UPDATE = '/api/staff/v1/updateTreatmentById/'
 
 
 // logout 
@@ -58,9 +70,7 @@ export const ENDPOINT_PERMISSION_DETAILS = '/api/permission/v1/details/';
 
 
 
-// Doctor Management
-export const ENDPOINT_DOCTOR_LIST = '/api/staff/v1/getDoctor'; //
-export const ENDPOINT_DOCTOR_ADD = '/api/staff/v1/addDoctor'; //
+
 
 export const ENDPOINT_STAFF_MANAGEMENT_CREATE = '/api/staff/v1/create';
 export const ENDPOINT_STAFF_MANAGEMENT_EDIT = '/api/staff/v1/edit/';

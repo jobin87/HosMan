@@ -57,27 +57,24 @@ export const AddpatientsData =  () => {
   });
 
   return (
-    <Form onSubmit={onSubmit} methods={methods}>
-      <Card>
-        <Typography
-          variant="h4"
-          sx={{ mb: 2, fontWeight: "bold", color: "primary.main" }}
-        >
-          Register new Patient
+    <Form methods={methods} onSubmit={onSubmit}>
+      <Card sx={{ p: 3, boxShadow: 0 }} elevation={0}>
+        <Typography variant="h4" sx={{ mb: 2, fontWeight: "bold", color: "primary.main" }}>
+          Register  New Patient
         </Typography>
         <Box display="grid" gridTemplateColumns={{ xs: "1fr", sm: "1fr 1fr" }} gap={2}>
-          <Field.Text  label="patient Name" {...methods.register("patientName")} />
-          <Field.Text  label="age" {...methods.register("age")} />
-
-          <Field.Text  label="disease" {...methods.register("disease")} />
+          <Field.Text  label="Doctor Name" {...methods.register("patientName")} />
+          <Field.Text  label="Age" {...methods.register("age")} />
+          <Field.Text  label="Disease" {...methods.register("disease")} />
           <Field.Text label="Contact Number" {...methods.register("contactNumber")} />
+          {errors.contactNumber && <span>{errors.contactNumber.message}</span>}
 
           <Field.Text label="patient Registration ID" {...methods.register("patientRegId" )} />
           
         </Box>
         <Stack alignItems="flex-end" sx={{ mt: 3 }}>
           <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-            Add patient
+            Add Patient
           </LoadingButton>
         </Stack>
       </Card>

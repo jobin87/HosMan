@@ -11,7 +11,9 @@ import { paths } from "src/routes/paths";
 
 // Define the schema for treatment data
 export const newTreatmentSchema = zod.object({
-  specialization: zod.string().min(1, { message: "specialization is required" }),
+  specialization: zod
+    .string()
+    .min(1, { message: "specialization is required" }),
   treatment: zod.string().min(1, { message: "Treatment name is required" }),
   department: zod.string().min(1, { message: "department is required" }),
   price: zod.coerce.number().min(1, { message: "price is required" }),
@@ -30,7 +32,7 @@ export const EditTreatmentData = () => {
 
   // Set default values dynamically based on the passed treatment data
   const defaultValues = {
-    treatmentId: treatmentData?.treatmentId || "",
+    treatmentId: treatmentData?.treatmentId ? String(treatmentData.treatmentId) : "",
     treatment: treatmentData?.treatment || "",
     department: treatmentData?.department || "",
     specialization: treatmentData?.specialization || "",
@@ -52,8 +54,9 @@ export const EditTreatmentData = () => {
   const onSubmit = handleSubmit(async (data) => {
     try {
       console.log("Treatment ID being updated:", data.treatmentId);
+      console.log("Type of treatmentId:", typeof data.treatmentId);
       const updates: Partial<newTreatmentSchemaType> = {};
-  
+
       // Compare form data with existing data and add only the changed fields
       if (data.treatment !== treatmentData?.treatment) {
         updates.treatment = data.treatment;
@@ -67,22 +70,26 @@ export const EditTreatmentData = () => {
       if (data.price !== treatmentData?.price) {
         updates.price = data.price;
       }
-  
+      console.log("treatmentData:", treatmentData);
+      console.log("treatmentId in form data:", data.treatmentId);
+
       // If no updates, exit early
       if (Object.keys(updates).length === 0) {
         console.log("No changes detected");
         return;
       }
-  
+
       // Dispatch update action with only changed fields
-      await dispatch(updateTreatment({ treatmentId: data.treatmentId, ...updates }));
-  
+      await dispatch(
+        updateTreatment({ treatmentId: data.treatmentId, ...updates })
+      );
+
       navigate(paths.dashboard.Treatment.root);
     } catch (error: any) {
+      
       console.error("Error updating treatment", error);
     }
   });
-  
 
   return (
     <Form methods={methods} onSubmit={onSubmit}>
@@ -100,11 +107,18 @@ export const EditTreatmentData = () => {
         >
           <Field.Text label="Department" {...methods.register("department")} />
           <Field.Text label="Treatment" {...methods.register("treatment")} />
-          <Field.Text label="Specialization" {...methods.register("specialization")} />
+          <Field.Text
+            label="Specialization"
+            {...methods.register("specialization")}
+          />
           <Field.Text label="Price" {...methods.register("price")} />
         </Box>
         <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-          <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+          <LoadingButton
+            type="submit"
+            variant="contained"
+            loading={isSubmitting}
+          >
             Save Changes
           </LoadingButton>
         </Stack>

@@ -8,6 +8,7 @@ import {
   ENDPOINT_STAFF_MANAGEMENT_DETAILS,
   ENDPOINT_STAFF_MANAGEMENT_EDIT,
   ENDPOINT_TREATMENT_ADD,
+  ENDPOINT_TREATMENT_ALL_DELETE,
   ENDPOINT_TREATMENT_DELETE,
   ENDPOINT_TREATMENT_GET,
   ENDPOINT_TREATMENT_UPDATE,
@@ -80,16 +81,18 @@ export const requestGetTreatment = createAsyncThunk(
       url,
       data: params,
     });
+    
     console.log(response);
     return response?.data?.treatmentData;
   }
 );
 export const updateTreatment = createAsyncThunk(
   "treatment/updateTreatment",
-  async (params: { treatmentId: string; [key: string]: any }) => {
-    const url = `${ENDPOINT_TREATMENT_UPDATE}/${params.treatmentId}`;
+  async (params: { treatmentId: string }) => {
+    const url = `${ENDPOINT_TREATMENT_UPDATE}${params.treatmentId}`;
     
     const { treatmentId, ...updates } = params; // Extracting the treatmentId from params
+    console.log("aswerfedaseraf",treatmentId)
 
     const response = await makeNetworkCall({
       method: API_METHODS.PATCH,
@@ -98,7 +101,7 @@ export const updateTreatment = createAsyncThunk(
     });
 
     console.log("Updated treatment response:", response);
-    return response?.data?.treatmentData;
+    return response?.data;
   }
 );
 
@@ -109,6 +112,17 @@ export const deleteTreatmentById= createAsyncThunk(
   async (params:{treatmentID:string})=>{const response = await makeNetworkCall({
     method: API_METHODS.DELETE,
     url: `${ENDPOINT_TREATMENT_DELETE}${params.treatmentID}`,
+  })
+  console.log("ressss:",response)
+  return response?.data?.data
+}
+)
+
+export const deleteAllTreatments= createAsyncThunk(
+  'treatment/deleteTreatmentById',
+  async ()=>{const response = await makeNetworkCall({
+    method: API_METHODS.DELETE,
+    url: ENDPOINT_TREATMENT_ALL_DELETE,
   })
   console.log("ressss:",response)
   return response?.data?.data

@@ -29,6 +29,7 @@ export const ENDPOINT_DOCTOR_ADD = '/api/staff/v1/addDoctor'; //
 export const ENDPOINT_TREATMENT_ADD= '/api/staff/v1/addTreatment'; //
 export const  ENDPOINT_TREATMENT_GET= '/api/staff/v1/getTreatment';//
 export const  ENDPOINT_TREATMENT_DELETE= '/api/staff/v1/deleteTreatmentById/';//
+export const  ENDPOINT_TREATMENT_ALL_DELETE= '/api/staff/v1/deleteAllTreatments';//
 export const ENDPOINT_TREATMENT_UPDATE = '/api/staff/v1/updateTreatmentById/'
 
 

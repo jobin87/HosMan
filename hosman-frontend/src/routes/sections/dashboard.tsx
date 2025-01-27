@@ -13,6 +13,8 @@ import { LoadingScreen } from 'src/components/loading-screen';
 import { DashboardLayout } from 'src/layouts/dashboard/layout';
 import { AddDoctorForm } from 'src/sections/doctors/add-doctor';
 import { AddpatientsData } from 'src/sections/patients/addpatients';
+import { AddTreatmentData } from 'src/sections/treatment/add-treatment';
+import { EditTreatmentData } from 'src/sections/treatment/edit-treatment';
 
 const IndexPage = lazy(() => import('src/pages/dashboard/six'));
 
@@ -79,12 +81,13 @@ export const dashboardRoutes = [
         ],
       },
       
-      
       {
         path: 'treatment',
         children: [
           { element: <TreatmentListPage/>, index: true },
-          { path: 'Patients-profile', element: <UserProfilePage /> },
+          { path: 'add-treatments', element: <AddTreatmentData /> },
+          { path: 'edit-treatments', element: <EditTreatmentData /> },
+
         ],
       },
       {

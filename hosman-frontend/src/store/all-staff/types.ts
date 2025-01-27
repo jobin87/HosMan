@@ -37,6 +37,13 @@ export interface IAllStaffCreateTypes {
   phone: string;
   permissionId: string;
 }
+export interface ITreatmentTypes {
+  specialization: string;
+    department: string;
+    treatment:  string;
+    price: number;
+
+}
 
 export interface adddoctorTypes {
   doctorName: string;

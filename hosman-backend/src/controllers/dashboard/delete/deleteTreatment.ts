@@ -17,12 +17,24 @@ export const deleteTreatmentById = async (req: Request, res: Response):Promise<v
   }
 };
 
-// Delete all treatments
-export const deleteAllTreatments = async (req: Request, res: Response) => {
-  try {
-    await Treatment.deleteMany({});
-    res.status(200).json({ message: 'All treatments deleted successfully' });
-  } catch (error) {
-    res.status(500).json({ message: 'Error deleting treatments', error });
-  }
+
+
+
+// Handler to delete all treatments
+export const deleteAllTreatments = async (req: Request, res: Response): Promise<void> => {
+    try {
+        // Delete all treatments
+        const result = await Treatment.deleteMany({});
+
+        // Check if any treatments were deleted
+        if (result.deletedCount > 0) {
+            res.status(200).json({ message: 'All treatments have been deleted successfully' });
+        } else {
+            res.status(404).json({ message: 'No treatments found to delete' });
+        }
+    } catch (error) {
+        console.error("Error deleting treatments:", error);
+        res.status(500).json({ message: 'Error deleting treatments' });
+    }
 };
+

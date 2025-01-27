@@ -92,7 +92,9 @@ export const allStaffReducer = createSlice({
       .addCase(updateTreatment.fulfilled, (state, action) => {
         const updatedTreatment = action.payload;
       
-        // Check if the updated treatment is undefined or malformed
+        // Log the updatedTreatment for debugging
+        console.log("Updated treatment received:", updatedTreatment);
+      
         if (!updatedTreatment) {
           console.error("Updated treatment is undefined:", updatedTreatment);
           return; // Exit early if the data is invalid
@@ -112,6 +114,7 @@ export const allStaffReducer = createSlice({
           console.error("treatmentDetails.data is not an array", state.treatmentDetails.data);
         }
       });
+      
       
       
       

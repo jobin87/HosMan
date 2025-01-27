@@ -1,9 +1,9 @@
-import { Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Chip, IconButton, Box, Button } from '@mui/material';
+import { Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, IconButton, Box, Button } from '@mui/material';
 import { Edit, Delete } from '@mui/icons-material';
 import { useAppDispatch, useAppSelector } from 'src/store';
 import { useNavigate } from 'react-router-dom';
 import { paths } from 'src/routes/paths';
-import { deleteTreatmentById, requestGetTreatment } from 'src/store/all-staff/allStaffThunk';
+import { deleteAllTreatments, deleteTreatmentById, requestGetTreatment } from 'src/store/all-staff/allStaffThunk';
 import { useEffect } from 'react';
 
 // Sample data for hospital treatments
@@ -53,24 +53,30 @@ export default function TreatmentList() {
         department: "",
         specialization: "",
         price: 0,
-        treatmentId:""
+        treatmentId:"",
       };
       dispatch(requestGetTreatment(treatmentData));
     }, [dispatch]);
 
-    const handleDelete = async (id: string) => {
-      console.log("derddi", id);
+    const handleDelete = async (_id: string) => {
+      const isConfirmed = window.confirm("Are you sure you want to delete this treatment?");
+      if (!isConfirmed) return; // Exit if the deletion is not confirmed
+    
       try {
-        await dispatch(deleteTreatmentById({ treatmentID: id }));  // Delete treatment first
-        // Once deleted, re-fetch the updated treatment list
-        const treatmentData = {
-          treatment: "",
-          department: "",
-          specialization: "",
-          price: 0,
-           treatmentId:""
-        };
-        await dispatch(requestGetTreatment(treatmentData)); // Re-fetch the treatment list
+        await dispatch(deleteTreatmentById({ treatmentID: _id }));
+        const treatmentData = { treatment: "", department: "", specialization: "", price: 0, treatmentId: "" };
+        await dispatch(requestGetTreatment(treatmentData)); // Re-fetch after deletion
+      } catch (error) {
+        console.error("Error deleting treatment:", error);
+      }
+    };
+    const handleDeleteAll = async () => {
+      const isConfirmed = window.confirm("Are you sure you want to delete this treatment?");
+      if (!isConfirmed) return; // Exit if the deletion is not confirmed
+    
+      try {
+        await dispatch(deleteAllTreatments());
+        await dispatch(requestGetTreatment(treatmentData)); // Re-fetch after deletion
       } catch (error) {
         console.error("Error deleting treatment:", error);
       }
@@ -110,7 +116,7 @@ export default function TreatmentList() {
                 <Button variant="contained" color="info" size="small" onClick={handleAdd}>
                   Add
                 </Button>
-                <Button variant="contained" color="error" size="small" >
+                <Button variant="contained" color="error" size="small" onClick={handleDeleteAll} >
                   Delete all
                 </Button>
               </>

@@ -23,6 +23,8 @@ export default function PatientList() {
   const dispatch = useAppDispatch();
   const navigate= useNavigate()
   const { data } = useAppSelector((state) => state.patients.patientlist);
+  const role = useAppSelector((state) => state.app.auth.role);
+
 
   useEffect(() => {
     dispatch(requestGetPatient(data));
@@ -51,15 +53,24 @@ export default function PatientList() {
         <Typography variant="h4" gutterBottom>
           Patient List
         </Typography>
-
-        <Button
-          variant="contained"
-          color="primary"
-          sx={{ textTransform: "none" }}
-          onClick={handleAddPatientClick}
-        >
-          Add Patient
-        </Button>
+        {role && (
+          <Box
+            sx={{
+              display: "flex",
+              gap: 1.5,
+              mr: { xs: 0, lg: 8 },
+              flexWrap: "wrap", // Allow buttons to wrap on smaller screens
+            }}
+          >
+            {role === "Manager" && (
+              <>
+                <Button variant="contained" color="info" size="small" onClick={handleAddPatientClick}>
+                  Add Patient
+                </Button>
+              </>
+            )}
+          </Box>
+        )}
       </Box>
 
       <TableContainer component={Paper}>

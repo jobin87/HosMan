@@ -15,6 +15,8 @@ import { AddDoctorForm } from 'src/sections/doctors/add-doctor';
 import { AddpatientsData } from 'src/sections/patients/addpatients';
 import { AddTreatmentData } from 'src/sections/treatment/add-treatment';
 import { EditTreatmentData } from 'src/sections/treatment/edit-treatment';
+import ReportEditForm from 'src/sections/reports/edit-report';
+import ReportFormPage from 'src/sections/reports/report-form';
 
 const IndexPage = lazy(() => import('src/pages/dashboard/six'));
 
@@ -94,7 +96,8 @@ export const dashboardRoutes = [
         path: 'report',
         children: [
           { element: <ReportPage/>, index: true },
-          { path: 'Patients-profile', element: <UserProfilePage /> },
+          { path: 'add-report', element: <ReportFormPage/> },
+
         ],
       },
       {

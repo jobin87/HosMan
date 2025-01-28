@@ -16,6 +16,7 @@ import { getAppointmentData} from 'src/store/appointment/appointmentThunk';
 
 export default function AppointmentListView() {
   const { data } = useAppSelector((state) => state.appointment.appointmentData); // Access data directly
+  console.log("daTTta:",data)
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 

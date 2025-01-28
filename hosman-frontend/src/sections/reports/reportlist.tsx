@@ -1,176 +1,102 @@
-import { Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, IconButton, Box, Button, Chip } from '@mui/material';
-import { Edit, Delete } from '@mui/icons-material';
-import { useAppDispatch, useAppSelector } from 'src/store';
+import { useState } from 'react';
+import {
+  Box,
+  Typography,
+  TextField,
+  Grid,
+  Card,
+  CardContent,
+  CardActions,
+  Button,
+  CircularProgress,
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { paths } from 'src/routes/paths';
-import { deleteAllTreatments, deleteTreatmentById, requestGetTreatment } from 'src/store/all-staff/allStaffThunk';
-import { useEffect } from 'react';
 
-// Sample data for hospital treatments
+export default function ReportListView() {
+  // Static data for the categories
+  const reportCategories = [
+    { id: 1, name: 'Room Maintenance', reportCount: 5 },
+    { id: 2, name: 'Lab Equipment Issues', reportCount: 3 },
+    { id: 3, name: 'Inventory Needs', reportCount: 8 },
+    { id: 4, name: 'Patient Needs', reportCount: 2 },
+    { id: 5, name: 'Staff Shortages', reportCount: 4 },
+  ];
 
-export default function ReportListPage() {
-  const navigate= useNavigate()
-  const dispatch = useAppDispatch()
-  const treatmentData =useAppSelector((state) => state.allstaff.treatmentDetails.data) || [];
-    const role = useAppSelector((state) => state.app.auth.role);
-  
-    const handleEdit = (_id: string) => {
-      console.log("Editing treatment with ID:", _id);
-    
-      // Ensure treatmentData is an array and _id exists
-      if (!Array.isArray(treatmentData)) {
-        console.log("treatmentData is not an array:", treatmentData);
-        return;
-      }
-    
-      const treatmentToEdit = treatmentData.find((item: any) => item._id === _id);
-    
-      if (treatmentToEdit) {
-        console.log("Found treatment to edit:", treatmentToEdit);
-        
-        navigate(paths.dashboard.Treatment.edit, {
-          state: {
-            treatmentId: treatmentToEdit._id,
-            treatment: treatmentToEdit.treatment,
-            department: treatmentToEdit.department,
-            specialization: treatmentToEdit.specialization,
-            price: treatmentToEdit.price,
-          },
-        });
-      } else {
-        console.log("Treatment not found for ID:", _id);
-      }
-    };
-    
-  const handleAdd = ()=>{
-    navigate(paths.dashboard.Treatment.newTreatMents)
-    // Add edit functionality here
-  };
+  const navigate = useNavigate();
+  const [searchCategory, setSearchCategory] = useState('');
+  const [loading, setLoading] = useState(false);
 
-   useEffect(() => {
-      const treatmentData = {
-        treatment: "",
-        department: "",
-        specialization: "",
-        price: 0,
-        treatmentId:"",
-      };
-      dispatch(requestGetTreatment(treatmentData));
-    }, [dispatch]);
+  // Filter categories based on search input
+  const filteredCategories = reportCategories.filter((category) =>
+    category.name.toLowerCase().includes(searchCategory.toLowerCase())
+  );
 
-    const handleDelete = async (_id: string) => {
-      const isConfirmed = window.confirm("Are you sure you want to delete this treatment?");
-      if (!isConfirmed) return; // Exit if the deletion is not confirmed
-    
-      try {
-        await dispatch(deleteTreatmentById({ treatmentID: _id }));
-        const treatmentData = { treatment: "", department: "", specialization: "", price: 0, treatmentId: "" };
-        await dispatch(requestGetTreatment(treatmentData)); // Re-fetch after deletion
-      } catch (error) {
-        console.error("Error deleting treatment:", error);
-      }
-    };
-    const handleDeleteAll = async () => {
-      const isConfirmed = window.confirm("Are you sure you want to delete this treatment?");
-      if (!isConfirmed) return; // Exit if the deletion is not confirmed
-    
-      try {
-        await dispatch(deleteAllTreatments());
-        await dispatch(requestGetTreatment(treatmentData)); // Re-fetch after deletion
-      } catch (error) {
-        console.error("Error deleting treatment:", error);
-      }
-    };
-    
+  // Navigate to the detailed category view
+  // const handleCategoryClick = (id: number) => {
+  //   navigate(`${paths.dashboard.Reports.category.replace(':id', String(id))}`);
+  // };
+
   return (
     <Box sx={{ p: 3 }}>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: {
-            xs: "row",
-            sm: "row", // Keep row direction for sm and above devices
-          },
-          width: {
-            xs: "85vw",
-            lg: "auto",
-          },
-          justifyContent: "space-between",
-          zIndex: 1,
-        }}
-      >
-        <Typography variant="h4" gutterBottom>
-          Treatment List
-        </Typography>
-        {role && (
-          <Box
-            sx={{
-              display: "flex",
-              gap: 1.5,
-              mr: { xs: 0, lg: 8 },
-              flexWrap: "wrap", // Allow buttons to wrap on smaller screens
-            }}
-          >
-            {role === "Manager" && (
-              <>
-                <Button variant="contained" color="info" size="small" onClick={handleAdd}>
-                  Add
-                </Button>
-                <Button variant="contained" color="error" size="small" onClick={handleDeleteAll} >
-                  Delete all
-                </Button>
-              </>
-            )}
-          </Box>
-        )}
-      </Box>
-     
+      <Typography variant="h6" sx={{ mb: 2 }}>
+        Total Reports: {filteredCategories.length}
+      </Typography>
 
+      {/* Search Input */}
+      <TextField
+        label="Search Category"
+        variant="outlined"
+        value={searchCategory}
+        onChange={(e) => setSearchCategory(e.target.value)}
+        sx={{ mb: 3, width: '100%' }}
+        placeholder="Search by category name"
+      />
+
+      {/* Loading Spinner */}
+      {loading && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+          <CircularProgress />
+        </Box>
+      )}
+
+      {/* Category Grid */}
       <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                <TableCell>ID</TableCell>
-                  <TableCell>Description</TableCell>
-                  <TableCell>Category</TableCell>
-                  <TableCell>Status</TableCell>
-                  <TableCell>Priority</TableCell>
-                  <TableCell>Date Reported</TableCell>
-                  <TableCell>Actions</TableCell>
-                </TableRow>
-              </TableHead>
-
-              <TableBody>
-                {reports.map((report) => (
-                  <TableRow key={report.id}>
-                    <TableCell>{report.id}</TableCell>
-                    <TableCell>{report.description}</TableCell>
-                    <TableCell>{report.category}</TableCell>
-                    <TableCell>
-                      <Chip
-                        label={report.status}
-                        color={report.status === 'Pending' ? 'warning' : report.status === 'In Progress' ? 'primary' : 'success'}
-                        variant="outlined"
-                      />
-                    </TableCell>
-                    <TableCell>{report.priority}</TableCell>
-                    <TableCell>{report.dateReported}</TableCell>
-                    <TableCell>
-                      <IconButton onClick={() => handleEdit(report.id)} color="primary">
-                        <Edit />
-                      </IconButton>
-                      <IconButton onClick={() => handleDelete(report.id)} color="error">
-                        <Delete />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Grid>
+        {filteredCategories.length > 0 ? (
+          filteredCategories.map((category) => (
+            <Grid item xs={12} sm={6} md={4} key={category.id}>
+              <Card
+                sx={{
+                  textAlign: 'center',
+                  transition: 'transform 0.3s ease',
+                  '&:hover': { transform: 'scale(1.05)', boxShadow: 3 },
+                }}
+              >
+                <CardContent>
+                  <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                    {category.name}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: 'gray' }}>
+                    {category.reportCount} Reports
+                  </Typography>
+                </CardContent>
+                <CardActions sx={{ justifyContent: 'center' }}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    sx={{
+                      '&:hover': { backgroundColor: 'primary.dark' },
+                    }}
+                  >
+                    View
+                  </Button>
+                </CardActions>
+              </Card>
+            </Grid>
+          ))
+        ) : (
+          <Typography sx={{ mt: 2 }}>No categories found matching your search.</Typography>
+        )}
       </Grid>
     </Box>
   );

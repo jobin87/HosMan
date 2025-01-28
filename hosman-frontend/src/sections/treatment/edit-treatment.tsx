@@ -16,7 +16,8 @@ export const newTreatmentSchema = zod.object({
     .min(1, { message: "specialization is required" }),
   treatment: zod.string().min(1, { message: "Treatment name is required" }),
   department: zod.string().min(1, { message: "department is required" }),
-  price: zod.coerce.number().min(1, { message: "price is required" }),
+  price: zod.string().regex(/^\$\d+$/, {
+    message: "Price must be in the format $ followed by digits (e.g., $60)"}),
   treatmentId: zod.string().min(1, { message: "Treatment ID is required" }),
 });
 

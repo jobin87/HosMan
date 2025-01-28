@@ -14,6 +14,8 @@ import toast from 'react-hot-toast';
 import { useAppDispatch, useAppSelector } from 'src/store';
 import { getAppointmentData, requestAppointmentSaved } from 'src/store/appointment/appointmentThunk';
 import { requestAllDoctorsList } from 'src/store/all-staff/allStaffThunk';
+import { useNavigate } from 'react-router-dom';
+import { paths } from 'src/routes/paths';
 
 // Validation schema using Zod
 const AppointmentSchema = zod.object({
@@ -28,7 +30,8 @@ const AppointmentSchema = zod.object({
 export type AppointmentFormSchemaType = zod.infer<typeof AppointmentSchema>;
 
 export function AppointmentForm() {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate()
 
 
   const defaultValues = {
@@ -107,6 +110,7 @@ export function AppointmentForm() {
         console.log('Appointment Booked:', response);
         dispatch(getAppointmentData(data)), 
         toast.success('Appointment booked successfully!');
+        navigate(paths.dashboard.root)
         // Add logic to save the appointment
         // navigate('/doctors');
       }

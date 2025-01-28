@@ -41,7 +41,7 @@ export interface ITreatmentTypes {
   specialization: string;
     department: string;
     treatment:  string;
-    price: number;
+    price: string;
 
 }
 

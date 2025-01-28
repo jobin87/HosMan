@@ -23,6 +23,11 @@ export const ENDPOINT_DOCTOR_LIST = '/api/staff/v1/getDoctor'; //
 export const ENDPOINT_DOCTOR_ADD = '/api/staff/v1/addDoctor'; //
 
 
+//reports 
+export const ENDPOINT_REPORT_LIST_ADD = '/api/staff/v1/report/addReportList'; //
+
+
+
 
 // /updateTreatmentById/:id
 //

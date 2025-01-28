@@ -2,7 +2,7 @@ import { combineReducers } from '@reduxjs/toolkit';
 import allStaffReducer from './all-staff/allStaffReducer';
 import appReducer from './app/appReducer';
 import  appointmentReducer  from './appointment/appointmentReducer';
-import rolesReducer from './roles/rolesReducer';
+import rolesReducer from './report/rolesReducer';
 import patientsReducer from './patient/patientReducer';
 
 export const rootReducer = combineReducers({

@@ -10,53 +10,86 @@ import {
   TableRow,
   Paper,
 } from '@mui/material';
-
-// Sample department data
-const departmentsData = [
-  { id: 1, name: 'Cardiology', appointments: 12, patients: ['John', 'Sarah', 'Mark'] },
-  { id: 2, name: 'Neurology', appointments: 8, patients: ['Alice', 'Bob'] },
-  { id: 3, name: 'Orthopedics', appointments: 15, patients: ['Emma', 'Liam', 'Sophia'] },
-  { id: 4, name: 'Physician', appointments: 19, patients: ['Michael', 'Olivia', 'James'] },
-  { id: 5, name: 'Dermatologist', appointments: 6, patients: ['William', 'Isabella'] },
-  { id: 6, name: 'Psychiatrist', appointments: 4, patients: ['Mason', 'Amelia'] },
-];
+import { useAppDispatch, useAppSelector } from 'src/store';
+import { useEffect, useState } from 'react';
+import { getAppointmentData } from 'src/store/appointment/appointmentThunk';
 
 export default function DepartmentDetailsPage() {
+  // Fetching data from Redux store
+  const { data, loading } = useAppSelector((state) => state.appointment.appointmentData);
   const { id } = useParams<{ id: string }>(); // Get department ID from URL
+  const dispatch = useAppDispatch();
   const departmentId = parseInt(id || '0'); // Convert ID to number
 
-  const department = departmentsData.find((dept) => dept.id === departmentId);
+  const [searchDepartment, setSearchDepartment] = useState('');
+  const [refresh, setRefresh] = useState(false);
+
+  useEffect(() => {
+    // Fetch appointment data on component mount if not already available
+    if (!data) {
+      dispatch(getAppointmentData(data)).then(() => setRefresh((prev) => !prev));
+    }
+  }, [dispatch, data]);
+
+  // Handle loading state
+  if (loading) {
+    return <Typography>Loading...</Typography>;
+  }
+
+  // Ensure data is not null or undefined before proceeding
+  if (!data || !data.departments) {
+    return <Typography>No data available</Typography>;
+  }
+
+  // Find the department by ID
+  const department = data.departments.find((dept: any) => dept.id === departmentId);
 
   if (!department) {
     return <Typography>Department not found</Typography>;
   }
 
+  useEffect(() => {
+    console.log("Fetched data:", data); // Check the structure of the data object
+  }, [data]);
+
+  // Filter appointments based on the department
+  const filteredAppointments = department.appointments.filter((appointment: any) =>
+    appointment.patientName.toLowerCase().includes(searchDepartment.toLowerCase())
+  );
+
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 2 }}>
-        {department.name} - Appointments
+        {department.name} - Appointments ({department.count})
       </Typography>
 
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell><strong>Patient Name</strong></TableCell>
-              <TableCell><strong>Doctor</strong></TableCell>
-              <TableCell><strong>Time</strong></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {department.patients.map((patient, index) => (
-              <TableRow key={index}>
-                <TableCell>{patient}</TableCell>
-                <TableCell>Dr. Smith</TableCell>  {/* Placeholder doctor name */}
-                <TableCell>10:00 AM</TableCell>   {/* Placeholder time */}
+      {/* Check if there are no appointments */}
+      {filteredAppointments.length === 0 ? (
+        <Typography>No appointments available</Typography> // Show this message if no appointments found
+      ) : (
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell><strong> Name</strong></TableCell>
+                <TableCell><strong>Doctor</strong></TableCell>
+                <TableCell><strong> Time</strong></TableCell>
+                <TableCell><strong>Date</strong></TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {filteredAppointments.map((appointment: any, index: number) => (
+                <TableRow key={index}>
+                  <TableCell>{appointment.patientName}</TableCell>
+                  <TableCell>{appointment.doctor}</TableCell>
+                  <TableCell>{appointment.appointmentTime}</TableCell>
+                  <TableCell>{appointment.appointmentDate}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
     </Box>
   );
 }

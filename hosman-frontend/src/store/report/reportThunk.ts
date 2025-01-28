@@ -5,21 +5,22 @@ import {
   ENDPOINT_PERMISSION_DELETE,
   ENDPOINT_PERMISSION_DETAILS,
   ENDPOINT_PERMISSION_EDIT,
-  ENDPOINT_PERMISSION_LIST,
+  ENDPOINT_REPORT_LIST_ADD,
   makeNetworkCall,
 } from 'src/network';
 
-import type { ICreateRoles, IEditRoles, IRolesDetailsParams, IRolesListParams } from './types';
+import type { ICreateRoles, IEditRoles, IReportListParams, IRolesDetailsParams, } from './types';
 
 // Staff Permissions List
-export const requestStaffRolesList = createAsyncThunk(
+export const addReportList = createAsyncThunk(
   'roles/staffRolesList',
-  async (params: IRolesListParams) => {
+  async (params: IReportListParams) => {
     const response = await makeNetworkCall({
       method: API_METHODS.POST,
-      url: ENDPOINT_PERMISSION_LIST,
+      url: ENDPOINT_REPORT_LIST_ADD,
       data: params,
     });
+    console.log(response)
     return response?.data?.data;
   }
 );

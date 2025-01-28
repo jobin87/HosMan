@@ -1,8 +1,12 @@
-export interface IRolesListParams {
-  page: number;
-  limit: number;
-  permissionName?: string;
-}
+export interface IReportListParams {
+    reportId?: string;
+    description: string;
+    category: string;
+    priority: string;
+    dateReported: string;
+  }
+ 
+
 
 export interface IRolesDetailsParams {
   id: string;

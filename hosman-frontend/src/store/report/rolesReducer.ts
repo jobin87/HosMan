@@ -5,8 +5,7 @@ import {
   requestDeleteStaffRoles,
   requestEditStaffRoles,
   requestStaffRolesDetails,
-  requestStaffRolesList,
-} from './rolesThunk';
+} from './reportThunk';
 
 const initialState = {
   list: basicInitialState,
@@ -16,8 +15,8 @@ const initialState = {
   delete: networkCallInitialState,
 };
 
-export const rolesReducer = createSlice({
-  name: 'roles',
+export const reportReducer = createSlice({
+  name: 'reports',
   initialState,
   reducers: {
     setRolesList: (state, action) => {
@@ -39,19 +38,19 @@ export const rolesReducer = createSlice({
   extraReducers(builder) {
     builder
       // LIST
-      .addCase(requestStaffRolesList.fulfilled, (state, action) => {
-        state.list.loading = false;
-        if (action.payload?.isData) {
-          state.list.data = action.payload;
-        }
-      })
-      .addCase(requestStaffRolesList.pending, (state, action) => {
-        state.list.loading = true;
-      })
-      .addCase(requestStaffRolesList.rejected, (state, action) => {
-        state.list.loading = false;
-        state.list.error = action.error;
-      })
+      // .addCase(requestStaffRolesList.fulfilled, (state, action) => {
+      //   state.list.loading = false;
+      //   if (action.payload?.isData) {
+      //     state.list.data = action.payload;
+      //   }
+      // })
+      // .addCase(requestStaffRolesList.pending, (state, action) => {
+      //   state.list.loading = true;
+      // })
+      // .addCase(requestStaffRolesList.rejected, (state, action) => {
+      //   state.list.loading = false;
+      //   state.list.error = action.error;
+      // })
 
       // DETAILS
       .addCase(requestStaffRolesDetails.fulfilled, (state, action) => {
@@ -117,6 +116,6 @@ export const rolesReducer = createSlice({
 });
 
 export const { setRolesList, setRolesDetails, setRolesCreate, setRolesEdit, setRolesDelete } =
-  rolesReducer.actions;
+  reportReducer.actions;
 
-export default rolesReducer.reducer;
+export default reportReducer.reducer;

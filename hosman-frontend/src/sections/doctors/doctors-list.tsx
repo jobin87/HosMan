@@ -16,6 +16,7 @@ import { useEffect } from "react";
 import { requestAllDoctorsList } from "src/store/all-staff/allStaffThunk";
 import { useNavigate } from "react-router-dom";
 import { paths } from "src/routes/paths";
+import { DashboardContent } from "src/layouts/dashboard";
 
 export default function DoctorList() {
   const dispatch = useAppDispatch();
@@ -46,7 +47,7 @@ export default function DoctorList() {
   console.log("Doctors List:", doctors);
 
   return (
-    <Box sx={{ p: 3 }}>
+    <DashboardContent>
       <Box
         sx={{
           display: "flex",
@@ -128,6 +129,6 @@ export default function DoctorList() {
           </TableBody>
         </Table>
       </TableContainer>
-    </Box>
+    </DashboardContent>
   );
 }

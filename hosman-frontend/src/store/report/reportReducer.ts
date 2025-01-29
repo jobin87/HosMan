@@ -1,6 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { basicInitialState, networkCallInitialState } from '../types';
 import {
+  addReportList,
+  getReportList,
   requestCreateStaffRoles,
   requestDeleteStaffRoles,
   requestEditStaffRoles,
@@ -13,6 +15,7 @@ const initialState = {
   create: networkCallInitialState,
   edit: networkCallInitialState,
   delete: networkCallInitialState,
+  reportData:basicInitialState,
 };
 
 export const reportReducer = createSlice({
@@ -38,47 +41,35 @@ export const reportReducer = createSlice({
   extraReducers(builder) {
     builder
       // LIST
-      // .addCase(requestStaffRolesList.fulfilled, (state, action) => {
-      //   state.list.loading = false;
-      //   if (action.payload?.isData) {
-      //     state.list.data = action.payload;
-      //   }
-      // })
-      // .addCase(requestStaffRolesList.pending, (state, action) => {
-      //   state.list.loading = true;
-      // })
-      // .addCase(requestStaffRolesList.rejected, (state, action) => {
-      //   state.list.loading = false;
-      //   state.list.error = action.error;
-      // })
-
-      // DETAILS
-      .addCase(requestStaffRolesDetails.fulfilled, (state, action) => {
-        state.details.loading = false;
-        state.details.data = action.payload;
-      })
-      .addCase(requestStaffRolesDetails.pending, (state, action) => {
-        state.details.loading = true;
-      })
-      .addCase(requestStaffRolesDetails.rejected, (state, action) => {
-        state.details.loading = false;
-        state.details.error = action.error;
-      })
-
-      // CREATE
-      .addCase(requestCreateStaffRoles.fulfilled, (state, action) => {
-        state.create.loading = false;
-        state.create.data = action.payload;
-        if (action.payload?.permissionAdded) {
-          state.list = basicInitialState;
+      .addCase(addReportList.fulfilled, (state, action) => {
+        state.list.loading = false;
+        if (action.payload?.isData) {
+          state.list.data = action.payload;
         }
       })
-      .addCase(requestCreateStaffRoles.pending, (state, action) => {
-        state.create.loading = true;
+      .addCase(addReportList.pending, (state) => {
+        state.list.loading = true;
       })
-      .addCase(requestCreateStaffRoles.rejected, (state, action) => {
-        state.create.loading = false;
-        state.create.error = action.error;
+      .addCase(addReportList.rejected, (state, action) => {
+        state.list.loading = false;
+        state.list.error = action.error;
+      })
+
+
+      // get
+      .addCase(getReportList.fulfilled, (state, action) => {
+        state.details.loading = false;
+        // state.details.data = action.payload;
+        if (action.payload) {
+          state.details.data = action.payload
+        }
+      })
+      .addCase(getReportList.pending, (state) => {
+        state.details.loading = true;
+      })
+      .addCase(getReportList.rejected, (state, action) => {
+        state.details.loading = false;
+        state.details.error = action.error;
       })
 
       // EDIT

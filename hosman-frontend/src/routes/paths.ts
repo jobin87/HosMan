@@ -62,8 +62,8 @@ export const paths = {
     Reports: {
       root: `${ROOTS.DASHBOARD}/report`,
       newReports: `${ROOTS.DASHBOARD}/report/add-report`,
-      security: `${ROOTS.DASHBOARD}/user/security`,
-      general: `${ROOTS.DASHBOARD}/user/general`,
+      details: `${ROOTS.DASHBOARD}/report/report-details/:id`,
+      edit: `${ROOTS.DASHBOARD}/report/report-edit`,
     },
 
     user: {

@@ -2,12 +2,14 @@ export interface IReportListParams {
     reportId?: string;
     description: string;
     category: string;
-    priority: string;
-    dateReported: string;
+  }
+  export interface IReportDataParams {
+    reportData?: string;
+    category: string;
+
+
   }
  
-
-
 export interface IRolesDetailsParams {
   id: string;
 }

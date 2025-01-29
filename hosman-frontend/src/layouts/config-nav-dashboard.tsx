@@ -75,14 +75,6 @@ export const navData = [
     subheader: 'Settings',
     items: [
       {
-        title: 'Staff Management',
-        path: paths.dashboard.settings.root,
-      },
-      {
-        title: 'Hospital-files',
-        path: paths.dashboard.settings.staff.list,
-      },
-      {
         title: 'Inventory',
         path: paths.dashboard.settings.staff.list,
       },

@@ -6,10 +6,11 @@ import {
   ENDPOINT_PERMISSION_DETAILS,
   ENDPOINT_PERMISSION_EDIT,
   ENDPOINT_REPORT_LIST_ADD,
+  ENDPOINT_REPORT_LIST_GET,
   makeNetworkCall,
 } from 'src/network';
 
-import type { ICreateRoles, IEditRoles, IReportListParams, IRolesDetailsParams, } from './types';
+import type { ICreateRoles, IEditRoles, IReportDataParams, IReportListParams, IRolesDetailsParams, } from './types';
 
 // Staff Permissions List
 export const addReportList = createAsyncThunk(
@@ -22,6 +23,24 @@ export const addReportList = createAsyncThunk(
     });
     console.log(response)
     return response?.data?.data;
+  }
+);
+export const getReportList = createAsyncThunk(
+  'roles/getReportList',
+  async (params: IReportDataParams) => {
+    const response = await makeNetworkCall({
+      method: API_METHODS.GET,
+      url: ENDPOINT_REPORT_LIST_GET,
+      data: params,
+    });
+
+    console.log(response)
+    if (response && response.data) {
+      console.log(response);
+      return response.data; // Return the data from the response
+    } else {
+      throw new Error('Failed to fetch report data'); // Handle errors gracefully
+    }
   }
 );
 

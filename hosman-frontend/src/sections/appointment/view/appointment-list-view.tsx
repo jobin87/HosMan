@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import { paths } from 'src/routes/paths';
 import { useAppDispatch, useAppSelector } from 'src/store';
 import { getAppointmentData} from 'src/store/appointment/appointmentThunk';
+import { DashboardContent } from 'src/layouts/dashboard';
 
 export default function AppointmentListView() {
   const { data } = useAppSelector((state) => state.appointment.appointmentData); // Access data directly
@@ -52,7 +53,7 @@ export default function AppointmentListView() {
   };
 
   return (
-    <Box sx={{ p: 3 }}>
+    <DashboardContent>
       <Typography variant="h6" sx={{ mb: 2 }}>
         Total Appointments: {totalAppointments}
       </Typography>
@@ -96,6 +97,6 @@ export default function AppointmentListView() {
           <Typography sx={{ mt: 2 }}>No departments found.</Typography>
         )}
       </Grid>
-    </Box>
+    </DashboardContent>
   );
 }

@@ -6,7 +6,7 @@ import {  AuthGuard} from 'src/guard';
 
 
 // Roles
-const StaffRolesList = lazy(() => import('src/pages/dashboard/settings/staff/roles'));
+// const StaffRolesList = lazy(() => import('src/pages/dashboard/settings/staff/roles'));
 
 import { LoadingScreen } from 'src/components/loading-screen';
 
@@ -17,6 +17,7 @@ import { AddTreatmentData } from 'src/sections/treatment/add-treatment';
 import { EditTreatmentData } from 'src/sections/treatment/edit-treatment';
 import ReportEditForm from 'src/sections/reports/edit-report';
 import ReportFormPage from 'src/sections/reports/report-form';
+import ReportDetailsPage from 'src/sections/reports/report-details';
 
 const IndexPage = lazy(() => import('src/pages/dashboard/six'));
 
@@ -97,6 +98,10 @@ export const dashboardRoutes = [
         children: [
           { element: <ReportPage/>, index: true },
           { path: 'add-report', element: <ReportFormPage/> },
+          { path: 'report-details/:id', element: <ReportDetailsPage/> },
+          { path: 'report-edit', element: <ReportEditForm/> },
+
+
 
         ],
       },
@@ -130,8 +135,8 @@ export const dashboardRoutes = [
           {
             path: 'roles',
             children: [
-              { element: <StaffRolesList />, index: true },
-              { path: 'list', element: <StaffRolesList /> },
+              // { element: <StaffRolesList />, index: true },
+              // { path: 'list', element: <StaffRolesList /> },
             ],
           },
         ],

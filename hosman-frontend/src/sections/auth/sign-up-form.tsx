@@ -42,7 +42,7 @@ export const NewUserSchema = zod.object({
     .min(6, { message: "Password must be at least 6 characters!" }),
 });
 
-export function SignUpForm(data: any) {
+export function SignUpForm() {
   const [isSignUpSuccess, setIsSignUpSuccess] = useState(false);
 
   const [identityPlaceHolder, setIdentityPlaceHolder] = useState<string | null>(

@@ -1,4 +1,14 @@
-import { Grid, Typography, Box, Stack, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  Box,
+  Stack,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
 import { useAppDispatch } from "src/store";
 import { useNavigate } from "react-router-dom";
 import { paths } from "src/routes/paths";
@@ -9,44 +19,27 @@ import { Field, Form } from "src/components/hook-form";
 import { Card } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { addReportList } from "src/store/report/reportThunk";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";  // Import DatePicker
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { Dayjs } from 'dayjs';
 
 const categories = [
-  { label: "Medical", value: "Medical" },
-  { label: "Patient Monitoring", value: "Patient Monitoring" },
-  { label: "Lab", value: "Lab" },
-  { label: "Emergency", value: "Emergency" },
-  { label: "Health Screening", value: "Health Screening" },
-  { label: "Pharmacy", value: "Pharmacy" },
-  { label: "Infection Control", value: "Infection Control" },
-  { label: "Clinical Research", value: "Clinical Research" },
-  { label: "Maintenance", value: "Maintenance" },
-  { label: "Technical", value: "Technical" },
+  { id: 1, name: "Room Maintenance" },
+  { id: 2, name: "Lab Equipment Issues" },
+  { id: 3, name: "Inventory Needs" },
+  { id: 4, name: "Patient Needs" },
+  { id: 5, name: "Staff Shortages" },
 ];
 
-const priorities = [
-  { label: "Low", value: "Low" },
-  { label: "Medium", value: "Medium" },
-  { label: "High", value: "High" },
-];
+const roomOptions = {
+  "Room Maintenance": ["Room 101", "Room 102", "Room 103"],
+  "Lab Equipment Issues": ["Lab 1", "Lab 2", "Lab 3", "Lab 4", "Lab 5"],
+  "Inventory Needs": ["Storage A", "Storage B"],
+  "Patient Needs": ["Ward 1", "Ward 2", "Ward 3"],
+  "Staff Shortages": ["Admin Room", "Staff Room"],
+};
 
-const statuses = [
-  { label: "Open", value: "Open" },
-  { label: "In Progress", value: "In Progress" },
-  { label: "Closed", value: "Closed" },
-];
-
-export type newReportSchemaType = Zod.infer<typeof newReportSchema>;
-
-export const newReportSchema = zod.object({
+const newReportSchema = zod.object({
   description: zod.string().min(1, { message: "Description is required" }),
-  status: zod.string().min(1, { message: "Status is required" }),
   category: zod.string().min(1, { message: "Category is required" }),
-  priority: zod.string().min(1, { message: "Priority is required" }),
-  dateReported: zod.string().min(1, { message: "Date Reported is required" }),
+  roomNo: zod.string().min(1, { message: "Room is required" }),
 });
 
 export default function ReportFormPage() {
@@ -55,13 +48,11 @@ export default function ReportFormPage() {
 
   const defaultValues = {
     description: "",
-    status: "",
+    roomNo: "",
     category: "",
-    priority: "",
-    dateReported: "",
   };
 
-  const methods = useForm<newReportSchemaType>({
+  const methods = useForm({
     mode: "onSubmit",
     resolver: zodResolver(newReportSchema),
     defaultValues,
@@ -70,17 +61,19 @@ export default function ReportFormPage() {
   const {
     handleSubmit,
     formState: { isSubmitting, errors },
+    setValue,
+    watch,
   } = methods;
-  console.log(errors);
+
+  const selectedCategory = watch("category"); // Get selected category value
+  const selectedRoom = watch("roomNo"); // Get selected room value
 
   const onSubmit = handleSubmit(async (data) => {
     try {
       console.log("Report Data:", data);
-
       await dispatch(addReportList(data));
-
       navigate(paths.dashboard.Reports.root);
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error adding report", error);
     }
   });
@@ -92,71 +85,45 @@ export default function ReportFormPage() {
           Add Report
         </Typography>
         <Box display="grid" gridTemplateColumns={{ xs: "1fr", sm: "1fr 1fr" }} gap={2}>
-          {/* Category Select */}
+          {/* Category Dropdown */}
           <Grid item xs={12}>
             <FormControl fullWidth variant="outlined">
               <InputLabel>Category</InputLabel>
               <Select
                 label="Category"
+                value={selectedCategory || ""}
                 {...methods.register("category")}
-                defaultValue=""
+                onChange={(e) => {
+                  setValue("category", e.target.value);
+                  setValue("roomNo", ""); // Reset roomNo when category changes
+                }}
               >
                 {categories.map((category) => (
-                  <MenuItem key={category.value} value={category.value}>
-                    {category.label}
+                  <MenuItem key={category.id} value={category.name}>
+                    {category.name}
                   </MenuItem>
                 ))}
               </Select>
             </FormControl>
           </Grid>
 
-          {/* Status Select */}
+          {/* Room Dropdown */}
           <Grid item xs={12}>
-            <FormControl fullWidth variant="outlined">
-              <InputLabel>Status</InputLabel>
+            <FormControl fullWidth variant="outlined" disabled={!selectedCategory}>
+              <InputLabel>Room</InputLabel>
               <Select
-                label="Status"
-                {...methods.register("status")}
-                defaultValue=""
+                label="Room"
+                value={selectedRoom || ""}
+                {...methods.register("roomNo")}
+                onChange={(e) => setValue("roomNo", e.target.value)}
               >
-                {statuses.map((status) => (
-                  <MenuItem key={status.value} value={status.value}>
-                    {status.label}
+                {(roomOptions[selectedCategory] || []).map((room, index) => (
+                  <MenuItem key={index} value={room}>
+                    {room}
                   </MenuItem>
                 ))}
               </Select>
             </FormControl>
-          </Grid>
-
-          {/* Priority Select */}
-          <Grid item xs={12}>
-            <FormControl fullWidth variant="outlined">
-              <InputLabel>Priority</InputLabel>
-              <Select
-                label="Priority"
-                {...methods.register("priority")}
-                defaultValue=""
-              >
-                {priorities.map((priority) => (
-                  <MenuItem key={priority.value} value={priority.value}>
-                    {priority.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-
-          {/* Date Reported DatePicker */}
-          <Grid item xs={12}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                label="Date Reported"
-                {...methods.register("dateReported")}
-                onChange={(newValue: Dayjs | null) => {
-                  methods.setValue("dateReported", newValue ? newValue.format("YYYY-MM-DD") : "");
-                }}
-              />
-            </LocalizationProvider>
           </Grid>
 
           {/* Description TextField */}
@@ -171,12 +138,9 @@ export default function ReportFormPage() {
             />
           </Grid>
 
+          {/* Submit Button */}
           <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-            <LoadingButton
-              type="submit"
-              variant="contained"
-              loading={isSubmitting}
-            >
+            <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
               Save Report
             </LoadingButton>
           </Stack>

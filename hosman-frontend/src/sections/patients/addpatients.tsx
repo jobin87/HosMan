@@ -43,13 +43,7 @@ export const AddpatientsData =  () => {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-        const formattedData={
-            ...data,
-        age: Number(data.age),
-        patientRegId: Number(data.patientRegId),
-        contactNumber: Number(data.contactNumber),
-        }
-      const response = await dispatch(requestAddPatientList(formattedData));
+      const response = await dispatch(requestAddPatientList(data));
       if(response){
         console.log("hello")
       }

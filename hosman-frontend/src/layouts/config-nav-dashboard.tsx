@@ -44,7 +44,7 @@ export const navData = [
    * Management
    */
   {
-    subheader: 'diagnosis-data',
+    subheader: 'General',
     items: [
       {
         title: 'Appointment',
@@ -65,15 +65,16 @@ export const navData = [
         title: 'treatments',
         path: paths.dashboard.Treatment.root,
       },
-      {
-        title: 'Reports',
-        path: paths.dashboard.Reports.root,
-      },
+      
     ],
   },
   {
     subheader: 'Settings',
     items: [
+      {
+        title: 'Staff-Roles',
+        path: paths.dashboard.Reports.root,
+      },
       {
         title: 'Inventory',
         path: paths.dashboard.settings.staff.list,

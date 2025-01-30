@@ -29,9 +29,9 @@ import type { NotificationItemProps } from './notification-item';
 // ----------------------------------------------------------------------
 
 const TABS = [
-  { value: 'all', label: 'All', count: 22 },
-  { value: 'unread', label: 'Unread', count: 12 },
-  { value: 'archived', label: 'Archived', count: 10 },
+  { value: 'Reports', label: 'Reports', count: 22 },
+  { value: 'staff', label: 'Staff', count: 12 },
+  { value: 'Emergency', label: 'Emergency', count: 10 },
 ];
 
 // ----------------------------------------------------------------------
@@ -43,7 +43,7 @@ export type NotificationsDrawerProps = IconButtonProps & {
 export function NotificationsDrawer({ data = [], sx, ...other }: NotificationsDrawerProps) {
   const drawer = useBoolean();
 
-  const [currentTab, setCurrentTab] = useState('all');
+  const [currentTab, setCurrentTab] = useState('Emergency');
 
   const handleChangeTab = useCallback((event: React.SyntheticEvent, newValue: string) => {
     setCurrentTab(newValue);
@@ -91,10 +91,11 @@ export function NotificationsDrawer({ data = [], sx, ...other }: NotificationsDr
           label={tab.label}
           icon={
             <Label
-              variant={((tab.value === 'all' || tab.value === currentTab) && 'filled') || 'soft'}
+              variant={((tab.value === 'Reports' || tab.value === currentTab) && 'filled') || 'soft'}
               color={
-                (tab.value === 'unread' && 'info') ||
-                (tab.value === 'archived' && 'success') ||
+                (tab.value==='Reports'&& 'error') ||
+                (tab.value === 'Emergency' && 'error') ||
+                (tab.value === 'staff' && 'info') ||
                 'default'
               }
             >

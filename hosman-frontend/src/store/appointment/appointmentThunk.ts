@@ -1,9 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
   API_METHODS,
-  ENDPOINT_ADD_APPOINTMENT,
 
-  ENDPOINT_GET_APPOINTMENT,
+
+  ENDPOINT_APPOINTMENT_GET,
+
+
+  ENDPOINT_APPOINTMENT_POST,
+
 
   makeNetworkCall,
 } from 'src/network';
@@ -18,7 +22,7 @@ export const requestAppointmentSaved = createAsyncThunk(
     try {
       const response = await makeNetworkCall({
         method: API_METHODS.POST,
-        url: ENDPOINT_ADD_APPOINTMENT,
+        url: ENDPOINT_APPOINTMENT_POST,
         data: params,
       });
       console.log("appointment:",response)
@@ -34,7 +38,7 @@ export const getAppointmentData = createAsyncThunk(
     try {
       const response = await makeNetworkCall({
         method: API_METHODS.GET,
-        url: ENDPOINT_GET_APPOINTMENT,
+        url: ENDPOINT_APPOINTMENT_GET,
         data: params,
       });
       console.log("appointment:",response)

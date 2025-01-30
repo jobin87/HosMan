@@ -33,6 +33,10 @@ const TABS = [
   { value: 'staff', label: 'Staff', count: 12 },
   { value: 'Emergency', label: 'Emergency', count: 10 },
 ];
+const SubTABS = [
+  { value: 'Patients', label: 'Patients', count: 22 },
+  { value: 'staff', label: 'Staff', count: 12 },
+];
 
 // ----------------------------------------------------------------------
 
@@ -106,6 +110,29 @@ export function NotificationsDrawer({ data = [], sx, ...other }: NotificationsDr
       ))}
     </CustomTabs>
   );
+  const renderSubTabs = (
+    <CustomTabs variant="fullWidth" value={currentTab} onChange={handleChangeTab}>
+      {SubTABS.map((tab) => (
+        <Tab
+          key={tab.value}
+          iconPosition="end"
+          value={tab.value}
+          label={tab.label}
+          icon={
+            <Label
+              variant={((tab.value === 'Patients' || tab.value === currentTab) && 'inverted') || 'soft'}
+              color={
+                (tab.value === 'staff' && 'info') ||
+                'default'
+              }
+            >
+              {tab.count}
+            </Label>
+          }
+        />
+      ))}
+    </CustomTabs>
+  );
 
   const renderList = (
     <Scrollbar>
@@ -157,7 +184,7 @@ export function NotificationsDrawer({ data = [], sx, ...other }: NotificationsDr
 
         {renderTabs}
 
-        {renderList}
+
 
         <Box sx={{ p: 1 }}>
           <Button fullWidth size="large">

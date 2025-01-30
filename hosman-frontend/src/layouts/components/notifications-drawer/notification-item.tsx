@@ -55,7 +55,7 @@ export function NotificationItem({ notification }: { notification: NotificationI
         <Stack
           direction="row"
           alignItems="center"
-          sx={{ typography: 'caption', color: 'text.disabled' }}
+          sx={{ typography: 'caption', color: 'Highlight' }}
           divider={
             <Box
               sx={{

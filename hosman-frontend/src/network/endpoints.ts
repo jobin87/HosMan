@@ -10,21 +10,27 @@ export const ENDPOINT_ADMIN_USER_LOGOUT_CURRENT_SESSION =
   '/api/auth/v1/logout-current-session';
 
 //appointment 
-export const ENDPOINT_ADD_APPOINTMENT = '/api/staff/v1/addappointment'; //
-export const ENDPOINT_GET_APPOINTMENT = '/api/staff/v1/getAppointments'; //
+export const ENDPOINT_APPOINTMENT_POST = '/api/staff/v1/addappointment'; //
+export const ENDPOINT_APPOINTMENT_GET = '/api/staff/v1/getAppointments'; //
 
 //patient
-export const ENDPOINT_ADD_PATIENT = '/api/staff/v1/addPatient'; //
-export const ENDPOINT_GET_PATIENT = '/api/staff/v1/getPatient'; //
+export const ENDPOINT_PATIENT_POST = '/api/staff/v1/addPatient'; //
+export const ENDPOINT_PATIENT_GET = '/api/staff/v1/getPatient'; //
 
 
 // Doctor Management
-export const ENDPOINT_DOCTOR_LIST = '/api/staff/v1/getDoctor'; //
-export const ENDPOINT_DOCTOR_ADD = '/api/staff/v1/addDoctor'; //
+export const ENDPOINT_DOCTOR_POST = '/api/staff/v1/addDoctor'; //
+export const ENDPOINT_DOCTOR_GET = '/api/staff/v1/getDoctor'; //
+
+
+//roomsAndCategories
+export const ENDPOINT_ROOM_AND_CATEGORIES_POST = '/api/staff/v1/report/addReportList'; //
+
+
 
 
 //reports 
-export const ENDPOINT_REPORT_LIST_ADD = '/api/staff/v1/report/addReportList'; //
+export const ENDPOINT_REPORT_LIST_POST = '/api/staff/v1/report/addReportList'; //
 export const ENDPOINT_REPORT_LIST_GET = '/api/staff/v1/report/getReport/'; //
 
 
@@ -34,7 +40,7 @@ export const ENDPOINT_REPORT_LIST_GET = '/api/staff/v1/report/getReport/'; //
 // /updateTreatmentById/:id
 //
 export const ENDPOINT_TREATMENT_ADD= '/api/staff/v1/addTreatment'; //
-export const  ENDPOINT_TREATMENT_GET= '/api/staff/v1/getTreatment';//
+export const  ENDPOINT_TREATMENT_GET= '/api/staff/v1/getTreatment/';//
 export const  ENDPOINT_TREATMENT_DELETE= '/api/staff/v1/deleteTreatmentById/';//
 export const  ENDPOINT_TREATMENT_ALL_DELETE= '/api/staff/v1/deleteAllTreatments';//
 export const ENDPOINT_TREATMENT_UPDATE = '/api/staff/v1/updateTreatmentById/'

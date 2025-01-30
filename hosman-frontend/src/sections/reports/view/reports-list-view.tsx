@@ -117,7 +117,7 @@ export default function ReportListView() {
                   "&:hover": { backgroundColor: "skyblue" },
                 }}
               >
-                View
+                Assign
               </Button>
             </Card>
           </Grid>

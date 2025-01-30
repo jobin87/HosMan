@@ -111,7 +111,7 @@ export default function ReportFormPage() {
           <Grid item xs={12}>
             <FormControl fullWidth variant="outlined" disabled={!selectedCategory}>
               <InputLabel>Room</InputLabel>
-              <Select
+              {/* <Select
                 label="Room"
                 value={selectedRoom || ""}
                 {...methods.register("roomNo")}
@@ -122,7 +122,7 @@ export default function ReportFormPage() {
                     {room}
                   </MenuItem>
                 ))}
-              </Select>
+              </Select> */}
             </FormControl>
           </Grid>
 

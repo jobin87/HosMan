@@ -1,13 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
   API_METHODS,
-  ENDPOINT_DOCTOR_ADD,
-  ENDPOINT_DOCTOR_LIST,
+  ENDPOINT_DOCTOR_GET,
+  ENDPOINT_DOCTOR_POST,
   ENDPOINT_STAFF_MANAGEMENT_CREATE,
   ENDPOINT_STAFF_MANAGEMENT_DELETE,
   ENDPOINT_STAFF_MANAGEMENT_DETAILS,
   ENDPOINT_STAFF_MANAGEMENT_EDIT,
-  ENDPOINT_TREATMENT_ADD,
   ENDPOINT_TREATMENT_ALL_DELETE,
   ENDPOINT_TREATMENT_DELETE,
   ENDPOINT_TREATMENT_GET,
@@ -30,7 +29,7 @@ export const requestaddDoctor = createAsyncThunk('addDoctor',
   async(params:adddoctorTypes)=>{
     const response = await makeNetworkCall({
       method: API_METHODS.POST,
-      url:ENDPOINT_DOCTOR_ADD,
+      url:ENDPOINT_DOCTOR_POST,
       data:params
     })
     console.log("response:",response)
@@ -41,7 +40,7 @@ export const requestaddDoctor = createAsyncThunk('addDoctor',
 export const requestAllDoctorsList = createAsyncThunk('all-staff/alldoctorsList', async (params:DoctorsList) => {
   const response = await makeNetworkCall({
     method: API_METHODS.GET,
-    url: ENDPOINT_DOCTOR_LIST,
+    url: ENDPOINT_DOCTOR_GET,
     data:params
   });
   console.log(response)
@@ -65,7 +64,7 @@ export const requestAddTreatment= createAsyncThunk(
   'treatment/requestAddTreatment',
   async (params:ITreatmentTypes)=>{const response = await makeNetworkCall({
     method: API_METHODS.POST,
-    url: ENDPOINT_TREATMENT_ADD,
+    url: ENDPOINT_TREATMENT_GET,
     data: params,
   })
   console.log(response)

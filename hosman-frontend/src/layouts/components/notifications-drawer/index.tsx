@@ -29,9 +29,13 @@ import type { NotificationItemProps } from './notification-item';
 // ----------------------------------------------------------------------
 
 const TABS = [
-  { value: 'all', label: 'All', count: 22 },
-  { value: 'unread', label: 'Unread', count: 12 },
-  { value: 'archived', label: 'Archived', count: 10 },
+  { value: 'Reports', label: 'Reports', count: 22 },
+  { value: 'staff', label: 'Staff', count: 12 },
+  { value: 'Emergency', label: 'Emergency', count: 10 },
+];
+const SubTABS = [
+  { value: 'Patients', label: 'Patients', count: 22 },
+  { value: 'staff', label: 'Staff', count: 12 },
 ];
 
 // ----------------------------------------------------------------------
@@ -43,7 +47,7 @@ export type NotificationsDrawerProps = IconButtonProps & {
 export function NotificationsDrawer({ data = [], sx, ...other }: NotificationsDrawerProps) {
   const drawer = useBoolean();
 
-  const [currentTab, setCurrentTab] = useState('all');
+  const [currentTab, setCurrentTab] = useState('Emergency');
 
   const handleChangeTab = useCallback((event: React.SyntheticEvent, newValue: string) => {
     setCurrentTab(newValue);
@@ -91,10 +95,34 @@ export function NotificationsDrawer({ data = [], sx, ...other }: NotificationsDr
           label={tab.label}
           icon={
             <Label
-              variant={((tab.value === 'all' || tab.value === currentTab) && 'filled') || 'soft'}
+              variant={((tab.value === 'Reports' || tab.value === currentTab) && 'filled') || 'soft'}
               color={
-                (tab.value === 'unread' && 'info') ||
-                (tab.value === 'archived' && 'success') ||
+                (tab.value==='Reports'&& 'error') ||
+                (tab.value === 'Emergency' && 'error') ||
+                (tab.value === 'staff' && 'info') ||
+                'default'
+              }
+            >
+              {tab.count}
+            </Label>
+          }
+        />
+      ))}
+    </CustomTabs>
+  );
+  const renderSubTabs = (
+    <CustomTabs variant="fullWidth" value={currentTab} onChange={handleChangeTab}>
+      {SubTABS.map((tab) => (
+        <Tab
+          key={tab.value}
+          iconPosition="end"
+          value={tab.value}
+          label={tab.label}
+          icon={
+            <Label
+              variant={((tab.value === 'Patients' || tab.value === currentTab) && 'inverted') || 'soft'}
+              color={
+                (tab.value === 'staff' && 'info') ||
                 'default'
               }
             >
@@ -156,7 +184,7 @@ export function NotificationsDrawer({ data = [], sx, ...other }: NotificationsDr
 
         {renderTabs}
 
-        {renderList}
+
 
         <Box sx={{ p: 1 }}>
           <Button fullWidth size="large">

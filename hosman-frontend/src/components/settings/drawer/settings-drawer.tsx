@@ -74,6 +74,8 @@ export function SettingsDrawer({
 
   const renderMode = (
     <BaseOption
+    tooltip="Dashboard only and available at large resolutions > 1600px (xl)"
+
       label="Dark mode"
       icon="moon"
       selected={settings.colorScheme === 'dark'}
@@ -97,6 +99,7 @@ export function SettingsDrawer({
 
   const renderRTL = (
     <BaseOption
+    tooltip="Dashboard only and available at large resolutions > 1600px (xl)"
       label="Right to left"
       icon="align-right"
       selected={settings.direction === 'rtl'}

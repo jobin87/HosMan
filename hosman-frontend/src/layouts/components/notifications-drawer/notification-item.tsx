@@ -55,7 +55,7 @@ export function NotificationItem({ notification }: { notification: NotificationI
         <Stack
           direction="row"
           alignItems="center"
-          sx={{ typography: 'caption', color: 'text.disabled' }}
+          sx={{ typography: 'caption', color: 'Highlight' }}
           divider={
             <Box
               sx={{
@@ -141,7 +141,7 @@ export function NotificationItem({ notification }: { notification: NotificationI
           disableTypography
           primary={
             <Typography variant="subtitle2" component="div" sx={{ color: 'text.secondary' }} noWrap>
-              design-suriname-2015.mp3
+              voice
             </Typography>
           }
           secondary={
@@ -161,8 +161,8 @@ export function NotificationItem({ notification }: { notification: NotificationI
                 />
               }
             >
-              <span>2.3 GB</span>
-              <span>30 min ago</span>
+              <span>2.3 mb</span>
+              <span>3 min ago</span>
             </Stack>
           }
         />

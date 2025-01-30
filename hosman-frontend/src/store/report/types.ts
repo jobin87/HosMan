@@ -7,6 +7,11 @@ export interface IReportListParams {
     reportData?: string;
     category: string;
 
+  }
+
+  export interface IRoomsAndCategoriesParams {
+    roomNo: string;
+    category: string;
 
   }
  

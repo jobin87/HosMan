@@ -1,8 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
   API_METHODS,
-  ENDPOINT_ADD_PATIENT,
-  ENDPOINT_GET_PATIENT,
+  ENDPOINT_PATIENT_GET,
+  ENDPOINT_PATIENT_POST,
   makeNetworkCall,
 } from 'src/network';
 
@@ -14,7 +14,7 @@ export const requestAddPatientList = createAsyncThunk(
   async (params: IPatientParams) => {
     const response = await makeNetworkCall({
       method: API_METHODS.POST,
-      url: ENDPOINT_ADD_PATIENT,
+      url: ENDPOINT_PATIENT_POST,
       data: params,
     });
     return response?.data?.data;
@@ -25,7 +25,7 @@ export const requestGetPatient = createAsyncThunk(
   async (params: IPatientParams) => {
     const response = await makeNetworkCall({
       method: API_METHODS.GET,
-      url: ENDPOINT_GET_PATIENT,
+      url: ENDPOINT_PATIENT_GET,
       data: params,
     });
     console.log("getpatient:::",response?.data?.patientsdata)

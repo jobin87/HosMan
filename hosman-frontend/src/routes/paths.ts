@@ -128,6 +128,7 @@ export const paths = {
         list: `${ROOTS.DASHBOARD}/settings/staff/list`, // ALL STAFF LISTING
         create: `${ROOTS.DASHBOARD}/settings/staff/create`,
         edit: (id: string) => `${ROOTS.DASHBOARD}/settings/staff/${id}/edit`,
+
       },
       roles: {
         root: `${ROOTS.DASHBOARD}/settings/roles`,

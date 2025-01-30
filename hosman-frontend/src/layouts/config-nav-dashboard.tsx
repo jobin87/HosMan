@@ -44,7 +44,7 @@ export const navData = [
    * Management
    */
   {
-    subheader: 'diagnosis-data',
+    subheader: 'General',
     items: [
       {
         title: 'Appointment',
@@ -74,6 +74,7 @@ export const navData = [
   {
     subheader: 'Settings',
     items: [
+     
       {
         title: 'Inventory',
         path: paths.dashboard.settings.staff.list,

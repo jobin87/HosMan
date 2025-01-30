@@ -5,8 +5,8 @@ import {
   ENDPOINT_PERMISSION_DELETE,
   ENDPOINT_PERMISSION_DETAILS,
   ENDPOINT_PERMISSION_EDIT,
-  ENDPOINT_REPORT_LIST_ADD,
   ENDPOINT_REPORT_LIST_GET,
+  ENDPOINT_REPORT_LIST_POST,
   makeNetworkCall,
 } from 'src/network';
 import { ICreateRoles, IEditRoles, IReportDataParams, IReportListParams, IRolesDetailsParams } from './types';
@@ -18,7 +18,7 @@ export const createRoomRoles = createAsyncThunk(
   async (params: IReportListParams) => {
     const response = await makeNetworkCall({
       method: API_METHODS.POST,
-      url: ENDPOINT_REPORT_LIST_ADD,
+      url: ENDPOINT_REPORT_LIST_POST,
       data: params,
     });
     console.log(response)

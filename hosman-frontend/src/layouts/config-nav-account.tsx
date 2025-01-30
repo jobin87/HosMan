@@ -6,7 +6,7 @@ import { paths } from 'src/routes/paths';
 export const _account = [
   {
     label: 'Security',
-    href: paths.dashboard.Reports,
+    href: paths.dashboard.user.account('security'),
     icon: <Iconify icon="solar:shield-keyhole-bold-duotone" />,
   },
   {

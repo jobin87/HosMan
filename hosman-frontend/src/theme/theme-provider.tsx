@@ -27,8 +27,8 @@ export function ThemeProvider({ children }: Props) {
   return (
     <CssVarsProvider
       theme={theme}
-      defaultMode={schemeConfig.defaultMode}
       modeStorageKey={schemeConfig.modeStorageKey}
+      colorSchemeSelector="#root"
     >
       <CssBaseline />
       <RTL direction={settings.direction}>{children}</RTL>

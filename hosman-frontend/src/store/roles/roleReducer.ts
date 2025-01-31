@@ -9,7 +9,7 @@ import {
 
 const initialState = {
   list: basicInitialState,
-  details: basicInitialState,
+  roomdetails: basicInitialState,
   create: networkCallInitialState,
   edit: networkCallInitialState,
   delete: networkCallInitialState,
@@ -24,7 +24,7 @@ export const roleReducer = createSlice({
       state.list = action.payload;
     },
     setRolesDetails: (state, action) => {
-      state.details = action.payload;
+      state.roomdetails = action.payload;
     },
     setRolesCreate: (state, action) => {
       state.create = action.payload;
@@ -41,9 +41,9 @@ export const roleReducer = createSlice({
       // LIST
       .addCase(createRoomRoles.fulfilled, (state, action) => {
         state.list.loading = false;
-        if (action.payload?.isData) {
-          state.list.data = action.payload;
-        }
+        // if (action.payload) {
+        //   state.list.data = action.payload;
+        // }
       })
       .addCase(createRoomRoles.pending, (state) => {
         state.list.loading = true;
@@ -56,18 +56,18 @@ export const roleReducer = createSlice({
 
       // get
       .addCase(getRoomRoles.fulfilled, (state, action) => {
-        state.details.loading = false;
+        state.roomdetails.loading = false;
         // state.details.data = action.payload;
         if (action.payload) {
-          state.details.data = action.payload
+          state.roomdetails.data = action.payload
         }
       })
       .addCase(getRoomRoles.pending, (state) => {
-        state.details.loading = true;
+        state.roomdetails.loading = true;
       })
       .addCase(getRoomRoles.rejected, (state, action) => {
-        state.details.loading = false;
-        state.details.error = action.error;
+        state.roomdetails.loading = false;
+        state.roomdetails.error = action.error;
       })
 
       // EDIT

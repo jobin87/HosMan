@@ -34,7 +34,6 @@ export const paths = {
   // DASHBOARD
   dashboard: {
     root: `${ROOTS.DASHBOARD}`,
-
     doctors: {
       root: `${ROOTS.DASHBOARD}/doctor`,
       doctorform:`${ROOTS.DASHBOARD}/doctor/doctor-form`
@@ -47,6 +46,7 @@ export const paths = {
       general: `${ROOTS.DASHBOARD}/user/general`,
     },
     Appointment: {
+      list:`${ROOTS.DASHBOARD}/appointment/appointmentList`,
       department: `${ROOTS.DASHBOARD}/appointment/department/:id`,
       form: `${ROOTS.DASHBOARD}/appointment/appointment-form`,
 
@@ -64,6 +64,10 @@ export const paths = {
       newReports: `${ROOTS.DASHBOARD}/report/add-report`,
       details: `${ROOTS.DASHBOARD}/report/report-details/:id`,
       edit: `${ROOTS.DASHBOARD}/report/report-edit`,
+    },
+
+    Roles:{
+      root:`${ROOTS.DASHBOARD}/roomsAndCategory`
     },
 
     user: {

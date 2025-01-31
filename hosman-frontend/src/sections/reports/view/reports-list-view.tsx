@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Typography,
-  TextField,
   Grid,
   Card,
   CardContent,
@@ -18,9 +17,10 @@ import {
 import { useNavigate } from "react-router-dom";
 import { paths } from "src/routes/paths";
 import { DashboardContent } from "src/layouts/dashboard";
+import { useAppDispatch, useAppSelector } from "src/store";
+import { getRoomRoles } from "src/store/roles/roleThunk";
 
 export default function ReportListView() {
-  // Static data for the categories and latest assigned reports
   const reportCategories = [
     { id: 1, name: "Room Maintenance", reportCount: 5 },
     { id: 2, name: "Lab Equipment Issues", reportCount: 3 },
@@ -52,6 +52,7 @@ export default function ReportListView() {
 
   const [searchCategory, setSearchCategory] = useState("");
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   // Filter categories based on search input
   const filteredCategories = reportCategories.filter((category) =>
@@ -62,6 +63,12 @@ export default function ReportListView() {
   const handleCategoryClick = (id: number) => {
     navigate(`${paths.dashboard.Reports.details.replace(":id", String(id))}`);
   };
+
+  const roomData = useAppSelector((state) => state.role.roomdetails.data || []); // Ensure it's an empty array if no data
+
+  useEffect(() => {
+    dispatch(getRoomRoles({}));
+  }, [dispatch]);
 
   return (
     <DashboardContent>
@@ -150,6 +157,35 @@ export default function ReportListView() {
           </TableBody>
         </Table>
       </TableContainer>
+
+      {/* Registered Rooms and Categories */}
+      <Card sx={{ p: 3 }}>
+        <Typography variant="h4" gutterBottom>
+          Registered Rooms and Categories
+        </Typography>
+        {roomData.length > 0 ? (
+          <Box>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Room Number</TableCell>
+                  <TableCell>Category</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {roomData.map((room: any, index: any) => (
+                  <TableRow key={index}>
+                    <TableCell>{room.roomNo}</TableCell>
+                    <TableCell>{room.category}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Box>
+        ) : (
+          <Typography>No registered rooms found.</Typography>
+        )}
+      </Card>
     </DashboardContent>
   );
 }

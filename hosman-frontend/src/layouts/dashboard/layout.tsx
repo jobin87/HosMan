@@ -9,7 +9,7 @@ import { iconButtonClasses } from '@mui/material/IconButton';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 // import { allLangs } from 'src/locales';
-import { _contacts, _notifications } from 'src/_mock';
+// import { _contacts, _notifications } from 'src/_mock';
 
 import { Logo } from 'src/components/logo';
 import { useSettingsContext } from 'src/components/settings';
@@ -153,7 +153,7 @@ export function DashboardLayout({ sx, children, header, data }: DashboardLayoutP
                 {/* -- Language popover -- */}
                 {/* <LanguagePopover data={allLangs} /> */}
                 {/* -- Notifications popover -- */}
-                <NotificationsDrawer data={_notifications} />
+                {/* <NotificationsDrawer data={_notifications} /> */}
                 {/* -- Contacts popover -- */}
                 {/* <ContactsPopover data={_contacts} /> */}
                 {/* -- Settings button -- */}

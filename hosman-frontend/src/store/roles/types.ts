@@ -1,13 +1,11 @@
-export interface IReportListParams {
-    reportId?: string;
-    description: string;
-    category: string;
-  }
+export interface IRoomsAndCategoriesParams {
+  roomNo: string;
+  category: string;
+
+}
   export interface IReportDataParams {
-    reportData?: string;
-    category: string;
-
-
+    rooms?: string;
+    category?: string;
   }
  
 export interface IRolesDetailsParams {

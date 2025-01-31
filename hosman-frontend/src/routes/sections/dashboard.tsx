@@ -18,8 +18,9 @@ import { EditTreatmentData } from 'src/sections/treatment/edit-treatment';
 import ReportEditForm from 'src/sections/reports/edit-report';
 import ReportFormPage from 'src/sections/reports/report-form';
 import ReportDetailsPage from 'src/sections/reports/report-details';
+import RoomsAndCategoryPage from 'src/sections/reports/report-category-form';
 
-const IndexPage = lazy(() => import('src/pages/dashboard/six'));
+const IndexPage = lazy(() => import('src/pages/home'));
 
 const UploadDocuments = lazy(() => import('src/pages/dashboard/upload-documents'));
 
@@ -59,10 +60,11 @@ export const dashboardRoutes = [
     path: 'dashboard',
     element: <AuthGuard>{layoutContent}</AuthGuard>,
     children: [
-      { element: <AppointMentListPage/>, index: true },
+      { element: <IndexPage/>, index: true },
       {
         path: 'Appointment',
         children: [
+          { path: 'appointmentList', element: <AppointMentListPage/> },
           { path: 'department/:id', element: <DepartmentDetails/> },
           { path: 'appointment-form', element: <FormDetails/> },
 
@@ -105,6 +107,21 @@ export const dashboardRoutes = [
 
         ],
       },
+      {
+        path: 'roles',
+        children: [
+          { element: <RoomsAndCategoryPage/>, index: true },
+          { path: 'add-report', element: <ReportFormPage/> },
+          { path: 'report-details/:id', element: <ReportDetailsPage/> },
+          { path: 'report-edit', element: <ReportEditForm/> },
+
+
+
+        ],
+      },
+
+
+
       {
         path: 'user',
         children: [

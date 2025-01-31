@@ -6,38 +6,38 @@ import {
   ENDPOINT_PERMISSION_DETAILS,
   ENDPOINT_PERMISSION_EDIT,
   ENDPOINT_REPORT_LIST_GET,
-  ENDPOINT_REPORT_LIST_POST,
+  ENDPOINT_ROOM_AND_CATEGORIES_GET,
+  ENDPOINT_ROOM_AND_CATEGORIES_POST,
   makeNetworkCall,
 } from 'src/network';
-import { ICreateRoles, IEditRoles, IReportDataParams, IReportListParams, IRolesDetailsParams } from './types';
+import { ICreateRoles, IEditRoles, IReportDataParams, IRolesDetailsParams, IRoomsAndCategoriesParams } from './types';
 
 
 // Staff Permissions List
 export const createRoomRoles = createAsyncThunk(
   'roles/staffRolesList',
-  async (params: IReportListParams) => {
+  async (params: IRoomsAndCategoriesParams) => {
     const response = await makeNetworkCall({
       method: API_METHODS.POST,
-      url: ENDPOINT_REPORT_LIST_POST,
+      url: ENDPOINT_ROOM_AND_CATEGORIES_POST,
       data: params,
     });
     console.log(response)
-    return response?.data?.data;
   }
 );
 export const getRoomRoles = createAsyncThunk(
   'roles/getReportList',
-  async (params: IReportDataParams) => {
+  async (params: IReportDataParams= { rooms: "", category: "" }) => {
     const response = await makeNetworkCall({
       method: API_METHODS.GET,
-      url: ENDPOINT_REPORT_LIST_GET,
+      url: ENDPOINT_ROOM_AND_CATEGORIES_GET,
       data: params,
     });
 
     console.log(response)
     if (response && response.data) {
       console.log(response);
-      return response.data; // Return the data from the response
+      return response.data?.rooms; // Return the data from the response
     } else {
       throw new Error('Failed to fetch report data'); // Handle errors gracefully
     }

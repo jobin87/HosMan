@@ -14,19 +14,6 @@ import type { ICreateRoles, IEditRoles, IReportDataParams, IReportListParams, IR
 
 
 //create categories and allotrooms
-export const createRoomsAndCategories = createAsyncThunk(
-  'reports/createRoomsAndCategories',
-  async (params: IRoomsAndCategoriesParams) => {
-    const response = await makeNetworkCall({
-      method: API_METHODS.POST,
-      url: ENDPOINT_REPORT_LIST_POST,
-      data: params,
-    });
-    console.log(response)
-    return response?.data?.data;
-  }
-);
-
 
 
 // Staff Permissions List

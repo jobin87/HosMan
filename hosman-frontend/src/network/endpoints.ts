@@ -23,8 +23,10 @@ export const ENDPOINT_DOCTOR_POST = '/api/staff/v1/addDoctor'; //
 export const ENDPOINT_DOCTOR_GET = '/api/staff/v1/getDoctor'; //
 
 
-//roomsAndCategories
-export const ENDPOINT_ROOM_AND_CATEGORIES_POST = '/api/staff/v1/report/addReportList'; //
+//roles
+export const ENDPOINT_ROOM_AND_CATEGORIES_POST = '/api/staff/v1/roles/addRoomsAndCategory'; //
+export const ENDPOINT_ROOM_AND_CATEGORIES_GET = '/api/staff/v1/roles/getRoomsAndCategory'; //
+
 
 
 
@@ -32,9 +34,6 @@ export const ENDPOINT_ROOM_AND_CATEGORIES_POST = '/api/staff/v1/report/addReport
 //reports 
 export const ENDPOINT_REPORT_LIST_POST = '/api/staff/v1/report/addReportList'; //
 export const ENDPOINT_REPORT_LIST_GET = '/api/staff/v1/report/getReport/'; //
-
-
-
 
 
 // /updateTreatmentById/:id

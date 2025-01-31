@@ -17,7 +17,7 @@ app.use(cors({
 app.use(express.json());
 connectDb()
 app.use('/api/auth/v1/',authRoutes);
-app.use('/api/staff/v1',dashboardRoutes)
+app.use('/api/staff/v1/',dashboardRoutes)
 
 
 

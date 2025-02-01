@@ -4,6 +4,7 @@ export interface IRoomsAndCategoriesParams {
 
 }
   export interface IReportDataParams {
+    description?: string;
     rooms?: string;
     category?: string;
   }

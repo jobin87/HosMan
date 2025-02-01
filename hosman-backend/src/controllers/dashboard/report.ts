@@ -4,9 +4,9 @@ import ReportModel from "../../models/dashboard/report";
 
 export const AddReports = async (req: Request,res: Response): Promise<void> => {
   try {
-    const { description, status, category, priority }= req.body;
+    const { description, category, roomNo }= req.body;
 
-    if (!description|| !status || !category || !priority )
+    if (!description|| !category || !roomNo )
        {
         res.status(400).json({ message: 'All fields are required' });
         return
@@ -19,7 +19,7 @@ export const AddReports = async (req: Request,res: Response): Promise<void> => {
          reportId: reportId,
          description,
          category,
-         priority,
+         roomNo,
          dateReported,
        });
    

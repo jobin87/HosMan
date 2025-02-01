@@ -43,7 +43,7 @@ export default function ReportDetailsPage() {
   const assigneeOptions = ["John Doe", "Jane Smith", "Mike Johnson", "Anna Lee", "Emily Davis"];
 
   const { data } = useAppSelector((state) => state.report.details); // Fetching from Redux store
-  console.log("Fetched Report Data: ", data);
+  console.log("Fetched Reportdetailspage Data: ", data);
 
   const defaultValues ={
     description: "",
@@ -69,11 +69,10 @@ export default function ReportDetailsPage() {
     
   // Fetch report details based on the category (id)
   useEffect(() => {
-    if (reportId) {
-      setLoading(true);
+
       getReportList(data)
-      
-    }
+      console.log("reportgetted:", getReportList)
+  
   }, [reportId]);
 
 

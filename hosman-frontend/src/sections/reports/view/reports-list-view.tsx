@@ -19,6 +19,8 @@ import { paths } from "src/routes/paths";
 import { DashboardContent } from "src/layouts/dashboard";
 import { useAppDispatch, useAppSelector } from "src/store";
 import { getRoomRoles } from "src/store/roles/roleThunk";
+import { getReportList } from "src/store/report/reportThunk";
+import { setRolesDetails } from "src/store/roles/roleReducer";
 
 export default function ReportListView() {
   const reportCategories = [
@@ -54,21 +56,43 @@ export default function ReportListView() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  // Filter categories based on search input
+  const roomData = useAppSelector(
+    (state) => state.role.roomRolesDetails.data || []
+  );
+  const reportData = useAppSelector(
+    (state) => state.report.reportDetails.data || []
+  );
+
+  useEffect(() => {
+    // Sequential API calls to ensure room roles are fetched first
+    (async () => {
+      await dispatch(getRoomRoles({}));
+      dispatch(getReportList({}));
+    })();
+
+    // Clear role details on mount
+    dispatch(setRolesDetails({}));
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (roomData.length) {
+      console.log("roomdata:", roomData);
+    }
+  }, [roomData]);
+
+  useEffect(() => {
+    if (reportData.length) {
+      console.log("reportdata:", reportData);
+    }
+  }, [reportData]);
+
   const filteredCategories = reportCategories.filter((category) =>
     category.name.toLowerCase().includes(searchCategory.toLowerCase())
   );
 
-  // Navigate to detailed category view
   const handleCategoryClick = (id: number) => {
     navigate(`${paths.dashboard.Reports.details.replace(":id", String(id))}`);
   };
-
-  const roomData = useAppSelector((state) => state.role.roomdetails.data || []); // Ensure it's an empty array if no data
-
-  useEffect(() => {
-    dispatch(getRoomRoles({}));
-  }, [dispatch]);
 
   return (
     <DashboardContent>
@@ -96,11 +120,11 @@ export default function ReportListView() {
                   sx={{
                     fontWeight: "bold",
                     fontSize: "0.875rem",
-                    whiteSpace: "nowrap", // Prevent the text from wrapping to the next line
-                    overflow: "hidden", // Hide the overflowing text
-                    textOverflow: "ellipsis", // Display ellipsis for overflowing text
-                    maxWidth: "100%", // Ensure it doesn't overflow horizontally
-                    textAlign: "center", // Align text in the center
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    maxWidth: "100%",
+                    textAlign: "center",
                   }}
                 >
                   {category.name}

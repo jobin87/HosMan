@@ -33,11 +33,8 @@ export const getRoomRoles = createAsyncThunk(
       url: ENDPOINT_ROOM_AND_CATEGORIES_GET,
       data: params,
     });
-
-    console.log(response)
-    if (response && response.data) {
-      console.log(response);
-      return response.data?.rooms; // Return the data from the response
+    if (response && response.data?.rooms) {
+      return response.data; // Return the data from the response
     } else {
       throw new Error('Failed to fetch report data'); // Handle errors gracefully
     }

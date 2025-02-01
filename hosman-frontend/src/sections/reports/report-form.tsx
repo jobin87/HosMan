@@ -1,41 +1,17 @@
-import {
-  Grid,
-  Typography,
-  Box,
-  Stack,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-} from "@mui/material";
-import { useAppDispatch } from "src/store";
+import { Grid, Typography, Box, Stack, MenuItem, Card } from "@mui/material";
+import { useAppDispatch, useAppSelector } from "src/store";
 import { useNavigate } from "react-router-dom";
 import { paths } from "src/routes/paths";
 import { z as zod } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Field, Form } from "src/components/hook-form";
-import { Card } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { addReportList } from "src/store/report/reportThunk";
+import { useEffect, useState } from "react";
+import { getRoomRoles } from "src/store/roles/roleThunk";
 
-const categories = [
-  { id: 1, name: "Room Maintenance" },
-  { id: 2, name: "Lab Equipment Issues" },
-  { id: 3, name: "Inventory Needs" },
-  { id: 4, name: "Patient Needs" },
-  { id: 5, name: "Staff Shortages" },
-];
-
-const roomOptions = {
-  "Room Maintenance": ["Room 101", "Room 102", "Room 103"],
-  "Lab Equipment Issues": ["Lab 1", "Lab 2", "Lab 3", "Lab 4", "Lab 5"],
-  "Inventory Needs": ["Storage A", "Storage B"],
-  "Patient Needs": ["Ward 1", "Ward 2", "Ward 3"],
-  "Staff Shortages": ["Admin Room", "Staff Room"],
-};
-
+// Validation schema for the report form
 const newReportSchema = zod.object({
   description: zod.string().min(1, { message: "Description is required" }),
   category: zod.string().min(1, { message: "Category is required" }),
@@ -45,11 +21,21 @@ const newReportSchema = zod.object({
 export default function ReportFormPage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const data = useAppSelector((state) => state.role.roomRolesDetails.data);
+
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [filteredRooms, setFilteredRooms] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (!data?.data?.length) {
+      dispatch(getRoomRoles({}));
+    }
+  }, [data?.data]);
 
   const defaultValues = {
     description: "",
     roomNo: "",
-    category: "",
+    category: selectedCategory, // Make sure the default category is set
   };
 
   const methods = useForm({
@@ -64,19 +50,75 @@ export default function ReportFormPage() {
     setValue,
     watch,
   } = methods;
+  console.log(errors)
 
-  const selectedCategory = watch("category"); // Get selected category value
-  const selectedRoom = watch("roomNo"); // Get selected room value
 
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = handleSubmit(async (formData) => {
     try {
-      console.log("Report Data:", data);
-      await dispatch(addReportList(data));
+      console.log("Report Data:", formData);
+      await dispatch(addReportList(formData));
       navigate(paths.dashboard.Reports.root);
     } catch (error) {
       console.error("Error adding report", error);
     }
   });
+
+  // Helper function to generate room numbers from a range string
+  const getRoomNumbers = (range: string) => {
+    const [start, end] = range.split("to").map((val) => val.trim());
+  
+    // Function to extract the numeric part and the alphanumeric prefix
+    const extractParts = (room: string) => {
+      const match = room.match(/^([a-zA-Z]+)(\d+)$/);
+      if (match) {
+        return {
+          prefix: match[1],
+          number: parseInt(match[2]),
+        };
+      }
+      return { prefix: "", number: 0 };
+    };
+  
+    const startParts = extractParts(start);
+    const endParts = extractParts(end);
+  
+    const roomNumbers = [];
+  
+    // If the room has a prefix, handle alphanumeric generation
+    if (startParts.prefix === endParts.prefix) {
+      for (let i = startParts.number; i <= endParts.number; i++) {
+        roomNumbers.push(`${startParts.prefix}${i}`);
+      }
+    } else {
+      // Handle edge case if the prefix is different (e.g., P1 to P5, or storage1 to storage5)
+      let current = startParts;
+      while (
+        current.prefix === startParts.prefix &&
+        current.number <= endParts.number
+      ) {
+        roomNumbers.push(`${current.prefix}${current.number}`);
+        current.number++;
+      }
+    }
+  
+    return roomNumbers;
+  };
+  
+
+  // Filter rooms based on the selected category
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category); // Update the selected category state
+    setValue("category", category); // Update the form field value for category
+
+    const categoryRooms = data?.data?.find(
+      (room: any) => room.category === category
+    );
+    if (categoryRooms) {
+      setFilteredRooms(getRoomNumbers(categoryRooms.range));
+      // Reset roomNo when category changes
+      setValue("roomNo", ""); // This will reset the roomNo field
+    }
+  };
 
   return (
     <Form methods={methods} onSubmit={onSubmit}>
@@ -84,46 +126,45 @@ export default function ReportFormPage() {
         <Typography variant="h4" gutterBottom>
           Add Report
         </Typography>
-        <Box display="grid" gridTemplateColumns={{ xs: "1fr", sm: "1fr 1fr" }} gap={2}>
+        <Box
+          display="grid"
+          gridTemplateColumns={{ xs: "1fr", sm: "1fr 1fr" }}
+          gap={2}
+        >
           {/* Category Dropdown */}
           <Grid item xs={12}>
-            <FormControl fullWidth variant="outlined">
-              <InputLabel>Category</InputLabel>
-              <Select
-                label="Category"
-                value={selectedCategory || ""}
-                {...methods.register("category")}
-                onChange={(e) => {
-                  setValue("category", e.target.value);
-                  setValue("roomNo", ""); // Reset roomNo when category changes
-                }}
-              >
-                {categories.map((category) => (
-                  <MenuItem key={category.id} value={category.name}>
-                    {category.name}
+            <Field.Select
+              label="Category"
+              {...methods.register("category")}
+              onChange={(e) => handleCategoryChange(e.target.value)}
+              value={watch("category")} // Bind category field to the selected value
+            >
+              {Array.isArray(data?.data) &&
+                data?.data?.map((room: any, index: number) => (
+                  <MenuItem key={index} value={room.category}>
+                    {room.category}
                   </MenuItem>
                 ))}
-              </Select>
-            </FormControl>
+            </Field.Select>
           </Grid>
 
-          {/* Room Dropdown */}
+          {/* Room Numbers Dropdown */}
           <Grid item xs={12}>
-            <FormControl fullWidth variant="outlined" disabled={!selectedCategory}>
-              <InputLabel>Room</InputLabel>
-              {/* <Select
-                label="Room"
-                value={selectedRoom || ""}
-                {...methods.register("roomNo")}
-                onChange={(e) => setValue("roomNo", e.target.value)}
-              >
-                {(roomOptions[selectedCategory] || []).map((room, index) => (
-                  <MenuItem key={index} value={room}>
-                    {room}
+            <Field.Select
+              label="Room"
+              {...methods.register("roomNo")}
+              value={watch("roomNo")} // Bind roomNo field to the selected value
+            >
+              {filteredRooms.length > 0 ? (
+                filteredRooms.map((roomNumber, index) => (
+                  <MenuItem key={index} value={roomNumber}>
+                    {roomNumber}
                   </MenuItem>
-                ))}
-              </Select> */}
-            </FormControl>
+                ))
+              ) : (
+                <MenuItem disabled>No rooms available</MenuItem>
+              )}
+            </Field.Select>
           </Grid>
 
           {/* Description TextField */}
@@ -140,7 +181,11 @@ export default function ReportFormPage() {
 
           {/* Submit Button */}
           <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-            <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+            <LoadingButton
+              type="submit"
+              variant="contained"
+              loading={isSubmitting}
+            >
               Save Report
             </LoadingButton>
           </Stack>

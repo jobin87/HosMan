@@ -10,6 +10,16 @@ export const basicInitialArrayState:  basicInitialStateProps  = {
   error: {},
 };
 
+export const roomState: basicInitialStateProps ={
+  data: {
+    message: '',
+    rooms: [],
+  },
+  loading: false,
+  error: {},
+};
+
+
 export const basicInitialStateWithRole:  basicInitialStatePropsWithRole  = {
   role:null,
   data: null,

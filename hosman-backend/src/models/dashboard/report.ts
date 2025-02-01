@@ -12,11 +12,6 @@ const reportSchema = new mongoose.Schema(
         required: true,
         trim: true,
       },
-      priority: {
-        type: String,
-        required: true,
-        trim: true,
-      },
       roomNo: {
         type: String,
         required:true,

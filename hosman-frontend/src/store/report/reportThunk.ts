@@ -10,7 +10,7 @@ import {
   makeNetworkCall,
 } from 'src/network';
 
-import type { ICreateRoles, IEditRoles, IReportDataParams, IReportListParams, IRolesDetailsParams, IRoomsAndCategoriesParams, } from './types';
+import type { ICreateRoles, IEditRoles, IReportDataParams, IReportListParams, IRolesDetailsParams,  } from './types';
 
 
 //create categories and allotrooms
@@ -34,13 +34,11 @@ export const getReportList = createAsyncThunk(
   async (params: IReportDataParams) => {
     const response = await makeNetworkCall({
       method: API_METHODS.GET,
-      url: ENDPOINT_REPORT_LIST_GET,
+      url: `${ENDPOINT_REPORT_LIST_GET}${params.reportId}`,
       data: params,
     });
 
-    console.log(response)
-    if (response && response.data) {
-      console.log(response);
+    if (response && response.data.reportdata) {
       return response.data; // Return the data from the response
     } else {
       throw new Error('Failed to fetch report data'); // Handle errors gracefully
@@ -56,7 +54,7 @@ export const requestStaffRolesDetails = createAsyncThunk(
       method: API_METHODS.GET,
       url: `${ENDPOINT_PERMISSION_DETAILS}${params.id}`,
     });
-    return response?.data?.data;
+    return response?.data?.reportdata;
   }
 );
 

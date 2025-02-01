@@ -111,6 +111,9 @@ export const dashboardRoutes = [
         path: 'roles',
         children: [
           { element: <RoomsAndCategoryPage/>, index: true },
+          { path: 'rooms-and-category', element: <RoomsAndCategoryPage/> },
+
+
           { path: 'add-report', element: <ReportFormPage/> },
           { path: 'report-details/:id', element: <ReportDetailsPage/> },
           { path: 'report-edit', element: <ReportEditForm/> },

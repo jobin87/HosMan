@@ -4,7 +4,7 @@ import { getPatient, PatientAdded } from '../controllers/dashboard/patients';
 import { deleteAllTreatments, deleteTreatmentById, getTreatment, treatementAdded, updateTreatment } from '../controllers/dashboard/treatment';
 import { DoctorsAdded, getDoctors } from '../controllers/dashboard/doctors';
 import { AddReports, getReports } from '../controllers/dashboard/report';
-import { getRoomsAndCategories, roomsAndCategories } from '../controllers/dashboard/roles';
+import { createStaffRoles, getRoomsAndCategories, roomsAndCategories } from '../controllers/dashboard/roles';
 
 export const dashboardRoutes = express.Router()
 dashboardRoutes.post('/addDoctor',DoctorsAdded);
@@ -31,6 +31,8 @@ dashboardRoutes.get('/report/getReport/:id?',getReports);
 
 dashboardRoutes.post('/roles/addRoomsAndCategory',roomsAndCategories);
 dashboardRoutes.get('/roles/getRoomsAndCategory',getRoomsAndCategories);
+dashboardRoutes.post('/roles/staffRoles',createStaffRoles);
+
 
 
 

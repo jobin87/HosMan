@@ -45,8 +45,8 @@ import { createRoomRoles } from "src/store/roles/roleThunk";
     const {
       handleSubmit,
       formState: { isSubmitting, errors },
-      watch,
     } = methods;
+    console.log(errors)
     
     const onSubmit = handleSubmit(async (data) => {
       try {

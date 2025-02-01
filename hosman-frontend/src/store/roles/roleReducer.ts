@@ -38,7 +38,7 @@ export const roleReducer = createSlice({
   extraReducers(builder) {
     builder
       // LIST
-      .addCase(createRoomRoles.fulfilled, (state, action) => {
+      .addCase(createRoomRoles.fulfilled, (state) => {
         state.list.loading = false;
         // if (action.payload) {
         //   state.list.data = action.payload;
@@ -57,8 +57,8 @@ export const roleReducer = createSlice({
       .addCase(getRoomRoles.fulfilled, (state, action) => {
         state.roomRolesDetails.loading = false;
         // Extract the rooms array from the payload
-        state.roomRolesDetails.data = action.payload.rooms || []; 
-        console.log("Rooms fetched:", action.payload.rooms);
+        state.roomRolesDetails.data = action.payload || []; 
+        console.log("Rooms fetched:", action.payload);
       })
       
       .addCase(getRoomRoles.pending, (state) => {

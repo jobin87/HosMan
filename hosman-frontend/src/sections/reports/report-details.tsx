@@ -1,6 +1,8 @@
-import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "src/store";
+import { getReportList } from "src/store/report/reportThunk";
 import {
-  Box,
   Typography,
   Table,
   TableBody,
@@ -9,167 +11,150 @@ import {
   TableHead,
   TableRow,
   Paper,
-  CircularProgress,
   Button,
   Dialog,
-  DialogTitle,
-  DialogContent,
   DialogActions,
+  DialogContent,
+  DialogTitle,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
 } from "@mui/material";
-import { useParams } from "react-router-dom";
-import { useAppSelector } from "src/store";
-import { getReportList } from "src/store/report/reportThunk";
-import { z  as zod} from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { DashboardContent } from "src/layouts/dashboard";
+import axios from 'axios'; // Assuming you're using axios for API requests
 
+export default function ReportDetailsView() {
+  const { id } = useParams<{ id: string }>(); // Retrieve the category or report id from URL params
+  const dispatch = useAppDispatch();
 
-export type newReportSchemaType = Zod.infer<typeof newReportSchema>;
+  // Fetching the report data from the Redux store
+  const reportData = useAppSelector((state) => state.report.reportDetails.data || []);
+  const [loading, setLoading] = useState(true);
+  const [openDialog, setOpenDialog] = useState(false); // State for dialog visibility
+  const [selectedReport, setSelectedReport] = useState<any>(null); // State to store selected report for assignment
+  const [workerName, setWorkerName] = useState(""); // State for selected worker ID
+  const [assignedWorker, setAssignedWorker] = useState<string | null>(null); // State to track assigned worker
 
-export const newReportSchema = zod.object({
-  description: zod.string().min(1, { message: "Description is required" }),
-  status: zod.string().min(1, { message: "Status is required" }),
-  category: zod.string().min(1, { message: "Category is required" }),
-  priority: zod.string().min(1, { message: "Priority is required" }),
+  useEffect(() => {
+    dispatch(getReportList({})).then(() => setLoading(false));
+  }, [dispatch]);
 
-});
-
-export default function ReportDetailsPage() {
-  const { reportId } = useParams<{ reportId: string }>();
-  const [loading, setLoading] = useState(false);
-  const [updatedReports, setUpdatedReports] = useState<any[]>([]);
-  const [selectedReportIndex, setSelectedReportIndex] = useState<number | null>(null);
-
-  const assigneeOptions = ["John Doe", "Jane Smith", "Mike Johnson", "Anna Lee", "Emily Davis"];
-
-  const { data } = useAppSelector((state) => state.report.details); // Fetching from Redux store
-  console.log("Fetched Reportdetailspage Data: ", data);
-
-  const defaultValues ={
-    description: "",
-    status: "",
-    category: "",
-    priority: "",
-
+  if (loading) {
+    return <Typography>Loading reports...</Typography>;
   }
 
-    const methods = useForm<newReportSchemaType>({
-      mode: "onSubmit",
-      resolver: zodResolver(newReportSchema),
-      defaultValues,
-    });
+  // Loop through the grouped report data and find the specific category or report
+  const selectedCategory = reportData.find((category: any) => category._id === id);
+  const filteredReports = selectedCategory ? selectedCategory.reports : [];
 
-    const {
-      handleSubmit,
-      formState: { isSubmitting, errors },
-      setValue,
-      watch,
-    } = methods;
-    console.log(errors)
-    
-  // Fetch report details based on the category (id)
-  useEffect(() => {
-
-      getReportList(data)
-      console.log("reportgetted:", getReportList)
-  
-  }, [reportId]);
-
-
-
-  const handleAssignClick = (index: number) => {
-    setSelectedReportIndex(index);
+  // Handle dialog open for a specific report
+  const handleDialogOpen = (report: any) => {
+    setSelectedReport(report); // Set the selected report
+    setAssignedWorker(report.workerAssigned || null); // Set the current assigned worker if any
+    setOpenDialog(true); // Open the dialog
   };
 
-  const handleAssigneeSelection = (assignee: string) => {
-    if (selectedReportIndex !== null) {
-      const updated = [...updatedReports]; // Create a new array to avoid direct mutation
-      updated[selectedReportIndex] = {
-        ...updated[selectedReportIndex], // Spread the existing report
-        assignedTo: assignee, // Update the assignee
-        status: "Assigned", // Set the status to "Assigned"
-      };
-      setUpdatedReports(updated);
-      setSelectedReportIndex(null);
+  // Handle dialog close
+  const handleDialogClose = () => {
+    setOpenDialog(false); // Close the dialog
+    setSelectedReport(null); // Clear selected report
+    setWorkerName(""); // Clear worker selection
+  };
+
+  // Handle worker assignment (POST request)
+  const assignWorkerToReport = async () => {
+    try {
+      // Sending POST request to backend
+      const response = await axios.post('/api/reports/assign-worker', {
+        reportId: selectedReport._id,
+        workerName: workerName,
+      });
+      console.log("Worker assigned:", response.data);
+
+      // Update assigned worker state to trigger button text change
+      setAssignedWorker(workerName);
+
+      // Optionally, update the Redux store or UI to reflect the assignment
+      handleDialogClose(); // Close dialog after assignment
+    } catch (error) {
+      console.error("Error assigning worker:", error);
     }
   };
 
   return (
-    <Box sx={{ p: 3 }}>
+    <DashboardContent>
       <Typography variant="h6" sx={{ mb: 2 }}>
-        Report Details - Category: {reportId}
+        Reports for Category: {selectedCategory ? selectedCategory._id : "Unknown"}
       </Typography>
 
-      {loading ? (
-        <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
-          <CircularProgress />
-        </Box>
-      ) : (
+      {/* Display the reports for the selected category */}
+      {filteredReports.length > 0 ? (
         <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }}>
+          <Table>
             <TableHead>
               <TableRow>
-                <TableCell><strong>Description</strong></TableCell>
-                <TableCell><strong>Status</strong></TableCell>
-                <TableCell><strong>Assigned To</strong></TableCell>
-                <TableCell><strong>Priority</strong></TableCell>
-                <TableCell><strong>Date</strong></TableCell>
+                <TableCell>Seq. No</TableCell> {/* Display sequential number */}
+                <TableCell>Description</TableCell>
+                <TableCell>Room No</TableCell>
+                <TableCell>Assign Worker</TableCell> {/* Button column */}
               </TableRow>
             </TableHead>
             <TableBody>
-              {updatedReports.length > 0 ? (
-                updatedReports.map((report, index) => (
-                  <TableRow key={report.id}>
-                    <TableCell>{report.description}</TableCell>
-                    <TableCell>{report.status}</TableCell>
-                    <TableCell>
-                      {report.assignedTo || (
-                        <Button variant="outlined" onClick={() => handleAssignClick(index)}>
-                          Assign
-                        </Button>
-                      )}
-                      {report.assignedTo}
-                    </TableCell>
-                    <TableCell>{report.priority}</TableCell>
-                    <TableCell>{report.date}</TableCell>
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={6} align="center">
-                    <Typography>No reports found for this category.</Typography>
+              {filteredReports.map((report: any, index: number) => (
+                <TableRow key={report._id}>
+                  <TableCell>{index + 1}</TableCell> {/* Sequential ID starts from 1 */}
+                  <TableCell>{report.description}</TableCell>
+                  <TableCell>{report.roomNo}</TableCell>
+                  <TableCell>
+                    {/* Assign Worker Button */}
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => handleDialogOpen(report)}
+                      disabled={!!assignedWorker} // Disable if worker is already assigned
+                    >
+                      {assignedWorker ? 'Assigned' : 'Assign'} {/* Change button text */}
+                    </Button>
                   </TableCell>
                 </TableRow>
-              )}
+              ))}
             </TableBody>
           </Table>
         </TableContainer>
+      ) : (
+        <Typography>No reports found for this category.</Typography>
       )}
-      <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
-        <Button variant="contained">
-          Submit Assignments
-        </Button>
-      </Box>
 
-      {/* Dialog for Assignee Selection */}
-      <Dialog open={selectedReportIndex !== null} onClose={() => setSelectedReportIndex(null)}>
-        <DialogTitle>Select Assignee</DialogTitle>
+      {/* Dialog for assigning worker */}
+      <Dialog open={openDialog} onClose={handleDialogClose}>
+        <DialogTitle>Assign Worker</DialogTitle>
         <DialogContent>
-          {assigneeOptions.map((assignee) => (
-            <Button
-              key={assignee}
-              fullWidth
-              sx={{ my: 1 }}
-              onClick={() => handleAssigneeSelection(assignee)}
+          <Typography variant="body2">Assign a worker to the selected report</Typography>
+          <FormControl fullWidth margin="dense">
+            <InputLabel id="worker-select-label">Worker</InputLabel>
+            <Select
+              labelId="worker-select-label"
+              value={workerName}
+              onChange={(e) => setWorkerName(e.target.value)}
+              label="Worker Name"
             >
-              {assignee}
-            </Button>
-          ))}
+              {/* Replace with your actual worker list */}
+              <MenuItem value="worker1">Worker 1</MenuItem>
+              <MenuItem value="worker2">Worker 2</MenuItem>
+              <MenuItem value="worker3">Worker 3</MenuItem>
+            </Select>
+          </FormControl>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setSelectedReportIndex(null)}>Cancel</Button>
+          <Button onClick={handleDialogClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={assignWorkerToReport} color="primary">
+            Assign
+          </Button>
         </DialogActions>
       </Dialog>
-    </Box>
+    </DashboardContent>
   );
 }

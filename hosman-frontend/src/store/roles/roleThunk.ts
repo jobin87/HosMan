@@ -1,16 +1,15 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
   API_METHODS,
-  ENDPOINT_PERMISSION_CREATE,
   ENDPOINT_PERMISSION_DELETE,
   ENDPOINT_PERMISSION_DETAILS,
   ENDPOINT_PERMISSION_EDIT,
-  ENDPOINT_REPORT_LIST_GET,
   ENDPOINT_ROOM_AND_CATEGORIES_GET,
   ENDPOINT_ROOM_AND_CATEGORIES_POST,
+  ENDPOINT_STAFF_ROLES_CREATE,
   makeNetworkCall,
 } from 'src/network';
-import { ICreateRoles, IEditRoles, IReportDataParams, IRolesDetailsParams, IRoomsAndCategoriesParams } from './types';
+import { ICreateRoles, IEditRoles, IRolesDetailsParams, IRoomDataParams, IRoomsAndCategoriesParams } from './types';
 
 
 // Staff Permissions List
@@ -27,17 +26,30 @@ export const createRoomRoles = createAsyncThunk(
 );
 export const getRoomRoles = createAsyncThunk(
   'roles/getReportList',
-  async (params: IReportDataParams= { rooms: "", category: "" }) => {
+  async (params: IRoomDataParams= { rooms: "", category: "" }) => {
     const response = await makeNetworkCall({
       method: API_METHODS.GET,
       url: ENDPOINT_ROOM_AND_CATEGORIES_GET,
       data: params,
     });
-    if (response && response.data?.rooms) {
+    if (response && response.data) {
       return response.data; // Return the data from the response
     } else {
       throw new Error('Failed to fetch report data'); // Handle errors gracefully
     }
+  }
+);
+
+// Create Staff Role
+export const requestCreateStaffRoles = createAsyncThunk(
+  'roles/requestCreateStaffRoles',
+  async (params: ICreateRoles) => {
+    const response = await makeNetworkCall({
+      method: API_METHODS.POST,
+      url: ENDPOINT_STAFF_ROLES_CREATE,
+      data: params,
+    });
+    return response?.data?.data;
   }
 );
 
@@ -53,18 +65,7 @@ export const requestStaffRolesDetails = createAsyncThunk(
   }
 );
 
-// Create Staff Role
-export const requestCreateStaffRoles = createAsyncThunk(
-  'roles/requestCreateStaffRoles',
-  async (params: ICreateRoles) => {
-    const response = await makeNetworkCall({
-      method: API_METHODS.POST,
-      url: ENDPOINT_PERMISSION_CREATE,
-      data: params,
-    });
-    return response?.data?.data;
-  }
-);
+
 
 // Edit Staff Role
 export const requestEditStaffRoles = createAsyncThunk(

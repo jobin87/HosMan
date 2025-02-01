@@ -67,7 +67,8 @@ export const paths = {
     },
 
     Roles:{
-      root:`${ROOTS.DASHBOARD}/roomsAndCategory`
+      root:`${ROOTS.DASHBOARD}/staff-management`,
+      roomAndCategory:`${ROOTS.DASHBOARD}/rooms-and-category`
     },
 
     user: {

@@ -1,7 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
   API_METHODS,
-  ENDPOINT_PERMISSION_CREATE,
   ENDPOINT_PERMISSION_DELETE,
   ENDPOINT_PERMISSION_DETAILS,
   ENDPOINT_PERMISSION_EDIT,
@@ -10,7 +9,7 @@ import {
   makeNetworkCall,
 } from 'src/network';
 
-import type { ICreateRoles, IEditRoles, IReportDataParams, IReportListParams, IRolesDetailsParams,  } from './types';
+import type {  IEditRoles, IReportDataParams, IReportListParams, IRolesDetailsParams,  } from './types';
 
 
 //create categories and allotrooms
@@ -18,7 +17,7 @@ import type { ICreateRoles, IEditRoles, IReportDataParams, IReportListParams, IR
 
 // Staff Permissions List
 export const addReportList = createAsyncThunk(
-  'roles/staffRolesList',
+  'roles/addReportList',
   async (params: IReportListParams) => {
     const response = await makeNetworkCall({
       method: API_METHODS.POST,
@@ -37,14 +36,20 @@ export const getReportList = createAsyncThunk(
       url: `${ENDPOINT_REPORT_LIST_GET}${params.reportId}`,
       data: params,
     });
-
-    if (response && response.data.reportdata) {
+    
+    // Check if response is not null or undefined
+    if (!response || !response.data) {
+      throw new Error('Failed to fetch report data');
+    }
+    if (response && response.data) {
+      console.log("response:::::::", response);
       return response.data; // Return the data from the response
     } else {
-      throw new Error('Failed to fetch report data'); // Handle errors gracefully
+      throw new Error('Response or response data is null');
     }
   }
 );
+
 
 // Staff Permission Details
 export const requestStaffRolesDetails = createAsyncThunk(
@@ -58,18 +63,7 @@ export const requestStaffRolesDetails = createAsyncThunk(
   }
 );
 
-// Create Staff Role
-export const requestCreateStaffRoles = createAsyncThunk(
-  'roles/requestCreateStaffRoles',
-  async (params: ICreateRoles) => {
-    const response = await makeNetworkCall({
-      method: API_METHODS.POST,
-      url: ENDPOINT_PERMISSION_CREATE,
-      data: params,
-    });
-    return response?.data?.data;
-  }
-);
+
 
 // Edit Staff Role
 export const requestEditStaffRoles = createAsyncThunk(

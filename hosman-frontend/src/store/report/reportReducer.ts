@@ -3,15 +3,12 @@ import { basicInitialState, networkCallInitialState } from '../types';
 import {
   addReportList,
   getReportList,
-  requestCreateStaffRoles,
   requestDeleteStaffRoles,
   requestEditStaffRoles,
-  requestStaffRolesDetails,
 } from './reportThunk';
 
 const initialState = {
   list: basicInitialState,
-  details: basicInitialState,
   create: networkCallInitialState,
   edit: networkCallInitialState,
   delete: networkCallInitialState,
@@ -26,7 +23,7 @@ export const reportReducer = createSlice({
       state.list = action.payload;
     },
     setReportDetails: (state, action) => {
-      state.details = action.payload;
+      state.reportDetails = action.payload;
     },
     setReportCreate: (state, action) => {
       state.create = action.payload;
@@ -80,7 +77,7 @@ export const reportReducer = createSlice({
           state.list = basicInitialState;
         }
       })
-      .addCase(requestEditStaffRoles.pending, (state, action) => {
+      .addCase(requestEditStaffRoles.pending, (state) => {
         state.edit.loading = true;
       })
       .addCase(requestEditStaffRoles.rejected, (state, action) => {
@@ -96,7 +93,7 @@ export const reportReducer = createSlice({
           state.list = basicInitialState;
         }
       })
-      .addCase(requestDeleteStaffRoles.pending, (state, action) => {
+      .addCase(requestDeleteStaffRoles.pending, (state) => {
         state.delete.loading = true;
       })
       .addCase(requestDeleteStaffRoles.rejected, (state, action) => {

@@ -18,10 +18,12 @@ export const ENDPOINT_PATIENT_POST = '/api/staff/v1/addPatient'; //
 export const ENDPOINT_PATIENT_GET = '/api/staff/v1/getPatient'; //
 
 
-// Doctor Management
+// staff Management
 export const ENDPOINT_DOCTOR_POST = '/api/staff/v1/addDoctor'; //
-export const ENDPOINT_DOCTOR_GET = '/api/staff/v1/getDoctor'; //
+export const ENDPOINT_STAFF_POST = '/api/staff/v1/addStaff'; //
+export const ENDPOINT_STAFF_GET = '/api/staff/v1/getStaff'; //
 
+export const ENDPOINT_DOCTOR_GET = '/api/staff/v1/getDoctor'; //
 
 //roles
 export const ENDPOINT_ROOM_AND_CATEGORIES_POST = '/api/staff/v1/roles/addRoomsAndCategory'; //

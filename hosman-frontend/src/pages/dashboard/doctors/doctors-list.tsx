@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
 import { CONFIG } from 'src/config-global';
-import DoctorListView from 'src/sections/doctors/doctors-list';
+import DoctorListView from 'src/sections/doctors/view/doctor-view';
 
 const metadata = { title: `All Staff | Staff | Settings - ${CONFIG.appName}` };
 

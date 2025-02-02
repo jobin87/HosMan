@@ -3,10 +3,12 @@ import {
   API_METHODS,
   ENDPOINT_DOCTOR_GET,
   ENDPOINT_DOCTOR_POST,
+  ENDPOINT_STAFF_GET,
   ENDPOINT_STAFF_MANAGEMENT_CREATE,
   ENDPOINT_STAFF_MANAGEMENT_DELETE,
   ENDPOINT_STAFF_MANAGEMENT_DETAILS,
   ENDPOINT_STAFF_MANAGEMENT_EDIT,
+  ENDPOINT_STAFF_POST,
   ENDPOINT_TREATMENT_ALL_DELETE,
   ENDPOINT_TREATMENT_DELETE,
   ENDPOINT_TREATMENT_GET,
@@ -14,7 +16,7 @@ import {
   makeNetworkCall,
 } from 'src/network';
 
-import type { adddoctorTypes, DoctorsList, IAllStaffCreateTypes, IAllStaffEditTypes, ITreatmentTypes } from './types';
+import type { adddoctorTypes, DoctorsList, IAllStaffCreateTypes, IAllStaffEditTypes, ITreatmentTypes, staffTypes } from './types';
 
 // Staff Permissions List
 // export const requestAllStaffList = createAsyncThunk('all-staff/allStaffList', async () => {
@@ -34,9 +36,32 @@ export const requestaddDoctor = createAsyncThunk('addDoctor',
     })
     console.log("response:",response)
   return response?.data
-  }
+  })
+
+export const createNewStaff = createAsyncThunk('addDoctor',
+    async(params:staffTypes)=>{
+      const response = await makeNetworkCall({
+        method: API_METHODS.POST,
+        url:ENDPOINT_STAFF_POST,
+        data:params
+      })
+      console.log("response:",response)
+    return response?.data
+    }
 
 )
+
+export const requestAllStaffList = createAsyncThunk('all-staff/allStaffList', async (params:staffTypes) => {
+  const response = await makeNetworkCall({
+    method: API_METHODS.GET,
+    url: ENDPOINT_STAFF_GET,
+    data:params
+  });
+  console.log("response:::::::::::",response?.data?.staffData)
+  return response?.data?.staffData
+
+});
+
 export const requestAllDoctorsList = createAsyncThunk('all-staff/alldoctorsList', async (params:DoctorsList) => {
   const response = await makeNetworkCall({
     method: API_METHODS.GET,
@@ -46,18 +71,6 @@ export const requestAllDoctorsList = createAsyncThunk('all-staff/alldoctorsList'
   console.log(response)
   return response?.data?.doctorsdata
 });
-
-// Staff Permission Details
-export const requestAllStaffDetails = createAsyncThunk(
-  'all-staff/allStaffDetails',
-  async (params: any) => {
-    const response = await makeNetworkCall({
-      method: API_METHODS.GET,
-      url: `${ENDPOINT_STAFF_MANAGEMENT_DETAILS}${params.staffId}`,
-    });
-    return response?.data;
-  }
-);
 
 //add treatment
 export const requestAddTreatment= createAsyncThunk(

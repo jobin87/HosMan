@@ -82,7 +82,7 @@ const MuiDataGrid: Components<Theme>['MuiDataGrid'] = {
       const styles = {
         pinnedCell: {
           common: {
-            backgroundColor: theme.palette.background.default,
+            backgroundColor: theme.palette.background.neutral,
             '&::after': {
               backgroundColor: theme.vars.palette.action.hover,
             },
@@ -132,7 +132,7 @@ const MuiDataGrid: Components<Theme>['MuiDataGrid'] = {
     columnHeader: ({ theme }) => ({
       fontSize: 14,
       color: theme.vars.palette.text.secondary,
-      '&--sorted': { color: theme.vars.palette.text.primary },
+      '&--sorted': { color: theme.vars.palette.text.disabled },
     }),
     columnSeparator: { color: 'var(--DataGrid-rowBorderColor)' },
     /**

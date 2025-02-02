@@ -19,10 +19,10 @@ import ReportEditForm from 'src/sections/reports/edit-report';
 import ReportFormPage from 'src/sections/reports/report-form';
 import ReportDetailsPage from 'src/sections/reports/report-details';
 import RoomsAndCategoryPage from 'src/sections/reports/report-category-form';
+import { StaffRegistrationForm } from 'src/sections/roomsAndStaff/add-staff';
+import StaffManagement from 'src/sections/allStaff-Management/view/staff-view-page';
 
 const IndexPage = lazy(() => import('src/pages/home'));
-
-const UploadDocuments = lazy(() => import('src/pages/dashboard/upload-documents'));
 
 // ----------------------------------------------------------------------
 const DoctorListPage = lazy(() => import('src/pages/dashboard/doctors/doctors-list'));
@@ -35,14 +35,6 @@ const FormDetails = lazy(() => import('src/pages/dashboard/appointment/form'));
 
 const ReportPage = lazy(() => import('src/pages/dashboard/reports/reports'));
 
-
-
-
-
-const UserProfilePage = lazy(() => import('src/pages/dashboard/user/profile'));
-const UserAccountPage = lazy(() => import('src/pages/dashboard/user/account'));
-const UserSecurityPage = lazy(() => import('src/pages/dashboard/user/account-security'));
-const DeviceSessionPage = lazy(() => import('src/pages/dashboard/user/device-sessions'));
 // const GeneralPage = lazy(() => import('src/pages/dashboard/user/general-account'));
 
 // ----------------------------------------------------------------------
@@ -122,45 +114,22 @@ export const dashboardRoutes = [
 
         ],
       },
+      {
+        path: 'staff',
+        children: [
+          { element: <RoomsAndCategoryPage/>, index: true },
+          { path: 'rooms-and-category', element: <RoomsAndCategoryPage/> },
+          { path: 'add-staff', element: <StaffRegistrationForm/> },
+          { path: 'staff-management', element: <StaffManagement/> },
+          { path: 'report-edit', element: <ReportEditForm/> },
 
 
 
-      {
-        path: 'user',
-        children: [
-          { element: <UserAccountPage />, index: true },
-          { path: 'account/:tab', element: <UserAccountPage /> },
-          { path: 'profile', element: <UserProfilePage /> },
-          { path: 'security', element: <UserSecurityPage /> },
-          { path: 'device', element: <DeviceSessionPage /> },
-          // { path: 'general', element: <GeneralPage /> },
         ],
       },
-      {
-        path: 'documents',
-        children: [
-          { element: <UploadDocuments />, index: true },
-          { path: 'list', element: <UploadDocuments /> },
-        ],
-      },
-      {
-        path: 'settings',
-        children: [
-          { element: <IndexPage />, index: true },
-          {
-            path: 'staff',
-            children: [
-            ],
-          },
-          {
-            path: 'roles',
-            children: [
-              // { element: <StaffRolesList />, index: true },
-              // { path: 'list', element: <StaffRolesList /> },
-            ],
-          },
-        ],
-      },
+
+     
+     
     ],
   },
 ];

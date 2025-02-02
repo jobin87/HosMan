@@ -96,7 +96,7 @@ export const navData = [
       },
       {
         title: "staffManagement",
-        path: paths.dashboard.Roles.root,icon:ICONS.inventory
+        path: paths.dashboard.staff.staffManagement,icon:ICONS.inventory
       },
     ],
   },

@@ -1,5 +1,7 @@
 // ----------------------------------------------------------------------
 
+import StaffManagement from "src/sections/allStaff-Management/view/staff-view-page";
+
 const MOCK_ID: string = 'e99f09a7-dd88-49d5-b1c8-1daf80c2d7b2';
 
 // const MOCK_TITLE = _postTitles[2];
@@ -69,6 +71,13 @@ export const paths = {
     Roles:{
       root:`${ROOTS.DASHBOARD}/staff-management`,
       roomAndCategory:`${ROOTS.DASHBOARD}/rooms-and-category`
+    },
+
+    staff:{
+      root:`${ROOTS.DASHBOARD}/user`,
+       addStaff:`${ROOTS.DASHBOARD}/staff/add-staff`,
+       staffManagement:`${ROOTS.DASHBOARD}/staff/staff-management`
+
     },
 
     user: {

@@ -54,6 +54,13 @@ export interface adddoctorTypes {
   // status: string
  
 }
+export interface staffTypes {
+  staffType:string;
+  Name: string;
+  contactNumber: string;
+  staffRegId: string;
+
+}
 
 export interface DoctorsList  {
   doctorName: string;

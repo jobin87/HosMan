@@ -3,6 +3,7 @@ import { basicInitialArrayState, basicInitialState, networkCallInitialState } fr
 import {
   requestaddDoctor,
   requestAllDoctorsList,
+  requestAllStaffList,
   requestGetTreatment,
   updateTreatment,
   // requestAllStaffDetails,
@@ -19,6 +20,7 @@ const initialState = {
   create: networkCallInitialState,
   edit: networkCallInitialState,
   delete: networkCallInitialState,
+  getStaffDetails:basicInitialState
 };
 
 export const allStaffReducer = createSlice({
@@ -32,7 +34,7 @@ export const allStaffReducer = createSlice({
       state.doctorsList = action.payload;
     },
     setAllStaffDetails: (state, action) => {
-      state.details = action.payload;
+      state.getStaffDetails = action.payload;
     },
     setAllStaffCreate: (state, action) => {
       state.create = action.payload;
@@ -113,25 +115,24 @@ export const allStaffReducer = createSlice({
         } else {
           console.error("treatmentDetails.data is not an array", state.treatmentDetails.data);
         }
-      });
+      })
       
-      
-      
-      
-
-
     // DETAILS
-    // .addCase(requestAllStaffDetails.fulfilled, (state, action) => {
-    //   state.details.loading = false;
-    //   state.details.data = action.payload;
-    // })
-    // .addCase(requestAllStaffDetails.pending, (state, action) => {
-    //   state.details.loading = true;
-    // })
-    // .addCase(requestAllStaffDetails.rejected, (state, action) => {
-    //   state.details.loading = false;
-    //   state.details.error = action.error;
-    // })
+    .addCase(requestAllStaffList.fulfilled, (state, action) => {
+      state.getStaffDetails.loading = false;
+      state.getStaffDetails.data = action.payload;
+      if(action.payload){
+        const dataasstaffs = action.payload;
+        console.log("datsasss::E::",dataasstaffs)
+      }
+    })
+    .addCase(requestAllStaffList.pending, (state) => {
+      state.getStaffDetails.loading = true;
+    })
+    .addCase(requestAllStaffList.rejected, (state, action) => {
+      state.getStaffDetails.loading = false;
+      state.getStaffDetails.error = action.error;
+    })
 
     // CREATE
     // .addCase(requestCreateAllStaff.fulfilled, (state, action) => {

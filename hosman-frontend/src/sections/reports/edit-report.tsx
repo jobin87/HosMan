@@ -44,7 +44,7 @@ export default function ReportEditForm() {
     handleSubmit,
     formState: { isSubmitting, errors },
   } = methods;
-  console.log(errors);
+  console.log("error:",errors);
 
   const onSubmit = handleSubmit(async (data) => {
     try {

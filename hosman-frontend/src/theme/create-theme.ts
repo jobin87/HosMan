@@ -11,7 +11,7 @@ export function createTheme(settings: SettingsState): Theme {
   const initialTheme = {
     colorSchemes,
     shadows: shadows(settings.colorScheme),
-    customShadows: customShadows(settings.colorScheme),
+    customShadows: customShadows(),
     direction: settings.direction,
     shape: { borderRadius: 8 },
     components,

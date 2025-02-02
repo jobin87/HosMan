@@ -5,9 +5,15 @@ import { deleteAllTreatments, deleteTreatmentById, getTreatment, treatementAdded
 import { DoctorsAdded, getDoctors } from '../controllers/dashboard/doctors';
 import { AddReports, getReports } from '../controllers/dashboard/report';
 import { createStaffRoles, getRoomsAndCategories, roomsAndCategories } from '../controllers/dashboard/roles';
+import { getStaff, staffAdded } from '../controllers/dashboard/staff';
 
 export const dashboardRoutes = express.Router()
+
+//staff data
 dashboardRoutes.post('/addDoctor',DoctorsAdded);
+dashboardRoutes.post('/addStaff',staffAdded);
+dashboardRoutes.get('/getStaff',getStaff);
+
 dashboardRoutes.get('/getDoctor',getDoctors);
 
 //

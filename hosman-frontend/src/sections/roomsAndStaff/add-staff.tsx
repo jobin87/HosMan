@@ -10,7 +10,7 @@ import { useAppDispatch } from "src/store";
 import { createNewStaff } from "src/store/all-staff/allStaffThunk";
 import { z as zod } from "zod";
 
-const staffTypes = ["Nurse", "Technician", "Electrician", "Plumber", "Pharmacist","Radiografer","Lab-Technician"];
+const staffTypes = ["Doctor","Nurse", "Technician", "Electrician", "Plumber", "Pharmacist","Radiografer","Lab-Technician"];
 
 export type NewStaffSchemaType = zod.infer<typeof newStaffSchema>;
 
@@ -18,6 +18,8 @@ const newStaffSchema = zod.object({
   staffType: zod.string().min(1, { message: "Staff type is required" }),
   Name: zod.string().min(1, { message: "Name is required" }),
   staffRegId: zod.string().min(1, { message: "Registration ID is required" }),
+  experience: zod.string().min(1, { message: "Experience is required" }),
+  department: zod.string().min(1, { message: "Specialization is required" }),
   contactNumber: zod
     .string()
     .min(10, { message: "Contact number must be at least 10 digits" })
@@ -25,12 +27,13 @@ const newStaffSchema = zod.object({
 });
 
 export const StaffRegistrationForm = () => {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const defaultValues = {
-    staffType: "",
     Name: "",
+    staffType: "",
+    experience:"",
+    department:"",
     staffRegId: "",
     contactNumber: "",
   };
@@ -80,6 +83,8 @@ export const StaffRegistrationForm = () => {
 
           <Field.Text label="Name" {...methods.register("Name")} />
           <Field.Text label="Registration ID" {...methods.register("staffRegId")} />
+          <Field.Text label="Experience" {...methods.register("experience")} />
+          <Field.Text label="department" {...methods.register("department")} />
           <Field.Text label="Contact Number" {...methods.register("contactNumber")} />
           {errors.contactNumber && <span>{errors.contactNumber.message}</span>}
         </Box>

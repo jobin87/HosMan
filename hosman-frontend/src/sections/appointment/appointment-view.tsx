@@ -9,12 +9,11 @@ import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import { MenuItem, Typography } from '@mui/material';
 import { Field, Form } from 'src/components/hook-form';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useAppDispatch, useAppSelector } from 'src/store';
 import { getAppointmentData, requestAppointmentSaved } from 'src/store/appointment/appointmentThunk';
-import { requestAllDoctorsList } from 'src/store/all-staff/allStaffThunk';
-import { useNavigate } from 'react-router-dom';
+import { requestAllStaffList } from 'src/store/all-staff/allStaffThunk';
 import { paths } from 'src/routes/paths';
 
 // Validation schema using Zod
@@ -24,15 +23,14 @@ const AppointmentSchema = zod.object({
   doctor: zod.string().min(1, { message: 'Doctor is required!' }),
   appointmentTime: zod.string().min(1, { message: 'Appointment Time is required!' }),
   appointmentDate: zod.string().min(1, { message: 'Appointment Date is required!' }),
-  payment: zod.string().min(1, { message: 'Appointment Date is required!' }),
+  payment: zod.string().min(1, { message: 'Payment is required!' }),
 });
 
 export type AppointmentFormSchemaType = zod.infer<typeof AppointmentSchema>;
 
 export function AppointmentForm() {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate()
-
+  const navigate = useNavigate();
 
   const defaultValues = {
     department: '',
@@ -44,27 +42,20 @@ export function AppointmentForm() {
   };
 
   useEffect(() => {
-    // Define an async function inside the useEffect
-    const fetchDoctorData = async (data:any) => {
+    const fetchDoctorData = async () => {
       try {
-        // Dispatch the action to fetch doctor data
-        await dispatch(requestAllDoctorsList(data));
+        await dispatch(requestAllStaffList(data));
       } catch (error) {
-        console.error("Error fetching doctors data:", error);
+        console.error('Error fetching doctors data:', error);
       }
     };
-  
-    // Call the async function
-    fetchDoctorData(data);
+
+    fetchDoctorData();
   }, [dispatch]);
-  
-
-  // Default form values
-
 
   // Selecting doctors list from Redux store
-  const { data } = useAppSelector((state) => state.allstaff.doctorsList) || { data: [] };
-  console.log("Doctors data from store:", data);
+  const { data } = useAppSelector((state) => state.allstaff.getStaffDetails) || { data: [] };
+  console.log('Doctors data from store:', data);
 
   // Generate available dates
   const availableDates = [
@@ -74,6 +65,7 @@ export function AppointmentForm() {
 
   // State to hold filtered doctors
   const [filteredDoctors, setFilteredDoctors] = useState<any[]>([]);
+  const [availableDepartments, setAvailableDepartments] = useState<any[]>([]);
 
   // React Hook Form setup
   const methods = useForm<AppointmentFormSchemaType>({
@@ -91,28 +83,38 @@ export function AppointmentForm() {
   // Watching department field changes
   const selectedDepartment = watch('department');
 
-  // Effect to filter doctors based on selected department
   useEffect(() => {
-    if (data && Array.isArray(data) && selectedDepartment) {
-      const filtered = data.filter((doctor: any) => doctor.specialization === selectedDepartment);
-      setFilteredDoctors(filtered);
-    } else {
-      setFilteredDoctors([]);
+    if (data && Array.isArray(data)) {
+      // Step 1: Get unique departments from the doctor data
+      const uniqueDepartments = Array.from(
+        new Set(data.filter((staff: any) => staff.staffType === 'Doctor').map((staff: any) => staff.department))
+      );
+      
+      // Step 2: Set departments for the department select field
+      setAvailableDepartments(uniqueDepartments);
+  
+      // Step 3: Filter doctors based on the selected department
+      if (selectedDepartment) {
+        const filtered = data.filter(
+          (staff: any) => staff.department === selectedDepartment && staff.staffType === 'Doctor'
+        );
+        setFilteredDoctors(filtered);  // Filter doctors based on department
+      } else {
+        setFilteredDoctors([]);  // Reset if no department is selected
+      }
     }
-  }, [data, selectedDepartment]);
+  }, [data, selectedDepartment]);  // Trigger when data or selectedDepartment changes
+  
 
   // Form submission handler
   const onSubmit = handleSubmit(async (formData) => {
     try {
-      const response = await dispatch(requestAppointmentSaved(formData))
-      if(response?.payload){
-
+      const response = await dispatch(requestAppointmentSaved(formData));
+      if (response?.payload) {
         console.log('Appointment Booked:', response);
-        dispatch(getAppointmentData(data)), 
+        dispatch(getAppointmentData(data));
         toast.success('Appointment booked successfully!');
-        navigate(paths.dashboard.root)
-        // Add logic to save the appointment
-        // navigate('/doctors');
+        navigate(paths.dashboard.root);
       }
     } catch (error) {
       toast.error('An error occurred while booking the appointment.');
@@ -130,9 +132,9 @@ export function AppointmentForm() {
           <Field.Text label="Patient Name" {...methods.register('patientName')} />
 
           <Field.Select label="Department" {...methods.register('department')}>
-            {['Cardiology', 'Neurology', 'Orthopedics', 'Physician', 'Dermatologist', 'Psychiatrist'].map((option) => (
-              <MenuItem key={option} value={option}>
-                {option}
+            {availableDepartments.map((department: any) => (
+              <MenuItem key={department} value={department}>
+                {department}
               </MenuItem>
             ))}
           </Field.Select>
@@ -140,8 +142,8 @@ export function AppointmentForm() {
           <Field.Select label="Doctor" {...methods.register('doctor')}>
             {filteredDoctors.length > 0 ? (
               filteredDoctors.map((doctor: any) => (
-                <MenuItem key={doctor.doctorRegId} value={doctor.doctorRegId}>
-                  {doctor.doctorName}
+                <MenuItem key={doctor._id} value={doctor._id}>
+                  {doctor.Name} {/* Show specialization of doctors only */}
                 </MenuItem>
               ))
             ) : (

@@ -1,8 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { basicInitialArrayState, basicInitialState, networkCallInitialState } from "../types";
 import {
-  requestaddDoctor,
-  requestAllDoctorsList,
   requestAllStaffList,
   requestGetTreatment,
   updateTreatment,
@@ -14,7 +12,6 @@ import {
 
 const initialState = {
   list: basicInitialState,
-  doctorsList: basicInitialState,
   treatmentDetails: basicInitialArrayState,
   details: basicInitialState,
   create: networkCallInitialState,
@@ -29,9 +26,6 @@ export const allStaffReducer = createSlice({
   reducers: {
     setAllStaffList: (state, action) => {
       state.list = action.payload;
-    },
-    setDoctorsList: (state, action) => {
-      state.doctorsList = action.payload;
     },
     setAllStaffDetails: (state, action) => {
       state.getStaffDetails = action.payload;
@@ -49,32 +43,24 @@ export const allStaffReducer = createSlice({
   extraReducers(builder) {
     builder
 
-      //Doctors
-      .addCase(requestaddDoctor.fulfilled, (state, action) => {
-        state.doctorsList.loading = false;
-        state.doctorsList.data = action.payload;
-      })
-      .addCase(requestaddDoctor.pending, (state) => {
-        state.doctorsList.loading = true;
-      })
-      .addCase(requestaddDoctor.rejected, (state, action) => {
-        state.doctorsList.loading = false;
-        state.doctorsList.error = action.error;
-      })
-      .addCase(requestAllDoctorsList.fulfilled, (state, action) => {
-        state.doctorsList.loading = false;
-        state.doctorsList.data = action.payload || {};
-       
 
-        console.log("action:",action.payload)
-      })
-      .addCase(requestAllDoctorsList.pending, (state) => {
-        state.doctorsList.loading = true;
-      })
-      .addCase(requestAllDoctorsList.rejected, (state, action) => {
-        state.doctorsList.loading = false;
-        state.doctorsList.error = action.error;
-      })
+        // DETAILS
+        .addCase(requestAllStaffList.fulfilled, (state, action) => {
+          state.getStaffDetails.loading = false;
+          state.getStaffDetails.data = action.payload;
+          if(action.payload){
+            const dataasstaffs = action.payload;
+            console.log("datsasss::E::",dataasstaffs)
+          }
+        })
+        .addCase(requestAllStaffList.pending, (state) => {
+          state.getStaffDetails.loading = true;
+        })
+        .addCase(requestAllStaffList.rejected, (state, action) => {
+          state.getStaffDetails.loading = false;
+          state.getStaffDetails.error = action.error;
+        })
+
 
       //treatment 
       .addCase(requestGetTreatment.fulfilled, (state, action) => {
@@ -117,22 +103,7 @@ export const allStaffReducer = createSlice({
         }
       })
       
-    // DETAILS
-    .addCase(requestAllStaffList.fulfilled, (state, action) => {
-      state.getStaffDetails.loading = false;
-      state.getStaffDetails.data = action.payload;
-      if(action.payload){
-        const dataasstaffs = action.payload;
-        console.log("datsasss::E::",dataasstaffs)
-      }
-    })
-    .addCase(requestAllStaffList.pending, (state) => {
-      state.getStaffDetails.loading = true;
-    })
-    .addCase(requestAllStaffList.rejected, (state, action) => {
-      state.getStaffDetails.loading = false;
-      state.getStaffDetails.error = action.error;
-    })
+
 
     // CREATE
     // .addCase(requestCreateAllStaff.fulfilled, (state, action) => {

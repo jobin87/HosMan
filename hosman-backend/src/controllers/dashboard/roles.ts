@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
 import RoomAndCategory from "../../models/dashboard/roomsAndCategory";
-import StaffRoles from "../../models/dashboard/staffroles";
 
 // Function for handling rooms and categories
-export const roomsAndCategories = async (req: Request, res: Response): Promise<void> => {
+export const AddroomsAndCategories = async (req: Request, res: Response): Promise<void> => {
     try {
         const { roomNo, category } = req.body;
 
@@ -100,48 +99,4 @@ export const getRoomsAndCategories = async (req: Request, res: Response): Promis
       console.error("Error fetching rooms:", error);
       res.status(500).json({ message: "Internal Server Error" });
     }
-};
-
-// Function for creating staff roles
-export const createStaffRoles = async (req: Request, res: Response): Promise<void> => {
-  const { staffId, staffName, StaffPosition } = req.body;
-
-  if (!staffId || !staffName || !StaffPosition) {
-    res.status(400).json({ message: 'All staff fields are required' });
-    return;
-  }
-
-  try {
-    // Check if staffId already exists
-    const existingStaff = await StaffRoles.findOne({ staffId });
-
-    if (existingStaff) {
-      res.status(400).json({ message: 'A staff member with this staffId already exists.' });
-      return;
-    }
-
-    // Optionally, check for the same name and position
-    const existingNameAndPosition = await StaffRoles.findOne({ staffName, StaffPosition });
-
-    if (existingNameAndPosition) {
-      res.status(400).json({ message: 'A staff member with this name and position already exists.' });
-      return;
-    }
-
-    const newStaffRole = new StaffRoles({
-      staffId,
-      staffName,
-      StaffPosition,
-    });
-
-    await newStaffRole.save();
-
-    res.status(201).json({
-      message: 'Staff role created successfully',
-      staffRole: newStaffRole,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error', error });
-  }
 };

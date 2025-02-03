@@ -11,7 +11,6 @@ import {  AuthGuard} from 'src/guard';
 import { LoadingScreen } from 'src/components/loading-screen';
 
 import { DashboardLayout } from 'src/layouts/dashboard/layout';
-import { AddDoctorForm } from 'src/sections/doctors/add-doctor';
 import { AddpatientsData } from 'src/sections/patients/addpatients';
 import { AddTreatmentData } from 'src/sections/treatment/add-treatment';
 import { EditTreatmentData } from 'src/sections/treatment/edit-treatment';
@@ -25,7 +24,6 @@ import StaffManagement from 'src/sections/allStaff-Management/view/staff-view-pa
 const IndexPage = lazy(() => import('src/pages/home'));
 
 // ----------------------------------------------------------------------
-const DoctorListPage = lazy(() => import('src/pages/dashboard/doctors/doctors-list'));
 const PatientsListPage = lazy(() => import('src/pages/dashboard/patients/patients-list'));
 const AppointMentListPage = lazy(() => import('src/pages/dashboard/appointment/appointment-user-list'));
 const TreatmentListPage = lazy(() => import('src/pages/dashboard/treatment/treatment'));
@@ -72,8 +70,7 @@ export const dashboardRoutes = [
       {
         path: 'doctor',
         children: [
-          { element: <DoctorListPage/>, index: true },
-          { path: 'doctor-form', element: <AddDoctorForm/> },
+          // { element: <DoctorListPage/>, index: true },
 
         ],
       },

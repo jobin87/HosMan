@@ -7,7 +7,16 @@ const staffSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-      staffType: {
+    staffType: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    department: {
+      type: String,
+      required: true,
+    },
+      experience: {
         type: String,
         required: true,
         trim: true,
@@ -19,13 +28,14 @@ const staffSchema = new mongoose.Schema(
       },
     staffRegId: {
       type: String,
-      required: false,
+      required: true,
     },
+    
    
   },
   { timestamps: true }
 );
 
-const StaffModel = mongoose.model('addStaff', staffSchema);
+const StaffModel = mongoose.model('StaffModel', staffSchema);
 
 export default StaffModel;

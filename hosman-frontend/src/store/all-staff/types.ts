@@ -57,6 +57,8 @@ export interface adddoctorTypes {
 export interface staffTypes {
   staffType:string;
   Name: string;
+  department: string;
+  experience: string;
   contactNumber: string;
   staffRegId: string;
 

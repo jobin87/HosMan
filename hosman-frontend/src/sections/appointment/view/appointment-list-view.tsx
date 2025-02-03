@@ -38,7 +38,7 @@ export default function AppointmentListView() {
 
   // Filter departments based on search input
   const filteredDepartments = departments.filter((dept:any) =>
-    dept.name.toLowerCase().includes(searchDepartment.toLowerCase())
+    dept.department.toLowerCase().includes(searchDepartment.toLowerCase())
   );
 
   // Calculate total appointments
@@ -67,36 +67,41 @@ export default function AppointmentListView() {
         sx={{ mb: 3, width: '100%' }}
       />
 
-      {/* Department Grid */}
-      <Grid container spacing={3}>
-        {filteredDepartments.length > 0 ? (
-          filteredDepartments.map((dept:any) => (
-            <Grid item xs={12} sm={6} md={4} key={dept.id}>
-              <Card sx={{ textAlign: 'center' }}>
-                <CardContent>
-                  <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                    {dept.name}
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: 'gray' }}>
-                    {dept.count} Appointments {/* Use the count from API data */}
-                  </Typography>
-                </CardContent>
-                <CardActions sx={{ justifyContent: 'center' }}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => handleDepartmentClick(dept.id)}
-                  >
-                    View
-                  </Button>
-                </CardActions>
-              </Card>
-            </Grid>
-          ))
-        ) : (
-          <Typography sx={{ mt: 2 }}>No departments found.</Typography>
-        )}
-      </Grid>
+<Grid container spacing={3}>
+  {filteredDepartments.length > 0 ? (
+    filteredDepartments.map((dept: any) => {
+      // Log the department object
+      console.log("Department:", dept);
+
+      return (
+        <Grid item xs={12} sm={6} md={4} key={dept.id}>
+          <Card sx={{ textAlign: 'center' }}>
+            <CardContent>
+              <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                {dept.department}
+              </Typography>
+              <Typography variant="body2" sx={{ color: 'gray' }}>
+                {dept.count} Appointments {/* Use the count from API data */}
+              </Typography>
+            </CardContent>
+            <CardActions sx={{ justifyContent: 'center' }}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => handleDepartmentClick(dept._id)}
+              >
+                View
+              </Button>
+            </CardActions>
+          </Card>
+        </Grid>
+      );
+    })
+  ) : (
+    <Typography sx={{ mt: 2 }}>No departments found.</Typography>
+  )}
+</Grid>
+
     </DashboardContent>
   );
 }

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import AppointmentModel from "../../models/dashboard/appointment";
+import StaffModel from "../../models/dashboard/staff";
 
 export const appointments = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -36,10 +37,17 @@ export const appointments = async (req: Request, res: Response): Promise<void> =
 
 export const getAppointments = async (req: Request, res: Response): Promise<void> => {
   try {
+    // Fetch doctors and their departments from staff data
+    const doctors = await StaffModel.find({ staffType: 'Doctor' }).populate('department', 'name'); // Assuming 'department' is a reference
+
+    // Extract the list of departments from the doctor data
+    const doctorDepartments = doctors.map(doctor => doctor.department).filter(Boolean);
+
+    // Fetch the appointment data and group by department
     const departmentCounts = await AppointmentModel.aggregate([
       {
         $group: {
-          _id: "$department",
+          _id: "$department", // Group by department in the appointments
           count: { $sum: 1 },
           appointments: {
             $push: {
@@ -61,21 +69,11 @@ export const getAppointments = async (req: Request, res: Response): Promise<void
       },
     ]);
 
-    const departments = [
-      { id: 1, name: "Cardiology" },
-      { id: 2, name: "Neurology" },
-      { id: 3, name: "Orthopedics" },
-      { id: 4, name: "Physician" },
-      { id: 5, name: "Dermatologist" },
-      { id: 6, name: "Psychiatrist" },
-    ];
-
-    const departmentsWithAppointments = departments.map((department) => {
-      const departmentData = departmentCounts.find(
-        (d) => d.department === department.name
-      );
+    // Merge the fetched doctor departments with the departmentCounts
+    const departmentsWithAppointments = doctorDepartments.map(departmentName => {
+      const departmentData = departmentCounts.find(d => d.department === departmentName);
       return {
-        ...department,
+        department: departmentName,
         count: departmentData ? departmentData.count : 0,
         appointments: departmentData ? departmentData.appointments : [],
       };
@@ -90,4 +88,3 @@ export const getAppointments = async (req: Request, res: Response): Promise<void
     res.status(500).json({ message: "Internal server error while fetching appointment data" });
   }
 };
-

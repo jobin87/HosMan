@@ -19,20 +19,13 @@ export const ENDPOINT_PATIENT_GET = '/api/staff/v1/getPatient'; //
 
 
 // staff Management
-export const ENDPOINT_DOCTOR_POST = '/api/staff/v1/addDoctor'; //
-export const ENDPOINT_STAFF_POST = '/api/staff/v1/addStaff'; //
+export const ENDPOINT_STAFF_CREATE = '/api/staff/v1/addStaff'; //
 export const ENDPOINT_STAFF_GET = '/api/staff/v1/getStaff'; //
-
-export const ENDPOINT_DOCTOR_GET = '/api/staff/v1/getDoctor'; //
 
 //roles
 export const ENDPOINT_ROOM_AND_CATEGORIES_POST = '/api/staff/v1/roles/addRoomsAndCategory'; //
 export const ENDPOINT_ROOM_AND_CATEGORIES_GET = '/api/staff/v1/roles/getRoomsAndCategory'; //
 export const ENDPOINT_STAFF_ROLES_CREATE = '/api/staff/v1/roles/staffRoles';
-
-
-
-
 
 
 //reports 

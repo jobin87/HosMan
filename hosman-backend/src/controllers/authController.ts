@@ -9,7 +9,7 @@ const SECRET_KEY = "112eryt33";
 import nodemailer from "nodemailer";
 import crypto from "crypto";
 import { promises } from "readline";
-import Doctor from "../models/dashboard/doctor";
+import Doctor from "../models/dashboard/staff";
 
 const transporter = nodemailer.createTransport({
   service: "Gmail",

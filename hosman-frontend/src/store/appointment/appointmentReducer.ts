@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { basicInitialState } from '../types';
 import {
+  getAppointmentData,
   // getAppointmentData,
   requestAppointmentSaved,
 } from './appointmentThunk';
@@ -22,16 +23,16 @@ export const appointmentReducer = createSlice({
   extraReducers(builder) {
     builder
      
-      .addCase(requestAppointmentSaved.fulfilled, (state, action) => {
+      .addCase(getAppointmentData.fulfilled, (state, action) => {
         state.appointmentData.data = action.payload;
         console.log("dataaass:",action.payload)
         state.appointmentData.loading = false;
       })
-      .addCase(requestAppointmentSaved.rejected, (state, action) => {
+      .addCase(getAppointmentData.rejected, (state, action) => {
         state.appointmentData.loading = false;
         state.appointmentData.error= action.error;
       })
-      .addCase(requestAppointmentSaved.pending, (state) => {
+      .addCase(getAppointmentData.pending, (state) => {
         state.appointmentData.loading = true;
       })
 

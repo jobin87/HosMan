@@ -62,7 +62,7 @@ export function updateCoreWithSettings(
       primary:
         settings.primaryColor === 'default'
           ? coreCustomShadows().primary
-          : createShadowColor(Number(updatedPrimary.mainChannel)),
+          : createShadowColor(updatedPrimary.mainChannel),
     },
   };
 }

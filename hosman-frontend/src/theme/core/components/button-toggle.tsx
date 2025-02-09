@@ -1,5 +1,5 @@
 import type { ToggleButtonProps } from '@mui/material/ToggleButton';
-import type { CSSObject, Components, Theme } from '@mui/material/styles';
+import type { Theme, CSSObject, Components } from '@mui/material/styles';
 
 import { toggleButtonClasses } from '@mui/material/ToggleButton';
 
@@ -75,10 +75,7 @@ const MuiToggleButtonGroup: Components<Theme>['MuiToggleButtonGroup'] = {
       border: `solid 1px ${varAlpha(theme.vars.palette.grey['500Channel'], 0.08)}`,
     }),
     grouped: {
-      [`&.${toggleButtonClasses.root}`]: {
-        border: 'none',
-        borderRadius: 'inherit',
-      },
+      [`&.${toggleButtonClasses.root}`]: { border: 'none', borderRadius: 'inherit' },
       [`&.${toggleButtonClasses.selected}`]: { boxShadow: 'none' },
     },
   },

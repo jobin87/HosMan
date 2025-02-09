@@ -1,10 +1,8 @@
-import type { ButtonProps } from '@mui/material/Button';
-import type { CSSObject, Components, ComponentsVariants, Theme } from '@mui/material/styles';
+import { buttonClasses, type ButtonProps } from '@mui/material/Button';
+import type { Theme, CSSObject, Components, ComponentsVariants } from '@mui/material/styles';
 
-import { loadingButtonClasses } from '@mui/lab/LoadingButton';
-import { buttonClasses } from '@mui/material/Button';
 
-import { stylesMode, varAlpha } from '../../styles';
+import { varAlpha, stylesMode } from '../../styles';
 
 // ----------------------------------------------------------------------
 
@@ -36,9 +34,7 @@ const MuiButtonBase: Components<Theme>['MuiButtonBase'] = {
   /** **************************************
    * STYLE
    *************************************** */
-  styleOverrides: {
-    root: ({ theme }) => ({ fontFamily: theme.typography.fontFamily }),
-  },
+  styleOverrides: { root: ({ theme }) => ({ fontFamily: theme.typography.fontFamily }) },
 };
 
 // ----------------------------------------------------------------------
@@ -50,9 +46,7 @@ const softVariant: Record<string, ComponentsVariants<Theme>['MuiButton']> = {
     style: ({ theme }) => ({
       color: theme.vars.palette[color].dark,
       backgroundColor: varAlpha(theme.vars.palette[color].mainChannel, 0.16),
-      '&:hover': {
-        backgroundColor: varAlpha(theme.vars.palette[color].mainChannel, 0.32),
-      },
+      '&:hover': { backgroundColor: varAlpha(theme.vars.palette[color].mainChannel, 0.32) },
       [stylesMode.dark]: { color: theme.vars.palette[color].light },
     }),
   })),
@@ -61,17 +55,13 @@ const softVariant: Record<string, ComponentsVariants<Theme>['MuiButton']> = {
       props: ({ ownerState }) => ownerState.variant === 'soft',
       style: ({ theme }) => ({
         backgroundColor: varAlpha(theme.vars.palette.grey['500Channel'], 0.08),
-        '&:hover': {
-          backgroundColor: varAlpha(theme.vars.palette.grey['500Channel'], 0.24),
-        },
+        '&:hover': { backgroundColor: varAlpha(theme.vars.palette.grey['500Channel'], 0.24) },
         [`&.${buttonClasses.disabled}`]: {
           backgroundColor: theme.vars.palette.action.disabledBackground,
         },
-        [`& .${loadingButtonClasses.loadingIndicatorStart}`]: { left: 14 },
-        [`& .${loadingButtonClasses.loadingIndicatorEnd}`]: { right: 14 },
+        [`& .MuiCircularProgress-root`]: { left: 14 }, // Adjust loading indicator position
         [`&.${buttonClasses.sizeSmall}`]: {
-          [`& .${loadingButtonClasses.loadingIndicatorStart}`]: { left: 10 },
-          [`& .${loadingButtonClasses.loadingIndicatorEnd}`]: { right: 10 },
+          [`& .MuiCircularProgress-root`]: { left: 10 }, // Adjust for small size
         },
       }),
     },
@@ -141,10 +131,7 @@ const MuiButton: Components<Theme>['MuiButton'] = {
             }),
         },
         base: {
-          '&:hover': {
-            borderColor: 'currentColor',
-            boxShadow: '0 0 0 0.75px currentColor',
-          },
+          '&:hover': { borderColor: 'currentColor', boxShadow: '0 0 0 0.75px currentColor' },
         },
       };
       return { ...styled.base, ...styled.inheritColor, ...styled.colors };

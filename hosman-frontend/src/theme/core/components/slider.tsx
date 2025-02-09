@@ -1,8 +1,8 @@
-import type { Components, Theme } from '@mui/material/styles';
+import type { Theme, Components } from '@mui/material/styles';
 
 import { sliderClasses } from '@mui/material/Slider';
 
-import { stylesMode, varAlpha } from '../../styles';
+import { varAlpha, stylesMode } from '../../styles';
 
 // ----------------------------------------------------------------------
 
@@ -107,10 +107,7 @@ const MuiSlider: Components<Theme>['MuiSlider'] = {
       [stylesMode.dark]: { backgroundColor: theme.vars.palette.grey[700] },
     }),
     sizeSmall: {
-      [`& .${sliderClasses.thumb}`]: {
-        width: SIZE.thumb.small,
-        height: SIZE.thumb.small,
-      },
+      [`& .${sliderClasses.thumb}`]: { width: SIZE.thumb.small, height: SIZE.thumb.small },
       [`& .${sliderClasses.rail}`]: { height: SIZE.rail.small },
       [`& .${sliderClasses.track}`]: { height: SIZE.rail.small },
       [`& .${sliderClasses.mark}`]: { height: SIZE.mark.small },

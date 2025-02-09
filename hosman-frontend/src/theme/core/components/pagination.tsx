@@ -1,8 +1,8 @@
-import type { Components, ComponentsVariants, Theme } from '@mui/material/styles';
+import type { Theme, Components, ComponentsVariants } from '@mui/material/styles';
 
 import { paginationItemClasses } from '@mui/material/PaginationItem';
 
-import { stylesMode, varAlpha } from '../../styles';
+import { varAlpha, stylesMode } from '../../styles';
 
 // ----------------------------------------------------------------------
 
@@ -34,9 +34,7 @@ const softVariant: Record<string, ComponentsVariants<Theme>['MuiPagination']> = 
           fontWeight: theme.typography.fontWeightSemiBold,
           color: theme.vars.palette[color].dark,
           backgroundColor: varAlpha(theme.vars.palette[color].mainChannel, 0.08),
-          '&:hover': {
-            backgroundColor: varAlpha(theme.vars.palette[color].mainChannel, 0.16),
-          },
+          '&:hover': { backgroundColor: varAlpha(theme.vars.palette[color].mainChannel, 0.16) },
           [stylesMode.dark]: { color: theme.vars.palette[color].light },
         },
       },
@@ -50,9 +48,7 @@ const softVariant: Record<string, ComponentsVariants<Theme>['MuiPagination']> = 
           [`&.${paginationItemClasses.selected}`]: {
             fontWeight: theme.typography.fontWeightSemiBold,
             backgroundColor: varAlpha(theme.vars.palette.grey['500Channel'], 0.08),
-            '&:hover': {
-              backgroundColor: varAlpha(theme.vars.palette.grey['500Channel'], 0.16),
-            },
+            '&:hover': { backgroundColor: varAlpha(theme.vars.palette.grey['500Channel'], 0.16) },
           },
         },
       }),

@@ -1,13 +1,13 @@
-import type { CSSObject, Theme } from '@mui/material/styles';
+import type { Theme, CSSObject } from '@mui/material/styles';
 
-import { autocompleteClasses } from '@mui/material/Autocomplete';
-import { checkboxClasses } from '@mui/material/Checkbox';
 import { dividerClasses } from '@mui/material/Divider';
+import { checkboxClasses } from '@mui/material/Checkbox';
 import { menuItemClasses } from '@mui/material/MenuItem';
+import { autocompleteClasses } from '@mui/material/Autocomplete';
 
 import { CONFIG } from 'src/config-global';
 
-import { mediaQueries, remToPx, varAlpha } from './utils';
+import { remToPx, varAlpha, mediaQueries } from './utils';
 
 // ----------------------------------------------------------------------
 
@@ -179,15 +179,9 @@ export function maxLine({ line, persistent }: MaxLineProps): CSSObject {
       ...baseStyles,
       ...(lineHeight && {
         ...(fontSizeBase && { height: fontSizeBase * lineHeight * line }),
-        ...(fontSizeSm && {
-          [mediaQueries.upSm]: { height: fontSizeSm * lineHeight * line },
-        }),
-        ...(fontSizeMd && {
-          [mediaQueries.upMd]: { height: fontSizeMd * lineHeight * line },
-        }),
-        ...(fontSizeLg && {
-          [mediaQueries.upLg]: { height: fontSizeLg * lineHeight * line },
-        }),
+        ...(fontSizeSm && { [mediaQueries.upSm]: { height: fontSizeSm * lineHeight * line } }),
+        ...(fontSizeMd && { [mediaQueries.upMd]: { height: fontSizeMd * lineHeight * line } }),
+        ...(fontSizeLg && { [mediaQueries.upLg]: { height: fontSizeLg * lineHeight * line } }),
       }),
     };
   }
@@ -215,9 +209,7 @@ export function paper({ theme, color, dropdown }: PaperProps) {
     backgroundRepeat: 'no-repeat, no-repeat',
     backgroundPosition: 'top right, left bottom',
     backgroundSize: '50%, 50%',
-    ...(theme.direction === 'rtl' && {
-      backgroundPosition: 'top left, right bottom',
-    }),
+    ...(theme.direction === 'rtl' && { backgroundPosition: 'top left, right bottom' }),
     ...(dropdown && {
       padding: theme.spacing(0.5),
       boxShadow: theme.customShadows.dropdown,

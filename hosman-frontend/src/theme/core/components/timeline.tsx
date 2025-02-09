@@ -1,4 +1,4 @@
-import type { Components, Theme } from '@mui/material/styles';
+import type { Theme, Components } from '@mui/material/styles';
 
 // ----------------------------------------------------------------------
 
@@ -13,9 +13,7 @@ const MuiTimelineConnector: Components<Theme>['MuiTimelineConnector'] = {
   /** **************************************
    * STYLE
    *************************************** */
-  styleOverrides: {
-    root: ({ theme }) => ({ backgroundColor: theme.vars.palette.divider }),
-  },
+  styleOverrides: { root: ({ theme }) => ({ backgroundColor: theme.vars.palette.divider }) },
 };
 
 // ----------------------------------------------------------------------

@@ -1,11 +1,11 @@
 import type { AlertProps } from '@mui/material/Alert';
 import type { SvgIconProps } from '@mui/material/SvgIcon';
-import type { CSSObject, Components, Theme } from '@mui/material/styles';
+import type { Theme, CSSObject, Components } from '@mui/material/styles';
 
-import { alertClasses } from '@mui/material/Alert';
 import SvgIcon from '@mui/material/SvgIcon';
+import { alertClasses } from '@mui/material/Alert';
 
-import { stylesMode, varAlpha } from '../../styles';
+import { varAlpha, stylesMode } from '../../styles';
 
 // ----------------------------------------------------------------------
 
@@ -140,9 +140,7 @@ const MuiAlert: Components<Theme>['MuiAlert'] = {
           color: theme.vars.palette[color].dark,
           border: `solid 1px ${varAlpha(theme.vars.palette[color].mainChannel, 0.16)}`,
           [stylesMode.dark]: { color: theme.vars.palette[color].light },
-          [`& .${alertClasses.icon}`]: {
-            color: theme.vars.palette[color].main,
-          },
+          [`& .${alertClasses.icon}`]: { color: theme.vars.palette[color].main },
         })),
       };
 

@@ -1,8 +1,8 @@
-import type { Components, Theme } from '@mui/material/styles';
+import type { Theme, Components } from '@mui/material/styles';
 
 import { switchClasses } from '@mui/material/Switch';
 
-import { stylesMode, varAlpha } from '../../styles';
+import { varAlpha, stylesMode } from '../../styles';
 
 // ----------------------------------------------------------------------
 
@@ -29,10 +29,7 @@ const MuiSwitch: Components<Theme>['MuiSwitch'] = {
         },
       },
       [`&.${switchClasses.disabled}`]: {
-        [`& .${switchClasses.thumb}`]: {
-          opacity: 1,
-          [stylesMode.dark]: { opacity: 0.48 },
-        },
+        [`& .${switchClasses.thumb}`]: { opacity: 1, [stylesMode.dark]: { opacity: 0.48 } },
         [`&+.${switchClasses.track}`]: { opacity: 0.48 },
       },
     }),

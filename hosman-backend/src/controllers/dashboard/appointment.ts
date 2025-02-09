@@ -38,7 +38,7 @@ export const appointments = async (req: Request, res: Response): Promise<void> =
 export const getAppointments = async (req: Request, res: Response): Promise<void> => {
   try {
     // Fetch doctors and their departments from staff data
-    const doctors = await StaffModel.find({ staffType: 'Doctor' }).populate('department', 'name'); // Assuming 'department' is a reference
+    const doctors = await StaffModel.find({ staffType: 'Doctor' }).populate('department', 'Name'); // Assuming 'department' is a reference
 
     // Extract the list of departments from the doctor data
     const doctorDepartments = doctors.map(doctor => doctor.department).filter(Boolean);
@@ -47,35 +47,49 @@ export const getAppointments = async (req: Request, res: Response): Promise<void
     const departmentCounts = await AppointmentModel.aggregate([
       {
         $group: {
-          _id: "$department", // Group by department in the appointments
-          count: { $sum: 1 },
+          _id: "$department", // Group by department field in appointments
+          count: { $sum: 1 }, // Count number of appointments in each department
           appointments: {
             $push: {
               patientName: "$patientName",
               appointmentTime: "$appointmentTime",
               appointmentDate: "$appointmentDate",
-              doctor: "$doctor",
+              doctor: "$doctor", // Assuming 'doctor' is a reference to staff/doctor
             },
           },
         },
       },
       {
+        $lookup: {
+          from: "departments", // Ensure this collection matches your department collection name
+          localField: "_id", // The department ID in appointment model
+          foreignField: "_id", // The department ID in departments collection
+          as: "departmentInfo",
+        },
+      },
+      {
+        $unwind: "$departmentInfo", // Unwind to flatten department data
+      },
+      {
         $project: {
-          _id: 0,
-          department: "$_id",
-          count: 1,
-          appointments: 1,
+          department: "$departmentInfo.name", // Get department name from the departmentInfo
+          departmentId: "$_id",
+          count: 1, // Include count of appointments
+          appointments: 1, // Include all appointment details
         },
       },
     ]);
+
+    // Log the department counts for debugging
+    console.log("Aggregated department counts:", departmentCounts);
 
     // Merge the fetched doctor departments with the departmentCounts
     const departmentsWithAppointments = doctorDepartments.map(departmentName => {
       const departmentData = departmentCounts.find(d => d.department === departmentName);
       return {
         department: departmentName,
-        count: departmentData ? departmentData.count : 0,
-        appointments: departmentData ? departmentData.appointments : [],
+        count: departmentData ? departmentData.count : 0, // If no data, set count to 0
+        appointments: departmentData ? departmentData.appointments : [], // If no data, set empty appointments array
       };
     });
 

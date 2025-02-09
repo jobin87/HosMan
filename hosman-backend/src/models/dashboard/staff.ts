@@ -12,6 +12,7 @@ const staffSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+
     department: {
       type: String,
       required: true,

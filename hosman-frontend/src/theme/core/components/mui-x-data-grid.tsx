@@ -1,16 +1,16 @@
 import type { SvgIconProps } from '@mui/material/SvgIcon';
-import type { Components, Theme } from '@mui/material/styles';
+import type { Theme, Components } from '@mui/material/styles';
 
-import { circularProgressClasses } from '@mui/material/CircularProgress';
-import { formControlLabelClasses } from '@mui/material/FormControlLabel';
-import { iconButtonClasses } from '@mui/material/IconButton';
+import { listClasses } from '@mui/material/List';
+import { paperClasses } from '@mui/material/Paper';
+import { textFieldClasses } from '@mui/material/TextField';
 import { inputBaseClasses } from '@mui/material/InputBase';
 import { inputLabelClasses } from '@mui/material/InputLabel';
-import { listClasses } from '@mui/material/List';
-import { listItemIconClasses } from '@mui/material/ListItemIcon';
-import { paperClasses } from '@mui/material/Paper';
+import { iconButtonClasses } from '@mui/material/IconButton';
 import SvgIcon, { svgIconClasses } from '@mui/material/SvgIcon';
-import { textFieldClasses } from '@mui/material/TextField';
+import { listItemIconClasses } from '@mui/material/ListItemIcon';
+import { circularProgressClasses } from '@mui/material/CircularProgress';
+import { formControlLabelClasses } from '@mui/material/FormControlLabel';
 
 import { paper, varAlpha } from '../../styles';
 
@@ -82,7 +82,7 @@ const MuiDataGrid: Components<Theme>['MuiDataGrid'] = {
       const styles = {
         pinnedCell: {
           common: {
-            backgroundColor: theme.palette.background.neutral,
+            backgroundColor: theme.palette.background.default,
             '&::after': {
               backgroundColor: theme.vars.palette.action.hover,
             },
@@ -132,7 +132,7 @@ const MuiDataGrid: Components<Theme>['MuiDataGrid'] = {
     columnHeader: ({ theme }) => ({
       fontSize: 14,
       color: theme.vars.palette.text.secondary,
-      '&--sorted': { color: theme.vars.palette.text.disabled },
+      '&--sorted': { color: theme.vars.palette.text.primary },
     }),
     columnSeparator: { color: 'var(--DataGrid-rowBorderColor)' },
     /**
@@ -213,9 +213,7 @@ const MuiDataGrid: Components<Theme>['MuiDataGrid'] = {
     footerContainer: { minHeight: 'auto', borderTopStyle: 'dashed' },
     selectedRowCount: { display: 'none', whiteSpace: 'nowrap' },
     overlay: ({ theme }) => ({
-      [`& .${circularProgressClasses.root}`]: {
-        color: theme.vars.palette.text.primary,
-      },
+      [`& .${circularProgressClasses.root}`]: { color: theme.vars.palette.text.primary },
     }),
     /**
      * Column panel
@@ -245,9 +243,7 @@ const MuiDataGrid: Components<Theme>['MuiDataGrid'] = {
       gap: theme.spacing(1.5),
       padding: theme.spacing(2),
       /* Fix label with input variant === 'outlined' */
-      [`& .${inputLabelClasses.shrink}`]: {
-        transform: 'translate(14px, -9px) scale(0.75)',
-      },
+      [`& .${inputLabelClasses.shrink}`]: { transform: 'translate(14px, -9px) scale(0.75)' },
     }),
     filterFormDeleteIcon: ({ theme }) => ({
       [`& .${iconButtonClasses.root}`]: {

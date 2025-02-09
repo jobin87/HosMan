@@ -1,4 +1,4 @@
-import type { Components, Theme } from '@mui/material/styles';
+import type { Theme, Components } from '@mui/material/styles';
 
 import { badgeClasses } from '@mui/material/Badge';
 
@@ -57,16 +57,8 @@ const MuiBadge: Components<Theme>['MuiBadge'] = {
         [`& .${badgeClasses.badge}`]: {
           ...baseStyles(theme),
           backgroundColor: theme.vars.palette.warning.main,
-          '&::before': {
-            width: 2,
-            height: 4,
-            transform: 'translateX(1px) translateY(-1px)',
-          },
-          '&::after': {
-            width: 2,
-            height: 4,
-            transform: 'translateY(1px) rotate(125deg)',
-          },
+          '&::before': { width: 2, height: 4, transform: 'translateX(1px) translateY(-1px)' },
+          '&::after': { width: 2, height: 4, transform: 'translateY(1px) rotate(125deg)' },
         },
       }),
     },

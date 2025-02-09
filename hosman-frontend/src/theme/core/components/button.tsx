@@ -1,9 +1,7 @@
 import type { ButtonProps } from '@mui/material/Button';
 import type { CSSObject, Components, ComponentsVariants, Theme } from '@mui/material/styles';
 
-import { loadingButtonClasses } from '@mui/lab/LoadingButton';
 import { buttonClasses } from '@mui/material/Button';
-
 import { stylesMode, varAlpha } from '../../styles';
 
 // ----------------------------------------------------------------------
@@ -67,11 +65,11 @@ const softVariant: Record<string, ComponentsVariants<Theme>['MuiButton']> = {
         [`&.${buttonClasses.disabled}`]: {
           backgroundColor: theme.vars.palette.action.disabledBackground,
         },
-        [`& .${loadingButtonClasses.loadingIndicatorStart}`]: { left: 14 },
-        [`& .${loadingButtonClasses.loadingIndicatorEnd}`]: { right: 14 },
+        [`& .CustomLoadingIndicatorStart`]: { left: 14 },
+        [`& .CustomLoadingIndicatorEnd`]: { right: 14 },
         [`&.${buttonClasses.sizeSmall}`]: {
-          [`& .${loadingButtonClasses.loadingIndicatorStart}`]: { left: 10 },
-          [`& .${loadingButtonClasses.loadingIndicatorEnd}`]: { right: 10 },
+          [`& .CustomLoadingIndicatorStart`]: { left: 10 },
+          [`& .CustomLoadingIndicatorEnd`]: { right: 10 },
         },
       }),
     },

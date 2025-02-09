@@ -1,8 +1,8 @@
 import type { SvgIconProps } from '@mui/material/SvgIcon';
-import type { Components, Theme } from '@mui/material/styles';
+import type { Theme, Components } from '@mui/material/styles';
 
-import { radioClasses } from '@mui/material/Radio';
 import SvgIcon from '@mui/material/SvgIcon';
+import { radioClasses } from '@mui/material/Radio';
 
 // ----------------------------------------------------------------------
 
@@ -48,13 +48,9 @@ const MuiRadio: Components<Theme>['MuiRadio'] = {
     root: ({ ownerState, theme }) => ({
       padding: theme.spacing(1),
       ...(ownerState.color === 'default' && {
-        [`&.${radioClasses.checked}`]: {
-          color: theme.vars.palette.text.primary,
-        },
+        [`&.${radioClasses.checked}`]: { color: theme.vars.palette.text.primary },
       }),
-      [`&.${radioClasses.disabled}`]: {
-        color: theme.vars.palette.action.disabled,
-      },
+      [`&.${radioClasses.disabled}`]: { color: theme.vars.palette.action.disabled },
     }),
   },
 };

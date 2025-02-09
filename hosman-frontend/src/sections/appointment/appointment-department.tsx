@@ -42,7 +42,7 @@ export default function DepartmentDetailsPage() {
   }
 
   // Find the department by ID
-  const department = data.departments.find((dept: any) => dept.department === department);
+  const department = data.departments.find((dept: any) => dept.department === department.count);
 
   if (!department) {
     return <Typography>Department not found</Typography>;

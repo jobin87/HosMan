@@ -1,7 +1,7 @@
-import type { Components, Theme } from '@mui/material/styles';
+import type { Theme, Components } from '@mui/material/styles';
 
-import { filledInputClasses } from '@mui/material/FilledInput';
 import { inputBaseClasses } from '@mui/material/InputBase';
+import { filledInputClasses } from '@mui/material/FilledInput';
 import { outlinedInputClasses } from '@mui/material/OutlinedInput';
 
 import { varAlpha } from '../../styles';
@@ -43,9 +43,7 @@ const MuiInput: Components<Theme>['MuiInput'] = {
    *************************************** */
   styleOverrides: {
     underline: ({ theme }) => ({
-      '&::before': {
-        borderBottomColor: varAlpha(theme.vars.palette.grey['500Channel'], 0.32),
-      },
+      '&::before': { borderBottomColor: varAlpha(theme.vars.palette.grey['500Channel'], 0.32) },
       '&::after': { borderBottomColor: theme.vars.palette.text.primary },
     }),
   },
@@ -99,9 +97,7 @@ const MuiFilledInput: Components<Theme>['MuiFilledInput'] = {
     root: ({ theme }) => ({
       borderRadius: theme.shape.borderRadius,
       backgroundColor: varAlpha(theme.vars.palette.grey['500Channel'], 0.08),
-      '&:hover': {
-        backgroundColor: varAlpha(theme.vars.palette.grey['500Channel'], 0.16),
-      },
+      '&:hover': { backgroundColor: varAlpha(theme.vars.palette.grey['500Channel'], 0.16) },
       [`&.${filledInputClasses.focused}`]: {
         backgroundColor: varAlpha(theme.vars.palette.grey['500Channel'], 0.16),
       },

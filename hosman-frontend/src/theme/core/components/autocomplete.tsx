@@ -1,10 +1,10 @@
 import type { SvgIconProps } from '@mui/material/SvgIcon';
-import type { Components, Theme } from '@mui/material/styles';
+import type { Theme, Components } from '@mui/material/styles';
 
-import { autocompleteClasses } from '@mui/material/Autocomplete';
 import SvgIcon, { svgIconClasses } from '@mui/material/SvgIcon';
+import { autocompleteClasses } from '@mui/material/Autocomplete';
 
-import { menuItem, paper, varAlpha } from '../../styles';
+import { paper, varAlpha, menuItem } from '../../styles';
 
 // ----------------------------------------------------------------------
 

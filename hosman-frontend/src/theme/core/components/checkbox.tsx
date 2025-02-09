@@ -1,8 +1,8 @@
 import type { SvgIconProps } from '@mui/material/SvgIcon';
-import type { Components, Theme } from '@mui/material/styles';
+import type { Theme, Components } from '@mui/material/styles';
 
-import { checkboxClasses } from '@mui/material/Checkbox';
 import SvgIcon from '@mui/material/SvgIcon';
+import { checkboxClasses } from '@mui/material/Checkbox';
 
 // ----------------------------------------------------------------------
 
@@ -47,13 +47,9 @@ const MuiCheckbox: Components<Theme>['MuiCheckbox'] = {
     root: ({ ownerState, theme }) => ({
       padding: theme.spacing(1),
       ...(ownerState.color === 'default' && {
-        [`&.${checkboxClasses.checked}`]: {
-          color: theme.vars.palette.text.primary,
-        },
+        [`&.${checkboxClasses.checked}`]: { color: theme.vars.palette.text.primary },
       }),
-      [`&.${checkboxClasses.disabled}`]: {
-        color: theme.vars.palette.action.disabled,
-      },
+      [`&.${checkboxClasses.disabled}`]: { color: theme.vars.palette.action.disabled },
     }),
   },
 };

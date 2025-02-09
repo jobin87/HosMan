@@ -1,94 +1,21 @@
-import { extendTheme, type Theme } from '@mui/material/styles';
-import type { SettingsState } from 'src/components/settings';
-import { colorSchemes, components, customShadows, shadows, typography } from './core';
-import { overridesTheme } from './overrides-theme';
-import { setFont } from './styles/utils';
+import { createTheme as muiCreateTheme } from '@mui/material/styles';
+import { SettingsState } from 'src/components/settings'; // Your settings type
+import { Theme } from '@mui/material/styles'; // MUI Theme type
 import { updateComponentsWithSettings, updateCoreWithSettings } from './with-settings/update-theme';
 
-// ----------------------------------------------------------------------
-
 export function createTheme(settings: SettingsState): Theme {
-  const initialTheme = {
-    colorSchemes,
-    shadows: shadows(settings.colorScheme),
-    customShadows: customShadows(),
-    direction: settings.direction,
-    shape: { borderRadius: 8 },
-    components,
-    typography: {
-      ...typography,
-      fontFamily: setFont(settings.fontFamily),
-    },
-    cssVarPrefix: '',
-    shouldSkipGeneratingVar,
+  // Define the base theme
+  const baseTheme = {
+    colorSchemes: { /* initial color schemes */ },
+    customShadows: { /* initial shadows */ },
+    // Other base theme values
   };
 
-  /**
-   * 1.Update values from settings before creating theme.
-   */
-  const updateTheme = updateCoreWithSettings(initialTheme, settings);
+  // Update the base theme with settings
+  const updatedTheme = updateCoreWithSettings(baseTheme, settings);
 
-  /**
-   * 2.Create theme + add locale + update component with settings.
-   */
-  const theme = extendTheme(updateTheme, updateComponentsWithSettings(settings), overridesTheme);
+  // Apply component-level settings and create the final theme
+  const finalTheme = muiCreateTheme(updatedTheme, updateComponentsWithSettings(settings));
 
-  return theme;
+  return finalTheme;
 }
-
-// ----------------------------------------------------------------------
-
-function shouldSkipGeneratingVar(keys: string[], value: string | number): boolean {
-  const skipGlobalKeys = [
-    'mixins',
-    'overlays',
-    'direction',
-    'breakpoints',
-    'cssVarPrefix',
-    'unstable_sxConfig',
-    'typography',
-    'transitions',
-  ];
-
-  const skipPaletteKeys: {
-    [key: string]: string[];
-  } = {
-    global: ['tonalOffset', 'dividerChannel', 'contrastThreshold'],
-    grey: ['A100', 'A200', 'A400', 'A700'],
-    text: ['icon'],
-  };
-
-  const isPaletteKey = keys[0] === 'palette';
-
-  if (isPaletteKey) {
-    const paletteType = keys[1];
-    const skipKeys = skipPaletteKeys[paletteType] || skipPaletteKeys.global;
-
-    return keys.some((key) => skipKeys?.includes(key));
-  }
-
-  return keys.some((key) => skipGlobalKeys?.includes(key));
-}
-
-/**
-* createTheme without @settings and @locale components.
-*
- ```jsx
-export function createTheme(): Theme {
-  const initialTheme = {
-    colorSchemes,
-    shadows: shadows('light'),
-    customShadows: customShadows('light'),
-    shape: { borderRadius: 8 },
-    components,
-    typography,
-    cssVarPrefix: '',
-    shouldSkipGeneratingVar,
-  };
-
-  const theme = extendTheme(initialTheme, overridesTheme);
-
-  return theme;
-}
- ```
-*/

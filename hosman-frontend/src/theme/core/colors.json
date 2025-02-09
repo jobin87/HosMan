@@ -1,10 +1,10 @@
 {
   "primary": {
-    "lighter": "#FFE3D5",
-    "light": "#FFC1AC",
+    "lighter": "#C8FAD6",
+    "light": "#5BE49B",
     "main": "#00A76F",
-    "dark": "#B71833",
-    "darker": "#7A0930",
+    "dark": "#007867",
+    "darker": "#004B50",
     "contrastText": "#FFFFFF"
   },
   "secondary": {

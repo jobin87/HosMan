@@ -82,7 +82,7 @@ export function updateComponentsWithSettings(settings: SettingsState) {
   const components: ThemeComponents = {};
 
   /** [2] */
-  if (settings.contrast === 'hight') {
+  if (settings.contrast === 'high') {
     const MuiCard: Components<Theme>['MuiCard'] = {
       styleOverrides: {
         root: ({ theme, ownerState }) => {

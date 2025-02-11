@@ -2,7 +2,6 @@ import type { ButtonProps } from '@mui/material/Button';
 import type { CSSObject, Components, ComponentsVariants, Theme } from '@mui/material/styles';
 
 import { buttonClasses } from '@mui/material/Button';
-import { CircularProgress } from '@mui/material';
 
 import { stylesMode, varAlpha } from '../../styles';
 
@@ -48,7 +47,7 @@ const softVariant: Record<string, ComponentsVariants<Theme>['MuiButton']> = {
     props: ({ ownerState }) =>
       !ownerState.disabled && ownerState.variant === 'soft' && ownerState.color === color,
     style: ({ theme }) => ({
-      color: theme.vars.palette[color].dark,
+      color: theme.vars.palette[color].light,
       backgroundColor: varAlpha(theme.vars.palette[color].mainChannel, 0.16),
       '&:hover': {
         backgroundColor: varAlpha(theme.vars.palette[color].mainChannel, 0.32),

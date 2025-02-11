@@ -3,32 +3,29 @@ import { basicInitialState, networkCallInitialState } from '../types';
 import {
   addReportList,
   getReportList,
-  requestCreateStaffRoles,
   requestDeleteStaffRoles,
   requestEditStaffRoles,
-  requestStaffRolesDetails,
 } from './reportThunk';
 
 const initialState = {
   list: basicInitialState,
-  details: basicInitialState,
   create: networkCallInitialState,
   edit: networkCallInitialState,
   delete: networkCallInitialState,
-  reportData:basicInitialState,
+  reportDetails:basicInitialState,
 };
 
 export const reportReducer = createSlice({
   name: 'reports',
   initialState,
   reducers: {
-    setRolesList: (state, action) => {
+    setReportList: (state, action) => {
       state.list = action.payload;
     },
-    setRolesDetails: (state, action) => {
-      state.details = action.payload;
+    setReportDetails: (state, action) => {
+      state.reportDetails = action.payload;
     },
-    setRolesCreate: (state, action) => {
+    setReportCreate: (state, action) => {
       state.create = action.payload;
     },
     setRolesEdit: (state, action) => {
@@ -58,18 +55,18 @@ export const reportReducer = createSlice({
 
       // get
       .addCase(getReportList.fulfilled, (state, action) => {
-        state.details.loading = false;
-        // state.details.data = action.payload;
-        if (action.payload) {
-          state.details.data = action.payload
-        }
+        state.reportDetails.loading = false;
+        // Extract the reportdata array from the payload
+        state.reportDetails.data = action.payload.reportdata || [];
+        console.log("Reports fetched:", action.payload.reportdata);
       })
+      
       .addCase(getReportList.pending, (state) => {
-        state.details.loading = true;
+        state.reportDetails.loading = true;
       })
       .addCase(getReportList.rejected, (state, action) => {
-        state.details.loading = false;
-        state.details.error = action.error;
+        state.reportDetails.loading = false;
+        state.reportDetails.error = action.error;
       })
 
       // EDIT
@@ -80,7 +77,7 @@ export const reportReducer = createSlice({
           state.list = basicInitialState;
         }
       })
-      .addCase(requestEditStaffRoles.pending, (state, action) => {
+      .addCase(requestEditStaffRoles.pending, (state) => {
         state.edit.loading = true;
       })
       .addCase(requestEditStaffRoles.rejected, (state, action) => {
@@ -96,7 +93,7 @@ export const reportReducer = createSlice({
           state.list = basicInitialState;
         }
       })
-      .addCase(requestDeleteStaffRoles.pending, (state, action) => {
+      .addCase(requestDeleteStaffRoles.pending, (state) => {
         state.delete.loading = true;
       })
       .addCase(requestDeleteStaffRoles.rejected, (state, action) => {
@@ -106,7 +103,7 @@ export const reportReducer = createSlice({
   },
 });
 
-export const { setRolesList, setRolesDetails, setRolesCreate, setRolesEdit, setRolesDelete } =
+export const { setReportList, setReportDetails, setReportCreate, setRolesEdit, setRolesDelete } =
   reportReducer.actions;
 
 export default reportReducer.reducer;

@@ -94,6 +94,10 @@ export const navData = [
         title: "Inventory",
         path: paths.dashboard.settings.staff.list,icon:ICONS.inventory
       },
+      {
+        title: "staffManagement",
+        path: paths.dashboard.staff.staffManagement,icon:ICONS.inventory
+      },
     ],
   },
 ];

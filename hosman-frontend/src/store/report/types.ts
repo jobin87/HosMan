@@ -4,8 +4,7 @@ export interface IReportListParams {
     category: string;
   }
   export interface IReportDataParams {
-    reportData?: string;
-    category: string;
+    reportId?: string;
 
   }
 

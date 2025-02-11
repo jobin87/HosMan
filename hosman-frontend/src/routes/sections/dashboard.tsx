@@ -11,7 +11,6 @@ import {  AuthGuard} from 'src/guard';
 import { LoadingScreen } from 'src/components/loading-screen';
 
 import { DashboardLayout } from 'src/layouts/dashboard/layout';
-import { AddDoctorForm } from 'src/sections/doctors/add-doctor';
 import { AddpatientsData } from 'src/sections/patients/addpatients';
 import { AddTreatmentData } from 'src/sections/treatment/add-treatment';
 import { EditTreatmentData } from 'src/sections/treatment/edit-treatment';
@@ -19,13 +18,12 @@ import ReportEditForm from 'src/sections/reports/edit-report';
 import ReportFormPage from 'src/sections/reports/report-form';
 import ReportDetailsPage from 'src/sections/reports/report-details';
 import RoomsAndCategoryPage from 'src/sections/reports/report-category-form';
+import { StaffRegistrationForm } from 'src/sections/roomsAndStaff/add-staff';
+import StaffManagement from 'src/sections/allStaff-Management/view/staff-view-page';
 
 const IndexPage = lazy(() => import('src/pages/home'));
 
-const UploadDocuments = lazy(() => import('src/pages/dashboard/upload-documents'));
-
 // ----------------------------------------------------------------------
-const DoctorListPage = lazy(() => import('src/pages/dashboard/doctors/doctors-list'));
 const PatientsListPage = lazy(() => import('src/pages/dashboard/patients/patients-list'));
 const AppointMentListPage = lazy(() => import('src/pages/dashboard/appointment/appointment-user-list'));
 const TreatmentListPage = lazy(() => import('src/pages/dashboard/treatment/treatment'));
@@ -35,14 +33,6 @@ const FormDetails = lazy(() => import('src/pages/dashboard/appointment/form'));
 
 const ReportPage = lazy(() => import('src/pages/dashboard/reports/reports'));
 
-
-
-
-
-const UserProfilePage = lazy(() => import('src/pages/dashboard/user/profile'));
-const UserAccountPage = lazy(() => import('src/pages/dashboard/user/account'));
-const UserSecurityPage = lazy(() => import('src/pages/dashboard/user/account-security'));
-const DeviceSessionPage = lazy(() => import('src/pages/dashboard/user/device-sessions'));
 // const GeneralPage = lazy(() => import('src/pages/dashboard/user/general-account'));
 
 // ----------------------------------------------------------------------
@@ -80,8 +70,7 @@ export const dashboardRoutes = [
       {
         path: 'doctor',
         children: [
-          { element: <DoctorListPage/>, index: true },
-          { path: 'doctor-form', element: <AddDoctorForm/> },
+          // { element: <DoctorListPage/>, index: true },
 
         ],
       },
@@ -111,6 +100,9 @@ export const dashboardRoutes = [
         path: 'roles',
         children: [
           { element: <RoomsAndCategoryPage/>, index: true },
+          { path: 'rooms-and-category', element: <RoomsAndCategoryPage/> },
+
+
           { path: 'add-report', element: <ReportFormPage/> },
           { path: 'report-details/:id', element: <ReportDetailsPage/> },
           { path: 'report-edit', element: <ReportEditForm/> },
@@ -119,45 +111,22 @@ export const dashboardRoutes = [
 
         ],
       },
+      {
+        path: 'staff',
+        children: [
+          { element: <RoomsAndCategoryPage/>, index: true },
+          { path: 'rooms-and-category', element: <RoomsAndCategoryPage/> },
+          { path: 'add-staff', element: <StaffRegistrationForm/> },
+          { path: 'staff-management', element: <StaffManagement/> },
+          { path: 'report-edit', element: <ReportEditForm/> },
 
 
 
-      {
-        path: 'user',
-        children: [
-          { element: <UserAccountPage />, index: true },
-          { path: 'account/:tab', element: <UserAccountPage /> },
-          { path: 'profile', element: <UserProfilePage /> },
-          { path: 'security', element: <UserSecurityPage /> },
-          { path: 'device', element: <DeviceSessionPage /> },
-          // { path: 'general', element: <GeneralPage /> },
         ],
       },
-      {
-        path: 'documents',
-        children: [
-          { element: <UploadDocuments />, index: true },
-          { path: 'list', element: <UploadDocuments /> },
-        ],
-      },
-      {
-        path: 'settings',
-        children: [
-          { element: <IndexPage />, index: true },
-          {
-            path: 'staff',
-            children: [
-            ],
-          },
-          {
-            path: 'roles',
-            children: [
-              // { element: <StaffRolesList />, index: true },
-              // { path: 'list', element: <StaffRolesList /> },
-            ],
-          },
-        ],
-      },
+
+     
+     
     ],
   },
 ];

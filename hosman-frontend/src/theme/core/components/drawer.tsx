@@ -1,6 +1,6 @@
-import type { Components, Theme } from '@mui/material/styles';
+import type { Theme, Components } from '@mui/material/styles';
 
-import { paper, stylesMode, varAlpha } from '../../styles';
+import { paper, varAlpha, stylesMode } from '../../styles';
 
 // ----------------------------------------------------------------------
 

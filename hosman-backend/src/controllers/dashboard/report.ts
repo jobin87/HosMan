@@ -4,9 +4,9 @@ import ReportModel from "../../models/dashboard/report";
 
 export const AddReports = async (req: Request,res: Response): Promise<void> => {
   try {
-    const { description, status, category, priority }= req.body;
+    const { description, category, roomNo }= req.body;
 
-    if (!description|| !status || !category || !priority )
+    if (!description|| !category || !roomNo )
        {
         res.status(400).json({ message: 'All fields are required' });
         return
@@ -19,7 +19,7 @@ export const AddReports = async (req: Request,res: Response): Promise<void> => {
          reportId: reportId,
          description,
          category,
-         priority,
+         roomNo,
          dateReported,
        });
    
@@ -37,33 +37,44 @@ export const AddReports = async (req: Request,res: Response): Promise<void> => {
 };
 export const getReports = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { reportId } = req.query;  // Use query params instead of body for GET requests
+    const { reportId } = req.query;
 
-    // If `doctorRegId` is provided, fetch specific doctor; otherwise, return all doctors
+    // If a specific reportId is provided, fetch the report by that ID
     if (reportId) {
       const existingReport = await ReportModel.findOne({ reportId });
 
       if (existingReport) {
-        res.status(200).json({ 
-          message: "report found",
-          doctor: existingReport
+        res.status(200).json({
+          message: "Report found",
+          report: existingReport,
         });
       } else {
-        res.status(404).json({ message: "report not found" });
+        res.status(404).json({ message: "Report not found" });
       }
     } else {
-      // If no `doctorRegId` provided, return all doctors
-      const reportdata=  await ReportModel.find();
-    
-    
-      res.status(200).json({ 
+      // If no specific reportId is provided, fetch all reports and group by category
+      const reportdata = await ReportModel.aggregate([
+        {
+          $group: {
+            _id: "$category", // Group by category field
+            count: { $sum: 1 }, // Count the number of reports per category
+            reports: { $push: "$$ROOT" }, // Push all reports under each category
+          },
+        },
+        {
+          $sort: { count: -1 }, // Optional: Sort categories by the count (descending)
+        },
+      ]);
+
+      res.status(200).json({
         message: "All reports fetched successfully",
-       reportdata
+        reportdata,
       });
     }
   } catch (error) {
     res.status(500).json({ message: "Internal server error", error });
   }
 };
+
 
 

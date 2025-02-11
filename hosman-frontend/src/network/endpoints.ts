@@ -18,17 +18,14 @@ export const ENDPOINT_PATIENT_POST = '/api/staff/v1/addPatient'; //
 export const ENDPOINT_PATIENT_GET = '/api/staff/v1/getPatient'; //
 
 
-// Doctor Management
-export const ENDPOINT_DOCTOR_POST = '/api/staff/v1/addDoctor'; //
-export const ENDPOINT_DOCTOR_GET = '/api/staff/v1/getDoctor'; //
-
+// staff Management
+export const ENDPOINT_STAFF_CREATE = '/api/staff/v1/addStaff'; //
+export const ENDPOINT_STAFF_GET = '/api/staff/v1/getStaff'; //
 
 //roles
 export const ENDPOINT_ROOM_AND_CATEGORIES_POST = '/api/staff/v1/roles/addRoomsAndCategory'; //
 export const ENDPOINT_ROOM_AND_CATEGORIES_GET = '/api/staff/v1/roles/getRoomsAndCategory'; //
-
-
-
+export const ENDPOINT_STAFF_ROLES_CREATE = '/api/staff/v1/roles/staffRoles';
 
 
 //reports 
@@ -75,7 +72,6 @@ export const ENDPOINT_SELLER_UPDATE_ADDRESS = '/api/seller/v1/address';
 
 // Permissions
 export const ENDPOINT_PERMISSION_LIST = '/api/permission/v1/permissions-list';
-export const ENDPOINT_PERMISSION_CREATE = '/api/permission/v1/create';
 export const ENDPOINT_PERMISSION_EDIT = '/api/permission/v1/update/';
 export const ENDPOINT_PERMISSION_DELETE = '/api/permission/v1/delete/';
 export const ENDPOINT_PERMISSION_DETAILS = '/api/permission/v1/details/';

@@ -1,20 +1,21 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
   API_METHODS,
-  ENDPOINT_DOCTOR_GET,
-  ENDPOINT_DOCTOR_POST,
+  ENDPOINT_STAFF_GET,
   ENDPOINT_STAFF_MANAGEMENT_CREATE,
   ENDPOINT_STAFF_MANAGEMENT_DELETE,
   ENDPOINT_STAFF_MANAGEMENT_DETAILS,
   ENDPOINT_STAFF_MANAGEMENT_EDIT,
+  ENDPOINT_STAFF_CREATE,
   ENDPOINT_TREATMENT_ALL_DELETE,
   ENDPOINT_TREATMENT_DELETE,
   ENDPOINT_TREATMENT_GET,
   ENDPOINT_TREATMENT_UPDATE,
   makeNetworkCall,
+  ENDPOINT_TREATMENT_ADD,
 } from 'src/network';
 
-import type { adddoctorTypes, DoctorsList, IAllStaffCreateTypes, IAllStaffEditTypes, ITreatmentTypes } from './types';
+import type { adddoctorTypes, DoctorsList, IAllStaffCreateTypes, IAllStaffEditTypes, ITreatmentTypes, staffTypes } from './types';
 
 // Staff Permissions List
 // export const requestAllStaffList = createAsyncThunk('all-staff/allStaffList', async () => {
@@ -25,46 +26,38 @@ import type { adddoctorTypes, DoctorsList, IAllStaffCreateTypes, IAllStaffEditTy
 //   return response?.data?.data;
 // });
 
-export const requestaddDoctor = createAsyncThunk('addDoctor',
-  async(params:adddoctorTypes)=>{
-    const response = await makeNetworkCall({
-      method: API_METHODS.POST,
-      url:ENDPOINT_DOCTOR_POST,
-      data:params
-    })
-    console.log("response:",response)
-  return response?.data
-  }
+
+export const createNewStaff = createAsyncThunk('addDoctor',
+    async(params:staffTypes)=>{
+      const response = await makeNetworkCall({
+        method: API_METHODS.POST,
+        url:ENDPOINT_STAFF_CREATE,
+        data:params
+      })
+      console.log("response:",response)
+    return response?.data
+    }
 
 )
-export const requestAllDoctorsList = createAsyncThunk('all-staff/alldoctorsList', async (params:DoctorsList) => {
+
+export const requestAllStaffList = createAsyncThunk('all-staff/allStaffList', async (params:staffTypes) => {
   const response = await makeNetworkCall({
     method: API_METHODS.GET,
-    url: ENDPOINT_DOCTOR_GET,
+    url: ENDPOINT_STAFF_GET,
     data:params
   });
-  console.log(response)
-  return response?.data?.doctorsdata
+  console.log("response:::::::::::",response?.data?.staffData)
+  return response?.data?.staffData
+
 });
 
-// Staff Permission Details
-export const requestAllStaffDetails = createAsyncThunk(
-  'all-staff/allStaffDetails',
-  async (params: any) => {
-    const response = await makeNetworkCall({
-      method: API_METHODS.GET,
-      url: `${ENDPOINT_STAFF_MANAGEMENT_DETAILS}${params.staffId}`,
-    });
-    return response?.data;
-  }
-);
 
 //add treatment
 export const requestAddTreatment= createAsyncThunk(
   'treatment/requestAddTreatment',
   async (params:ITreatmentTypes)=>{const response = await makeNetworkCall({
     method: API_METHODS.POST,
-    url: ENDPOINT_TREATMENT_GET,
+    url: ENDPOINT_TREATMENT_ADD,
     data: params,
   })
   console.log(response)

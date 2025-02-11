@@ -7,7 +7,7 @@ const SECRET_KEY = "112eryt33";
 import nodemailer from "nodemailer";
 import crypto from "crypto";
 import { promises } from "readline"
-import Doctor from "../../models/dashboard/doctor";
+import Doctor from "../../models/dashboard/staff";
 
 export const DoctorsAdded = async(req:Request,res:Response):Promise<void>=>{
   try{

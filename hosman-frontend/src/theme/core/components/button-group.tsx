@@ -1,9 +1,9 @@
 import type { ButtonGroupProps } from '@mui/material/ButtonGroup';
-import type { CSSObject, Components, ComponentsVariants, Theme } from '@mui/material/styles';
+import type { Theme, CSSObject, Components, ComponentsVariants } from '@mui/material/styles';
 
 import { buttonGroupClasses } from '@mui/material/ButtonGroup';
 
-import { stylesMode, varAlpha } from '../../styles';
+import { varAlpha, stylesMode } from '../../styles';
 
 // ----------------------------------------------------------------------
 
@@ -38,9 +38,7 @@ const softVariant: Record<string, ComponentsVariants<Theme>['MuiButtonGroup']> =
     style: ({ theme }) => ({
       [buttonClasses]: {
         borderColor: varAlpha(theme.vars.palette[color].darkChannel, 0.24),
-        [stylesMode.dark]: {
-          borderColor: varAlpha(theme.vars.palette[color].lightChannel, 0.24),
-        },
+        [stylesMode.dark]: { borderColor: varAlpha(theme.vars.palette[color].lightChannel, 0.24) },
       },
       [`&.${buttonGroupClasses.vertical}`]: {
         [buttonClasses]: {
@@ -104,15 +102,11 @@ const MuiButtonGroup: Components<Theme>['MuiButtonGroup'] = {
     contained: ({ theme, ownerState }) => {
       const styled = {
         colors: styleColors(ownerState, (color) => ({
-          [buttonClasses]: {
-            borderColor: varAlpha(theme.vars.palette[color].darkChannel, 0.48),
-          },
+          [buttonClasses]: { borderColor: varAlpha(theme.vars.palette[color].darkChannel, 0.48) },
         })),
         inheritColor: {
           ...(ownerState.color === 'inherit' && {
-            [buttonClasses]: {
-              borderColor: varAlpha(theme.vars.palette.grey['500Channel'], 0.32),
-            },
+            [buttonClasses]: { borderColor: varAlpha(theme.vars.palette.grey['500Channel'], 0.32) },
           }),
         },
         disabled: {
@@ -134,15 +128,11 @@ const MuiButtonGroup: Components<Theme>['MuiButtonGroup'] = {
     text: ({ theme, ownerState }) => {
       const styled = {
         colors: styleColors(ownerState, (color) => ({
-          [buttonClasses]: {
-            borderColor: varAlpha(theme.vars.palette[color].mainChannel, 0.48),
-          },
+          [buttonClasses]: { borderColor: varAlpha(theme.vars.palette[color].mainChannel, 0.48) },
         })),
         inheritColor: {
           ...(ownerState.color === 'inherit' && {
-            [buttonClasses]: {
-              borderColor: varAlpha(theme.vars.palette.grey['500Channel'], 0.32),
-            },
+            [buttonClasses]: { borderColor: varAlpha(theme.vars.palette.grey['500Channel'], 0.32) },
           }),
         },
         disabled: {

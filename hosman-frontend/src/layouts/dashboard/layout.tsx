@@ -33,7 +33,6 @@ import { SettingsButton } from '../components/settings-button';
 // import { WorkspacesPopover } from '../components/workspaces-popover';
 import { navData as dashboardNavData } from '../config-nav-dashboard';
 import { NavHorizontal } from './nav-horizontal';
-import { NotificationsDrawer } from '../components/notifications-drawer';
 // import { NotificationsDrawer } from '../components/notifications-drawer';
 
 // ----------------------------------------------------------------------

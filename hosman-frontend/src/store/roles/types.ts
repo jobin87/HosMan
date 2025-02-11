@@ -3,7 +3,8 @@ export interface IRoomsAndCategoriesParams {
   category: string;
 
 }
-  export interface IReportDataParams {
+  export interface IRoomDataParams {
+    description?: string;
     rooms?: string;
     category?: string;
   }
@@ -13,8 +14,9 @@ export interface IRolesDetailsParams {
 }
 
 export interface ICreateRoles {
-  permissionName: string;
-  permissions: string[];
+  staffId:string;
+  staffName: string;
+  Position: string[];
 }
 
 export interface IEditRoles {

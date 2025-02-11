@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { basicInitialState, networkCallInitialState } from '../types';
+import { basicInitialState, networkCallInitialState, } from '../types';
 import {
   createRoomRoles,
   getRoomRoles,
@@ -9,22 +9,21 @@ import {
 
 const initialState = {
   list: basicInitialState,
-  roomdetails: basicInitialState,
+  roomRolesDetails: basicInitialState,
   create: networkCallInitialState,
   edit: networkCallInitialState,
   delete: networkCallInitialState,
-  reportData:basicInitialState,
 };
 
 export const roleReducer = createSlice({
-  name: 'reports',
+  name: 'role',
   initialState,
   reducers: {
     setRolesList: (state, action) => {
       state.list = action.payload;
     },
     setRolesDetails: (state, action) => {
-      state.roomdetails = action.payload;
+      state.roomRolesDetails = action.payload;
     },
     setRolesCreate: (state, action) => {
       state.create = action.payload;
@@ -39,7 +38,7 @@ export const roleReducer = createSlice({
   extraReducers(builder) {
     builder
       // LIST
-      .addCase(createRoomRoles.fulfilled, (state, action) => {
+      .addCase(createRoomRoles.fulfilled, (state) => {
         state.list.loading = false;
         // if (action.payload) {
         //   state.list.data = action.payload;
@@ -56,18 +55,18 @@ export const roleReducer = createSlice({
 
       // get
       .addCase(getRoomRoles.fulfilled, (state, action) => {
-        state.roomdetails.loading = false;
-        // state.details.data = action.payload;
-        if (action.payload) {
-          state.roomdetails.data = action.payload
-        }
+        state.roomRolesDetails.loading = false;
+        // Extract the rooms array from the payload
+        state.roomRolesDetails.data = action.payload || []; 
+        console.log("Rooms fetched:", action.payload);
       })
+      
       .addCase(getRoomRoles.pending, (state) => {
-        state.roomdetails.loading = true;
+        state.roomRolesDetails.loading = true;
       })
       .addCase(getRoomRoles.rejected, (state, action) => {
-        state.roomdetails.loading = false;
-        state.roomdetails.error = action.error;
+        state.roomRolesDetails.loading = false;
+        state.roomRolesDetails.error = action.error;
       })
 
       // EDIT

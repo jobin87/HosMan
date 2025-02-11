@@ -1,6 +1,10 @@
-import { buttonClasses, type ButtonProps } from '@mui/material/Button';
+import type { ButtonProps } from '@mui/material/Button';
+
 import type { Theme, CSSObject, Components, ComponentsVariants } from '@mui/material/styles';
-import { stylesMode, varAlpha } from '../../styles';
+
+import { buttonClasses } from '@mui/material/Button';
+
+import { varAlpha, stylesMode } from '../../styles';
 
 
 // ----------------------------------------------------------------------
@@ -43,7 +47,7 @@ const softVariant: Record<string, ComponentsVariants<Theme>['MuiButton']> = {
     props: ({ ownerState }) =>
       !ownerState.disabled && ownerState.variant === 'soft' && ownerState.color === color,
     style: ({ theme }) => ({
-      color: theme.vars.palette[color].light,
+      color: theme.vars.palette[color].dark,
       backgroundColor: varAlpha(theme.vars.palette[color].mainChannel, 0.16),
       '&:hover': { backgroundColor: varAlpha(theme.vars.palette[color].mainChannel, 0.32) },
       [stylesMode.dark]: { color: theme.vars.palette[color].light },
@@ -58,11 +62,12 @@ const softVariant: Record<string, ComponentsVariants<Theme>['MuiButton']> = {
         [`&.${buttonClasses.disabled}`]: {
           backgroundColor: theme.vars.palette.action.disabledBackground,
         },
-        [`& .${loadingButtonClasses.loadingIndicatorStart}`]: { left: 14 },
-        [`& .${loadingButtonClasses.loadingIndicatorEnd}`]: { right: 14 },
+        // No need for loadingButtonClasses anymore
+        [`& .MuiButton-loadingIndicatorStart`]: { left: 14 },
+        [`& .MuiButton-loadingIndicatorEnd`]: { right: 14 },
         [`&.${buttonClasses.sizeSmall}`]: {
-          [`& .${loadingButtonClasses.loadingIndicatorStart}`]: { left: 10 },
-          [`& .${loadingButtonClasses.loadingIndicatorEnd}`]: { right: 10 },
+          [`& .MuiButton-loadingIndicatorStart`]: { left: 10 },
+          [`& .MuiButton-loadingIndicatorEnd`]: { right: 10 },
         },
       }),
     },

@@ -23,7 +23,7 @@ export function SettingsButton({ sx, ...other }: SettingsButtonProps) {
       {...other}
     >
       <Badge color="error" variant="dot" invisible={!settings.canReset}>
-        <SvgIcon
+         <SvgIcon
           component={m.svg}
           animate={{ rotate: 20 }}
           transition={{ duration: 8, ease: 'linear', repeat:Infinity }}

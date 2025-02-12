@@ -5,7 +5,6 @@ import { overridesTheme } from './overrides-theme';
 import { shadows, typography, components, colorSchemes, customShadows } from './core';
 import { updateCoreWithSettings, updateComponentsWithSettings } from './with-settings/update-theme';
 
-import type { ThemeLocaleComponents } from './types';
 
 // ----------------------------------------------------------------------
 

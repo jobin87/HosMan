@@ -1,4 +1,3 @@
-import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Badge from '@mui/material/Badge';
 import Tooltip from '@mui/material/Tooltip';
@@ -23,6 +22,7 @@ import { defaultSettings } from '../config-settings';
 import { FullScreenButton } from './fullscreen-button';
 
 import type { SettingsDrawerProps } from '../types';
+import { Box } from '@mui/material';
 
 // ----------------------------------------------------------------------
 

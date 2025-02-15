@@ -36,12 +36,11 @@ export default function StaffManagement() {
     defaultValues,
   });
 
-  const [roles, setRoles] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
-    const fetchStaffData = async () => {
+    const fetchStaffData = async (data:any) => {
       try {
-        const response = await dispatch(requestAllStaffList());
+        const response = await dispatch(requestAllStaffList(data));
         console.log("Staff data fetched:", response);
       } catch (error) {
         console.error('Error fetching staff:', error);

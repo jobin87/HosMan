@@ -30,7 +30,7 @@ export default function App() {
       <ReduxProvider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <SettingsProvider settings={defaultSettings}>
-            <ThemeProvider >
+            <ThemeProvider>
               <MotionLazy>
                 <ProgressBar />
                 <SettingsDrawer />

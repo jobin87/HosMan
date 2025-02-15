@@ -3,7 +3,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z as zod } from 'zod';
 
-import LoadingButton from '@mui/lab/LoadingButton';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -54,7 +53,7 @@ export function AppointmentForm() {
   }, [dispatch]);
 
   // Selecting doctors list from Redux store
-  const { data } = useAppSelector((state) => state.allstaff.getStaffDetails) || { data: [] };
+  const { data } = useAppSelector((state:any) => state.allstaff.getStaffDetails) || { data: [] };
   console.log('Doctors data from store:', data);
 
   // Generate available dates
@@ -162,11 +161,6 @@ export function AppointmentForm() {
           </Field.Select>
         </Box>
 
-        <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-          <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-            Book Appointment
-          </LoadingButton>
-        </Stack>
       </Card>
     </Form>
   );

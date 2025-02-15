@@ -27,7 +27,6 @@ import { LayoutSection } from '../core/layout-section';
 import { HeaderSection } from '../core/header-section';
 import { StyledDivider, useNavColorVars } from './styles';
 import { AccountDrawer } from '../components/account-drawer';
-import { SettingsButton } from '../components/settings-button';
 // import { LanguagePopover } from '../components/language-popover';
 // import { ContactsPopover } from '../components/contacts-popover';
 // import { WorkspacesPopover } from '../components/workspaces-popover';
@@ -148,17 +147,6 @@ export function DashboardLayout({ sx, children, header, data }: DashboardLayoutP
             ),
             rightArea: (
               <Box display="flex" alignItems="center" gap={{ xs: 0, sm: 0.75 }}>
-                {/* -- Searchbar -- */}
-                {/* -- Language popover -- */}
-                {/* <LanguagePopover data={allLangs} /> */}
-                {/* -- Notifications popover -- */}
-                {/* <NotificationsDrawer data={_notifications} /> */}
-                {/* -- Contacts popover -- */}
-                {/* <ContactsPopover data={_contacts} /> */}
-                {/* -- Settings button -- */}
-                {/* <SettingsButton /> */}
-                <SettingsButton/>
-                {/* -- Account drawer -- */}
                 <AccountDrawer data={_account} />
               </Box>
             ),

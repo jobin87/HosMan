@@ -1,184 +1,108 @@
-import type { ButtonProps } from '@mui/material/Button';
+import type { Theme, Components } from '@mui/material/styles';
 
-import type { Theme, CSSObject, Components, ComponentsVariants } from '@mui/material/styles';
-
-import { buttonClasses } from '@mui/material/Button';
-
-import { varAlpha, stylesMode } from '../../styles';
-
+import { badgeClasses } from '@mui/material/Badge';
 
 // ----------------------------------------------------------------------
 
 // NEW VARIANT
-declare module '@mui/material/Button' {
-  interface ButtonPropsVariantOverrides {
-    soft: true;
+declare module '@mui/material/Badge' {
+  interface BadgePropsVariantOverrides {
+    alway: true;
+    busy: true;
+    online: true;
+    offline: true;
+    invisible: true;
   }
 }
 
-const COLORS = ['primary', 'secondary', 'info', 'success', 'warning', 'error'] as const;
+ // ----------------------------------------------------------------------
 
-type ColorType = (typeof COLORS)[number];
+const baseStyles = (theme: Theme) => ({
+  width: 10,
+  zIndex: 9,
+  padding: 0,
+  height: 10,
+  minWidth: 'auto',
+  '&::before, &::after': {
+    content: "''",
+    borderRadius: 1,
+    backgroundColor: theme.vars.palette.common.white,
+  },
+  [`&.${badgeClasses.invisible}`]: { transform: 'unset' },
+});
 
-function styleColors(ownerState: ButtonProps, styles: (val: ColorType) => CSSObject) {
-  const outputStyle = COLORS.reduce((acc, color) => {
-    if (!ownerState.disabled && ownerState.color === color) {
-      acc = styles(color);
-    }
-    return acc;
-  }, {});
-
-  return outputStyle;
-}
-
-// ----------------------------------------------------------------------
-
-const MuiButtonBase: Components<Theme>['MuiButtonBase'] = {
-  /** **************************************
-   * STYLE
-   *************************************** */
-  styleOverrides: { root: ({ theme }) => ({ fontFamily: theme.typography.fontFamily }) },
-};
-
-// ----------------------------------------------------------------------
-
-const softVariant: Record<string, ComponentsVariants<Theme>['MuiButton']> = {
-  colors: COLORS.map((color) => ({
-    props: ({ ownerState }) =>
-      !ownerState.disabled && ownerState.variant === 'soft' && ownerState.color === color,
-    style: ({ theme }) => ({
-      color: theme.vars.palette[color].dark,
-      backgroundColor: varAlpha(theme.vars.palette[color].mainChannel, 0.16),
-      '&:hover': { backgroundColor: varAlpha(theme.vars.palette[color].mainChannel, 0.32) },
-      [stylesMode.dark]: { color: theme.vars.palette[color].light },
-    }),
-  })),
-  base: [
-    {
-      props: ({ ownerState }) => ownerState.variant === 'soft',
-      style: ({ theme }) => ({
-        backgroundColor: varAlpha(theme.vars.palette.grey['500Channel'], 0.08),
-        '&:hover': { backgroundColor: varAlpha(theme.vars.palette.grey['500Channel'], 0.24) },
-        [`&.${buttonClasses.disabled}`]: {
-          backgroundColor: theme.vars.palette.action.disabledBackground,
-        },
-        // No need for loadingButtonClasses anymore
-        [`& .MuiButton-loadingIndicatorStart`]: { left: 14 },
-        [`& .MuiButton-loadingIndicatorEnd`]: { right: 14 },
-        [`&.${buttonClasses.sizeSmall}`]: {
-          [`& .MuiButton-loadingIndicatorStart`]: { left: 10 },
-          [`& .MuiButton-loadingIndicatorEnd`]: { right: 10 },
-        },
-      }),
-    },
-  ],
-};
-
-const MuiButton: Components<Theme>['MuiButton'] = {
-  /** **************************************
-   * DEFAULT PROPS
-   *************************************** */
-  defaultProps: { color: 'inherit', disableElevation: true },
-
+const MuiBadge: Components<Theme>['MuiBadge'] = {
   /** **************************************
    * VARIANTS
    *************************************** */
   variants: [
     /**
-     * @variant soft
+     * @variant online
      */
-    ...[...softVariant.base!, ...softVariant.colors!],
+    {
+      props: ({ ownerState }) => ownerState.variant === 'online',
+      style: ({ theme }) => ({
+        [`& .${badgeClasses.badge}`]: {
+          ...baseStyles(theme),
+          backgroundColor: theme.vars.palette.success.main,
+        },
+      }),
+    },
+    /**
+     * @variant alway
+     */
+    {
+      props: ({ ownerState }) => ownerState.variant === 'alway',
+      style: ({ theme }) => ({
+        [`& .${badgeClasses.badge}`]: {
+          ...baseStyles(theme),
+          backgroundColor: theme.vars.palette.warning.main,
+          '&::before': { width: 2, height: 4, transform: 'translateX(1px) translateY(-1px)' },
+          '&::after': { width: 2, height: 4, transform: 'translateY(1px) rotate(125deg)' },
+        },
+      }),
+    },
+    /**
+     * @variant busy
+     */
+    {
+      props: ({ ownerState }) => ownerState.variant === 'busy',
+      style: ({ theme }) => ({
+        [`& .${badgeClasses.badge}`]: {
+          ...baseStyles(theme),
+          backgroundColor: theme.vars.palette.error.main,
+          '&::before': { width: 6, height: 2 },
+        },
+      }),
+    },
+    /**
+     * @variant offline
+     */
+    {
+      props: ({ ownerState }) => ownerState.variant === 'offline',
+      style: ({ theme }) => ({
+        [`& .${badgeClasses.badge}`]: {
+          ...baseStyles(theme),
+          backgroundColor: theme.vars.palette.text.disabled,
+          '&::before': { width: 6, height: 6, borderRadius: '50%' },
+        },
+      }),
+    },
+    /**
+     * @variant invisible
+     */
+    {
+      props: ({ ownerState }) => ownerState.variant === 'invisible',
+      style: { [`& .${badgeClasses.badge}`]: { display: 'none' } },
+    },
   ],
 
   /** **************************************
    * STYLE
    *************************************** */
-  styleOverrides: {
-    /**
-     * @variant contained
-     */
-    contained: ({ theme, ownerState }) => {
-      const styled = {
-        colors: styleColors(ownerState, (color) => ({
-          '&:hover': { boxShadow: theme.customShadows[color] },
-        })),
-        inheritColor: {
-          ...(ownerState.color === 'inherit' &&
-            !ownerState.disabled && {
-              color: theme.vars.palette.common.white,
-              backgroundColor: theme.vars.palette.grey[800],
-              '&:hover': {
-                boxShadow: theme.customShadows.z8,
-                backgroundColor: theme.vars.palette.grey[700],
-              },
-              [stylesMode.dark]: {
-                color: theme.vars.palette.grey[800],
-                backgroundColor: theme.vars.palette.common.white,
-                '&:hover': { backgroundColor: theme.vars.palette.grey[400] },
-              },
-            }),
-        },
-      };
-      return { ...styled.inheritColor, ...styled.colors };
-    },
-    /**
-     * @variant outlined
-     */
-    outlined: ({ theme, ownerState }) => {
-      const styled = {
-        colors: styleColors(ownerState, (color) => ({
-          borderColor: varAlpha(theme.vars.palette[color].mainChannel, 0.48),
-        })),
-        inheritColor: {
-          ...(ownerState.color === 'inherit' &&
-            !ownerState.disabled && {
-              borderColor: varAlpha(theme.vars.palette.grey['500Channel'], 0.32),
-              '&:hover': { backgroundColor: theme.vars.palette.action.hover },
-            }),
-        },
-        base: {
-          '&:hover': { borderColor: 'currentColor', boxShadow: '0 0 0 0.75px currentColor' },
-        },
-      };
-      return { ...styled.base, ...styled.inheritColor, ...styled.colors };
-    },
-    /**
-     * @variant text
-     */
-    text: ({ ownerState, theme }) => {
-      const styled = {
-        inheritColor: {
-          ...(ownerState.color === 'inherit' &&
-            !ownerState.disabled && {
-              '&:hover': { backgroundColor: theme.vars.palette.action.hover },
-            }),
-        },
-      };
-      return { ...styled.inheritColor };
-    },
-    /**
-     * @size
-     */
-    sizeSmall: ({ ownerState }) => ({
-      height: 30,
-      ...(ownerState.variant === 'text'
-        ? { paddingLeft: '4px', paddingRight: '4px' }
-        : { paddingLeft: '8px', paddingRight: '8px' }),
-    }),
-    sizeMedium: ({ ownerState }) => ({
-      ...(ownerState.variant === 'text'
-        ? { paddingLeft: '8px', paddingRight: '8px' }
-        : { paddingLeft: '12px', paddingRight: '12px' }),
-    }),
-    sizeLarge: ({ ownerState }) => ({
-      height: 48,
-      ...(ownerState.variant === 'text'
-        ? { paddingLeft: '10px', paddingRight: '10px' }
-        : { paddingLeft: '16px', paddingRight: '16px' }),
-    }),
-  },
+  styleOverrides: { dot: { borderRadius: '50%' } },
 };
 
 // ----------------------------------------------------------------------
 
-export const button = { MuiButtonBase, MuiButton };
+export const badge = { MuiBadge };

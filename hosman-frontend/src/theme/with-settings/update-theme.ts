@@ -10,6 +10,8 @@ import { createShadowColor, customShadows as coreCustomShadows } from '../core/c
 
 import type { ThemeComponents, ThemeUpdateOptions } from '../types';
 
+// ----------------------------------------------------------------------
+
 const PRIMARY_COLORS = {
   default: COLORS.primary,
   cyan: PRIMARY_COLOR.cyan,
@@ -19,16 +21,19 @@ const PRIMARY_COLORS = {
   red: PRIMARY_COLOR.red,
 };
 
+// ----------------------------------------------------------------------
+
 /**
- * Update the core theme with settings like primaryColor and contrast
+ * [1] settings @primaryColor
+ * [2] settings @contrast
  */
+
 export function updateCoreWithSettings(
   theme: ThemeUpdateOptions,
   settings: SettingsState
 ): ThemeUpdateOptions {
   const { colorSchemes, customShadows } = theme;
 
-  // Update primary color based on the setting
   const updatedPrimary = getPalette(
     settings.primaryColor,
     corePrimary,
@@ -42,7 +47,9 @@ export function updateCoreWithSettings(
       light: {
         palette: {
           ...colorSchemes?.light?.palette,
+          /** [1] */
           primary: updatedPrimary,
+          /** [2] */
           background: {
             ...colorSchemes?.light?.palette?.background,
             default: getBackgroundDefault(settings.contrast),
@@ -53,12 +60,14 @@ export function updateCoreWithSettings(
       dark: {
         palette: {
           ...colorSchemes?.dark?.palette,
+          /** [1] */
           primary: updatedPrimary,
         },
       },
     },
     customShadows: {
       ...customShadows,
+      /** [1] */
       primary:
         settings.primaryColor === 'default'
           ? coreCustomShadows('light').primary
@@ -67,9 +76,8 @@ export function updateCoreWithSettings(
   };
 }
 
-/**
- * Update component-level overrides based on settings
- */
+// ----------------------------------------------------------------------
+
 export function updateComponentsWithSettings(settings: SettingsState) {
   const components: ThemeComponents = {};
 
@@ -97,14 +105,18 @@ export function updateComponentsWithSettings(settings: SettingsState) {
   return { components };
 }
 
+// ----------------------------------------------------------------------
+
 function getPalette(
   name: SettingsState['primaryColor'],
   initialPalette: typeof corePrimary,
   updatedPalette: typeof corePrimary
 ) {
+  /** [1] */
   return name === 'default' ? initialPalette : createPaletteChannel(updatedPalette);
 }
 
 function getBackgroundDefault(contrast: SettingsState['contrast']) {
+  /** [2] */
   return contrast === 'default' ? '#FFFFFF' : coreGreyPalette[200];
 }

@@ -47,7 +47,7 @@ export default function StaffManagement() {
       }
     };
 
-    fetchStaffData();
+    fetchStaffData(data);
   }, [dispatch]);
 
   return (

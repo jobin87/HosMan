@@ -13887,6 +13887,7 @@
     }
   },
   "devDependencies": {
+    "@types/lodash.debounce": "^4.0.9",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
     "@vitejs/plugin-react-swc": "^3.8.0",
@@ -13911,6 +13912,8 @@
     "@mui/x-data-grid": "^7.26.0",
     "@mui/x-date-pickers": "^7.26.0",
     "@reduxjs/toolkit": "^2.5.1",
+    "@splinetool/react-spline": "^4.0.0",
+    "@splinetool/runtime": "^1.9.68",
     "@tiptap/extension-code-block-lowlight": "^2.11.5",
     "@tiptap/extension-image": "^2.11.5",
     "@tiptap/extension-link": "^2.11.5",
@@ -13926,6 +13929,7 @@
     "i18next": "^24.2.2",
     "i18next-browser-languagedetector": "^8.0.3",
     "i18next-resources-to-backend": "^1.2.1",
+    "lodash.debounce": "^4.0.8",
     "lowlight": "^3.3.0",
     "mui-one-time-password-input": "^3.0.2",
     "nprogress": "^0.2.0",

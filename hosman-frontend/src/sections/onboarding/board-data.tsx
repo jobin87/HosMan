@@ -1,5 +1,6 @@
 import {  Card } from "@mui/material"
 import { primary } from "src/theme/core"
+import Spline from '@splinetool/react-spline';
 
 interface BoardDataProps {
     position: "left" | "right";
@@ -20,8 +21,12 @@ export const BoardData =({ position }: BoardDataProps) => {
             <h1>Board Data</h1>
 
 
+            <div style={{ width: "100vw", height: "100vh", background: "#000" }}>
+              <Spline scene="/spline/my-scene.splinecode" />
+            </div>
 
         </Card>
+       
     )
 
 }

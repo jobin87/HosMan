@@ -37,7 +37,6 @@ export const createNewStaff = createAsyncThunk('addDoctor',
       console.log("response:",response)
     return response?.data
     }
-
 )
 
 export const requestAllStaffList = createAsyncThunk('all-staff/allStaffList', async (params:staffTypes) => {

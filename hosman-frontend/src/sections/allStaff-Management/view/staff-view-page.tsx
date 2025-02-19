@@ -38,16 +38,16 @@ export default function StaffManagement() {
 
 
   useEffect(() => {
-    const fetchStaffData = async (data:any) => {
+    const fetchStaffData = async () => {
       try {
-        const response = await dispatch(requestAllStaffList(data));
+        const response = await dispatch(requestAllStaffList());
         console.log("Staff data fetched:", response);
       } catch (error) {
         console.error('Error fetching staff:', error);
       }
     };
 
-    fetchStaffData(data);
+    fetchStaffData();
   }, [dispatch]);
 
   return (

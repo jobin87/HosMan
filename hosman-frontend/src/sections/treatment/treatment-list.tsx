@@ -137,11 +137,12 @@ export default function TreatmentList() {
               gap: 1.5,
               mr: { xs: 0, lg: 8 },
               flexWrap: "wrap", // Allow buttons to wrap on smaller screens
+              mb:.2
             }}
           >
             {role === "Manager" && (
               <>
-                <Button
+                <Button sx={{mb:2}}
                   variant="contained"
                   color="info"
                   size="small"
@@ -150,6 +151,7 @@ export default function TreatmentList() {
                   Add
                 </Button>
                 <Button
+                sx={{mb:2}}
                   variant="contained"
                   color="error"
                   size="small"

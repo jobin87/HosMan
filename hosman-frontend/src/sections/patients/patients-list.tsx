@@ -40,18 +40,20 @@ export default function PatientList() {
       <Box
         sx={{
           display: "flex",
-          flexDirection: { xs: "row", sm: "row" },
+          flexDirection: {
+            xs: "row",
+            sm: "row", // Keep row direction for sm and above devices
+          },
+          width: {
+            xs: "85vw",
+            lg: "auto",
+          },
           justifyContent: "space-between",
-          alignItems: "center",
-          p: 2,
-          gap: 2,
-          bgcolor: "background.paper",
-          borderRadius: 2,
-          boxShadow: 1,
+          zIndex: 1,
         }}
       >
         <Typography variant="h4" gutterBottom>
-          Patient List
+          Patients List
         </Typography>
         {role && (
           <Box
@@ -60,19 +62,25 @@ export default function PatientList() {
               gap: 1.5,
               mr: { xs: 0, lg: 8 },
               flexWrap: "wrap", // Allow buttons to wrap on smaller screens
+              mb:.2
             }}
           >
             {role === "Manager" && (
               <>
-                <Button variant="contained" color="info" size="small" onClick={handleAddPatientClick}>
+                <Button sx={{mb:2}}
+                  variant="contained"
+                  color="info"
+                  size="small"
+                  onClick={handleAddPatientClick}
+                >
                   Add Patient
                 </Button>
+                
               </>
             )}
           </Box>
         )}
       </Box>
-
       <TableContainer component={Paper}>
         <Table>
           <TableHead>

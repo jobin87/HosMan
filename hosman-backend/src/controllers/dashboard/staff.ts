@@ -18,24 +18,36 @@ export const addStaff = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+
+
 export const getStaff = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { staffType } = req.query;
-
-    // If staffType is provided, filter by staffType; otherwise, return all staff
-    const staffData = staffType
-      ? await StaffModel.find({ staffType })
-      : await StaffModel.find();
+    const staffData = await StaffModel.find();
+    console.log("Fetched staff data:", staffData);
 
     if (staffData.length === 0) {
       res.status(404).json({ message: "No staff found" });
-    } else {
-      res.status(200).json({
-        message: staffType ? `Staff of type '${staffType}' fetched successfully` : "All staff fetched",
-        staffData,
-      });
+      return;
     }
+
+
+    // Group staff by staffType
+    const groupedStaff = staffData.reduce((acc: Record<string, any[]>, staff) => {
+      const { staffType } = staff;
+      if (!acc[staffType]) {
+        acc[staffType] = [];
+      }
+      acc[staffType].push(staff);
+      return acc;
+    }, {});
+    console.log("Grouped staff data:", JSON.stringify(groupedStaff, null, 2));
+
+    res.status(200).json({
+      message: "Staff grouped by staff type",
+      data: groupedStaff,
+    });
   } catch (error) {
     res.status(500).json({ message: "Internal server error", error });
   }
 };
+

@@ -39,16 +39,31 @@ export const createNewStaff = createAsyncThunk('addDoctor',
     }
 )
 
-export const requestAllStaffList = createAsyncThunk('all-staff/allStaffList', async (params:staffTypes) => {
-  const response = await makeNetworkCall({
-    method: API_METHODS.GET,
-    url: ENDPOINT_STAFF_GET,
-    data:params
-  });
-  console.log("response:::::::::::",response?.data?.staffData)
-  return response?.data?.staffData
+export const requestAllStaffList = createAsyncThunk(
+  "all-staff/allStaffList",
+  async () => {
+    try {
+      const response = await makeNetworkCall({
+        method: API_METHODS.GET,
+        url: ENDPOINT_STAFF_GET,
+      });
 
-});
+      console.log("Full API Response:", response);
+
+      if (!response?.data) {
+        throw new Error("No data received from API");
+      }
+
+      console.log("Staff Data:", response?.data?.data);
+      return response?.data?.data ?? []; // ✅ Ensure it never returns `undefined`
+    } catch (error) {
+      console.error("Error fetching staff list:", error);
+      throw error;
+    }
+  }
+);
+
+
 
 
 //add treatment

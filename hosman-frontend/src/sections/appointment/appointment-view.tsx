@@ -14,6 +14,7 @@ import { useAppDispatch, useAppSelector } from 'src/store';
 import { getAppointmentData, requestAppointmentSaved } from 'src/store/appointment/appointmentThunk';
 import { requestAllStaffList } from 'src/store/all-staff/allStaffThunk';
 import { paths } from 'src/routes/paths';
+import { LoadingButton } from '@mui/lab';
 
 // Validation schema using Zod
 const AppointmentSchema = zod.object({
@@ -43,7 +44,7 @@ export function AppointmentForm() {
   useEffect(() => {
     const fetchDoctorData = async () => {
       try {
-        await dispatch(requestAllStaffList(data));
+        await dispatch(requestAllStaffList());
       } catch (error) {
         console.error('Error fetching doctors data:', error);
       }
@@ -83,28 +84,29 @@ export function AppointmentForm() {
   const selectedDepartment = watch('department');
 
   useEffect(() => {
-    if (data && Array.isArray(data)) {
-      // Step 1: Get unique departments from the doctor data
+    if (data && typeof data === 'object') {
+      // Extract the doctors array from the data object
+      const doctorsList = data.Doctor || []; // Ensure it defaults to an empty array
+  
+      // Step 1: Get unique departments from doctors
       const uniqueDepartments = Array.from(
-        new Set(data.filter((staff: any) => staff.staffType === 'Doctor').map((staff: any) => staff.department))
+        new Set(doctorsList.map((staff: any) => staff.department))
       );
-      
-      // Step 2: Set departments for the department select field
+  
       setAvailableDepartments(uniqueDepartments);
   
-      // Step 3: Filter doctors based on the selected department
+      // Step 2: Filter doctors based on selected department
       if (selectedDepartment) {
-        const filtered = data.filter(
-          (staff: any) => staff.department === selectedDepartment && staff.staffType === 'Doctor'
+        const filtered = doctorsList.filter(
+          (staff: any) => staff.department === selectedDepartment
         );
-        setFilteredDoctors(filtered);  // Filter doctors based on department
+        setFilteredDoctors(filtered);
       } else {
-        setFilteredDoctors([]);  // Reset if no department is selected
+        setFilteredDoctors([]); // Reset if no department is selected
       }
     }
-  }, [data, selectedDepartment]);  // Trigger when data or selectedDepartment changes
+  }, [data, selectedDepartment]); // Ensure the effect runs when data or department changes
   
-
   // Form submission handler
   const onSubmit = handleSubmit(async (formData) => {
     try {
@@ -160,6 +162,11 @@ export function AppointmentForm() {
             ))}
           </Field.Select>
         </Box>
+        <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+          <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+            Book Appointment
+          </LoadingButton>
+        </Stack>
 
       </Card>
     </Form>

@@ -1,6 +1,7 @@
 import { paths } from "src/routes/paths";
 import { CONFIG } from "src/config-global";
 import { SvgColor } from "src/components/svg-color";
+import { useUser } from "src/hooks/use-user";
 
 // Assuming the user role is available in a context or state
 const userRole = "manager"; // Example, this would be dynamic based on the logged-in user
@@ -45,7 +46,9 @@ const ICONS = {
 };
 
 // Role-based navigation data
-export const navData = [
+export const navData = () => {
+  const {role} = useUser()
+return [
   /**
    * Management
    */
@@ -91,13 +94,13 @@ export const navData = [
     subheader: "Settings",
     items: [
       {
-        title: "Inventory",
-        path: paths.dashboard.settings.staff.list,icon:ICONS.inventory
-      },
-      {
-        title: "staffManagement",
-        path: paths.dashboard.staff.staffManagement,icon:ICONS.inventory
+        title: userRole === "manager" ? "Staff Management" : "Community",
+        path: userRole === "manager" 
+          ? paths.dashboard.staff.staffManagement 
+          : paths.dashboard.Roles,
+        icon: ICONS.inventory,
       },
     ],
-  },
-];
+  }
+]
+}

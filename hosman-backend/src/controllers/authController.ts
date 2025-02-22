@@ -21,11 +21,11 @@ const transporter = nodemailer.createTransport({
 
 export const signup = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { userName, role, userRegNum, userEmail, password, zipCode } =
+    const { userName, role, userRegNum, specialization, userEmail, password, zipCode } =
       req.body;
 
     // Check if all fields are provided
-    if (!userName || !userEmail || !password) {
+    if (!userName || !userEmail || !password ) {
       res
         .status(400)
         .json({ success: false, message: "All fields are required" });
@@ -68,6 +68,11 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
         .status(400)
         .json({ success: false, message: "regNumber is required" });
     }
+    if (!specialization) {
+      res
+        .status(400)
+        .json({ success: false, message: "specialization is required" });
+    }
 
     if (!zipCode) {
       res.status(400).json({ success: false, message: "zipcode is required" });
@@ -82,6 +87,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
     const newUser = new User({
       userName,
       userEmail,
+      specialization,
       password: hashedPassword,
       role: role,
       isVerified: false,
@@ -203,13 +209,49 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       SECRET_KEY,
       { expiresIn: "1h" }
     );
-    const doctorsdata = await Doctor.find();
+
+    // Store session in the database
+    let existingSession = await Session.findOne({ userId: existingUser._id }).sort({ loginTime: -1 });
+
+    if (existingSession) {
+      // Update existing session instead of creating a new one
+      existingSession.token = token;
+      existingSession.deviceId = req.headers["user-agent"] || "Unknown Device";
+      existingSession.ipAddress = req.ip || "Unknown IP";
+      existingSession.loginTime = new Date();
+      existingSession.isActive = true;
+      existingSession.logoutTime = null;
+      existingSession.role = existingUser.role;
+      existingSession.userName = existingUser.userName;
+      existingSession.specialization = existingUser.specialization;
+
+
+
+      await existingSession.save();
+    } else {
+      // Create a new session if no active session exists
+      await Session.create({
+        userId: existingUser._id,
+        token,
+        userName: existingUser.userName,
+        specialization: existingUser.specialization, 
+        role :existingUser.role,
+        deviceId: req.headers["user-agent"] || "Unknown Device",
+        ipAddress: req.ip || "Unknown IP",
+        isActive: true,
+
+      });
+    }
+
+
     res.cookie("authToken", token, {
-      httpOnly: true, // Prevents client-side JavaScript access
-      secure: process.env.NODE_ENV === "production", // Use secure cookies in production
-      sameSite: "strict", // Prevent CSRF attacks
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
       maxAge: 60 * 60 * 1000, // 1 hour expiration
     });
+
+
     res.status(200).json({
       success: true,
       message: "Login successful",
@@ -221,8 +263,6 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       role: existingUser.role,
       photoURL:
         "https://i.pinimg.com/736x/3b/33/47/3b3347c6e29f5b364d7b671b6a799943.jpg",
-      doctorsdata
-      
     });
   } catch (err) {
     console.error("Login Error:", err);
@@ -232,7 +272,6 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
 export const logout = async (req: Request, res: Response): Promise<void> => {
   try {
-    // Check if token is provided in the authorization header or cookie
     const authHeader = req.headers.authorization;
     const token =
       authHeader && authHeader.startsWith("Bearer ")
@@ -240,166 +279,51 @@ export const logout = async (req: Request, res: Response): Promise<void> => {
         : req.cookies.authToken;
 
     if (!token) {
-       res
-        .status(400)
-        .json({ success: false, message: "No token provided" });
+      res.status(400).json({ success: false, message: "No token provided" });
+      return;
     }
 
-    // Optional: You can check the token's validity here if needed (optional depending on your setup)
-    // jwt.verify(token, SECRET_KEY); // This step may not be necessary for simple logout
+    // Find the session with this token
+    const session = await Session.findOne({ token });
 
-    // Clear the token in the cookie
+    if (session) {
+      // Mark the session as inactive, but keep the role
+      await Session.updateOne(
+        { _id: session._id },
+        { isActive: false, logoutTime: new Date() }
+      );
+    }
+
+    // Clear the auth cookie
     res.clearCookie("authToken", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // Ensure secure cookies in production
+      secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
     });
 
-    // Optionally deactivate the session if you're storing sessions in your database (optional)
-    const session = await Session.findOne({ token });
-    if (session) {
-      session.isActive = false;
-      session.logoutTime = new Date();
-      await session.save();
-    }
-
-    // Respond with success message
-    res.status(200).json({ success: true, message: "Logout successful", loggedOut:true });
+    res.status(200).json({ success: true, message: "Logout successful", loggedOut: true });
   } catch (error: any) {
-    res
-      .status(500)
-      .json({ success: false, message: "Logout failed", error: error.message });
+    res.status(500).json({ success: false, message: "Logout failed", error: error.message });
   }
 };
 
+export const sessions = async (req: Request, res: Response): Promise<void> => {
+  try {
 
+    const sessions = await Session.find().sort({ loginTime: -1 });
 
+    if (!sessions.length) {
+      res.status(404).json({ success: false, message: "No sessions found" });
+      return;
+    }
 
-// export const checkEmailExist = async (req: Request, res: Response): Promise<void> => {
-//   try {
-//     const { email } = req.body;
+    res.status(200).json({
+      success: true,
+      message: "Sessions retrieved successfully",
+      sessions,
+    });
+  } catch  (error) {
+    res.status(500).json({ success: false, message: "Internal Server Error", error });
 
-//     // Check if email fields are provided
-//     if (!email) {
-//       res.status(400).json({ success: false, message: 'Email field is empty' });
-//       return;
-//     }
-
-//     // Validate email format
-//     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-//     if (!emailRegex.test(email)) {
-//       res.status(400).json({ success: false, message: 'Invalid email format' });
-//       return;
-//     }
-
-//     // Check if the email already exists
-//     const existingUser = await User.findOne({ email });
-//     if (existingUser) {
-//       res.status(400).json({ success: false, message: 'User exists with this email so login with that' });
-//       return;
-//     }
-
-//     // If email is available, send success response
-//     res.status(200).json({ success: true, message: 'Email is available move to sign in' });
-
-//   } catch (error) {
-//     res.status(500).json({ success: false, message: 'Internal Server Error', error });
-//   }
-// };
-
-// export const login = async (req: Request, res: Response): Promise<void> => {
-//   try {
-//     const { email, password } = req.body;
-
-//     // Find the user by email
-//     const user = await User.findOne({ email});
-//     if (!user) {
-//       res.status(400).json({ success: false, message: 'Invalid email or password' });
-//       return;
-//     }
-
-//     // Compare the password with the hashed password
-//     const isPasswordCorrect = await bcrypt.compare(password, user.password);
-//     if (!isPasswordCorrect) {
-//       res.status(400).json({ success: false, message: 'Invalid email or password' });
-//       return;
-//     }
-
-//     // Generate a JWT token
-//     const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET || SECRET_KEY, { expiresIn: '1h' });
-
-//     // Fetch movies from JSON file
-//     const filepath = path.join(__dirname, "../../contentjson/content.json");
-//     const fileData = fs.readFileSync(filepath, "utf-8");
-//     const movieData = JSON.parse(fileData);
-
-//     // Filter movies and series
-//     const movies = movieData.filter((item: any) => item.Type === "movie");
-//     const series = movieData.filter((item: any) => item.Type === "series");
-//     const anime = movieData.filter((item: any) => item.Type === "anime");
-
-//     res.cookie('authToken', token, {
-//       httpOnly: true,
-//       secure: process.env.NODE_ENV === "production",
-//       maxAge: 60 * 60 * 1000,
-//     });
-
-//     // Respond with the success message and token
-//     res.status(200).json({
-//       success: true,
-//       token,
-//       user: { id: user._id, email: user.email , username: user.username },
-//       movies,
-//       series,
-//       anime,
-//     });
-//   } catch (error) {
-//     res.status(500).json({ success: false, message: 'Internal Server Error', error });
-//   }
-// };
-
-// export const logout = async (req: Request, res: Response): Promise<void> => {
-//   try {
-//     res.clearCookie('authToken'); // Clear the cookie on logout
-//     res.status(200).json({ LoggedOut: true, message: 'Logout successful' });
-//   } catch (error) {
-//     res.status(500).json({ success: false, message: 'Server error', error });
-//   }
-// };
-
-// export const getAllUsers = async (req: Request, res: Response): Promise<void> => {
-//   try {
-//     // Retrieve all users from the database
-//     const users = await User.find();
-
-//     res.status(200).json({
-//       success: true,
-//       message: 'Users retrieved successfully',
-//       users,
-//     });
-//   } catch (error) {
-//     res.status(500).json({ success: false, message: 'Internal Server Error', error });
-//   }
-// };
-
-// export const deleteuser = async (req: Request, res: Response): Promise<void> => {
-//   const { email } = req.params;
-//   try {
-//     console.log(`User with email ${email} is deleting`);
-
-//     // Find and delete the user by email
-//     const deleteduser = await User.findOneAndDelete({ email });
-
-//     if (!deleteduser) {
-//       // User not found
-//       res.status(404).json({ success: false, message: 'User not found' });
-//       return;
-//     }
-
-//     // Successfully deleted user
-//     res.status(200).json({ success: true, message: 'User deleted successfully' });
-//   } catch (error) {
-//     // Handle unexpected errors
-//     res.status(500).json({ success: false, message: 'An error occurred while deleting the user', error });
-//   }
-// };
+  }
+};

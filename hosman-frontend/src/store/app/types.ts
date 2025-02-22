@@ -101,6 +101,7 @@ export interface SellerDetails {
 export interface UserRegistrationParams {
   role: string | null;
   userName: string;
+  specialization: string;
   userEmail: string;
   password: string;
   userRegNum: string;
@@ -157,6 +158,17 @@ export interface fileListRequestProps {
   docName?: string;
   docType?: string;
   ownerId: string;
+}
+
+export interface ISessionUpdateProps {
+  userId: string;
+  token: string; 
+  deviceId: string;
+  role: string;
+  ipAddress: string;
+  isActive: boolean;
+  loginTime: Date;
+  logoutTime?: Date | null;
 }
 
 export interface IDocumentUpdateProps {

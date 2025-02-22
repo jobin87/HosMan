@@ -33,6 +33,7 @@ export const NewUserSchema = zod.object({
   role: schemaHelper.objectOrNull<string | null>({
     message: { required_error: "Type is required!" },
   }),
+  specialization: zod.string().min(1, { message: "Name is required!" }),
   zipCode: zod
     .string()
     .regex(/^[1-9][0-9]{5}$/, { message: "invalid zipcode" }),
@@ -57,6 +58,7 @@ export function SignUpForm() {
 
   const defaultValues = {
     userName: "",
+    specialization:"",
     userEmail: "",
     userRegNum: "",
     role: "Manager",
@@ -103,7 +105,7 @@ export function SignUpForm() {
     }
   }, [values.role]);
 
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = handleSubmit(async () => {
     const formData = methods.getValues();
     try {
       const response = await dispatch(
@@ -162,6 +164,11 @@ export function SignUpForm() {
               {...methods.register}
               name="userName"
               label={fullnamePlaceHolder}
+            />
+             <Field.Text
+              {...methods.register}
+              name="specialization"
+              label="specialization"
             />
             <Field.Text
               {...methods.register}

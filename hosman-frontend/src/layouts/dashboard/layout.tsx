@@ -58,7 +58,7 @@ export function DashboardLayout({ sx, children, header, data }: DashboardLayoutP
 
   const layoutQuery: Breakpoint = 'lg';
 
-  const navData = data?.nav ?? dashboardNavData;
+  const navData = data?.nav ?? dashboardNavData();
 
   const isNavMini = settings.navLayout === 'mini';
   const isNavHorizontal = settings.navLayout === 'horizontal';

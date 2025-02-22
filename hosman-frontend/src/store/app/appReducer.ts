@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { basicInitialState, networkCallInitialState } from '../types';
 import {
   changeDefaultPassword,
-  getAllUserDocuments,
+  requestgetSessions,
   // requestForgetPassword,
   requestResetPassword,
   requestSignInWithPassword,
@@ -19,6 +19,7 @@ const initialState = {
   userLogged: false,
   forgetpassword: networkCallInitialState,
   resetpassword: networkCallInitialState,
+  sessiondetails: networkCallInitialState,
   userDocuments: [],
 
   // ---------------------------------------
@@ -133,6 +134,11 @@ export const appReducer = createSlice({
         };
       })
 
+      //sessions
+      .addCase(requestgetSessions.fulfilled, (state, action) => {
+        state.sessiondetails= action.payload
+      })
+
       // Change Default Password
       .addCase(changeDefaultPassword.fulfilled, (state, action) => {
         console.log('action.payload.defaultPasswordUpdated', action.payload, state);
@@ -140,12 +146,12 @@ export const appReducer = createSlice({
           state.auth.data.defaultPassword = false;
         }
       })
-      .addCase(getAllUserDocuments.fulfilled, (state, action) => {
-        console.log('action.payload.documents', action.payload, state);
-        if (action.payload) {
-          state.userDocuments = action.payload;
-        }
-      });
+      // .addCase(getAllUserDocuments.fulfilled, (state, action) => {
+      //   console.log('action.payload.documents', action.payload, state);
+      //   if (action.payload) {
+      //     state.userDocuments = action.payload;
+      //   }
+      // });
   },
 });
 

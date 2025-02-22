@@ -23,7 +23,7 @@ export function Router() {
     ...onboardingRoutes,
 
     // Dashboard
-    ...dashboardRoutes,
+    ...dashboardRoutes(),
 
     // Main
     ...mainRoutes,

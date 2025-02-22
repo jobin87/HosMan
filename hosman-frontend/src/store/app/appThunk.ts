@@ -12,6 +12,7 @@ import {
   ENDPOINT_DOCUMENT_UPDATE,
   ENDPOINT_FORGOT_PASSWORD,
   ENDPOINT_RESET_PASSWORD,
+  ENDPOINT_SESSION,
   ENDPOINT_UPDATE_PASSWORD,
   ENDPOINT_USER_ONBOARDING_REGISTRATION,
   makeNetworkCall,
@@ -26,6 +27,7 @@ import type {
   IDocumentUpdateProps,
   IForgetPassword,
   IResetPassword,
+   ISessionUpdateProps,
    SignInParams,
 UserRegistrationParams,
 } from './types';
@@ -122,23 +124,42 @@ export const changeDefaultPassword = createAsyncThunk(
   }
 );
 
-// Upload Document
-export const getAllUserDocuments = createAsyncThunk(
-  'app/getDocuments',
-  async (params: fileListRequestProps) => {
-    try {
-      const response = await makeNetworkCall({
-        method: API_METHODS.POST,
-        url: ENDPOINT_DOCUMENT_LIST,
-        data: params,
-      });
-      return response?.data?.data?.documents;
-    } catch (error) {
-      console.error('Error during fetching all documents in:', error);
-      throw error;
-    }
+export const requestgetSessions = createAsyncThunk(
+  'app/getSessions',
+  async(params:ISessionUpdateProps )=>{
+    try{
+    const response = await makeNetworkCall({
+      method: API_METHODS.GET,
+      url: ENDPOINT_SESSION,
+      data: params,
+    });
+    console.log("resdddponsedd:", response)
+    return response?.data?.sessions;
+  } catch (error) {
+    console.error('Error during default password update in:', error);
+    throw error;
   }
+}
 );
+
+
+// Upload Document
+// export const getAllUserDocuments = createAsyncThunk(
+//   'app/getDocuments',
+//   async (params: fileListRequestProps) => {
+//     try {
+//       const response = await makeNetworkCall({
+//         method: API_METHODS.POST,
+//         url: ENDPOINT_DOCUMENT_LIST,
+//         data: params,
+//       });
+//       return response?.data?.data?.documents;
+//     } catch (error) {
+//       console.error('Error during fetching all documents in:', error);
+//       throw error;
+//     }
+//   }
+// );
 
 // export const uploadPresignedUrl = createAsyncThunk(
 //   'app/uploadDocument',

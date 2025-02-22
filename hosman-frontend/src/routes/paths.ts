@@ -35,8 +35,7 @@ export const paths = {
   dashboard: {
     root: `${ROOTS.DASHBOARD}`,
     doctors: {
-      root: `${ROOTS.DASHBOARD}/doctor`,
-      doctorform:`${ROOTS.DASHBOARD}/doctor/doctor-form`
+      root: `${ROOTS.DASHBOARD}/doctors`,
     },
 
     patients: {

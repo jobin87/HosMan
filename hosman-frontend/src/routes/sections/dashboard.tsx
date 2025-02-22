@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useMemo } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import {  AuthGuard} from 'src/guard';
@@ -20,6 +20,8 @@ import ReportDetailsPage from 'src/sections/reports/report-details';
 import RoomsAndCategoryPage from 'src/sections/reports/report-category-form';
 import { StaffRegistrationForm } from 'src/sections/roomsAndStaff/add-staff';
 import StaffManagement from 'src/sections/allStaff-Management/view/staff-view-page';
+import { useUser } from 'src/hooks/use-user';
+import { Doctors } from 'src/sections/doctors/view/doctors';
 
 const IndexPage = lazy(() => import('src/pages/home'));
 
@@ -37,6 +39,7 @@ const ReportPage = lazy(() => import('src/pages/dashboard/reports/reports'));
 
 // ----------------------------------------------------------------------
 
+// Layout wrapper with a loading fallback
 const layoutContent = (
   <DashboardLayout>
     <Suspense fallback={<LoadingScreen />}>
@@ -45,88 +48,72 @@ const layoutContent = (
   </DashboardLayout>
 );
 
-export const dashboardRoutes = [
-  {
-    path: 'dashboard',
-    element: <AuthGuard>{layoutContent}</AuthGuard>,
-    children: [
-      { element: <IndexPage/>, index: true },
-      {
-        path: 'Appointment',
-        children: [
-          { path: 'appointmentList', element: <AppointMentListPage/> },
-          { path: 'department/:id', element: <DepartmentDetails/> },
-          { path: 'appointment-form', element: <FormDetails/> },
+// Component to determine routes based on role
+const DashboardRoutesWrapper = () => {
+  const { role } = useUser();
+  const isManager = role?.toLowerCase() === 'manager';
 
+  // Memoize routes to avoid unnecessary recalculations
+  const routes = useMemo(() => {
+    return [
+      {
+        path: 'dashboard',
+        element: <AuthGuard>{layoutContent}</AuthGuard>,
+        children: [
+          { element: isManager ? <IndexPage /> : <AppointMentListPage />, index: true }, // Dynamic default page
+          {
+            path: 'appointment',
+            children: [
+              { path: 'appointmentList', element: <AppointMentListPage /> },
+              { path: 'department/:id', element: <DepartmentDetails /> },
+              { path: 'appointment-form', element: <FormDetails /> },
+            ],
+          },
+          {
+            path: 'doctors',
+            children: [
+              { element: <Doctors/>, index: true },
+
+            ],
+          },
+          {
+            path: 'patients',
+            children: [
+              { element: <PatientsListPage />, index: true },
+              { path: 'patient-form', element: <AddpatientsData /> },
+            ],
+          },
+          {
+            path: 'treatment',
+            children: [
+              { element: <TreatmentListPage />, index: true },
+              { path: 'add-treatments', element: <AddTreatmentData /> },
+              { path: 'edit-treatments', element: <EditTreatmentData /> },
+            ],
+          },
+          {
+            path: 'report',
+            children: [
+              { element: <ReportPage />, index: true },
+              { path: 'add-report', element: <ReportFormPage /> },
+              { path: 'report-details/:id', element: <ReportDetailsPage /> },
+              { path: 'report-edit', element: <ReportEditForm /> },
+            ],
+          },
+          {
+            path: 'staff',
+            children: [
+              { path: 'add-staff', element: <StaffRegistrationForm /> },
+              { path: 'staff-management', element: <StaffManagement /> },
+            ],
+          },
         ],
       },
-      {
-        path: 'patients',
-        children: [
-          { element: <PatientsListPage/>, index: true },
-          { path: 'Patient-form', element: <AddpatientsData /> },
-        ],
-      },
-      {
-        path: 'doctor',
-        children: [
-          // { element: <DoctorListPage/>, index: true },
+    ];
+  }, [isManager]);
 
-        ],
-      },
-      
-      {
-        path: 'treatment',
-        children: [
-          { element: <TreatmentListPage/>, index: true },
-          { path: 'add-treatments', element: <AddTreatmentData /> },
-          { path: 'edit-treatments', element: <EditTreatmentData /> },
+  return routes;
+};
 
-        ],
-      },
-      {
-        path: 'report',
-        children: [
-          { element: <ReportPage/>, index: true },
-          { path: 'add-report', element: <ReportFormPage/> },
-          { path: 'report-details/:id', element: <ReportDetailsPage/> },
-          { path: 'report-edit', element: <ReportEditForm/> },
-
-
-
-        ],
-      },
-      {
-        path: 'roles',
-        children: [
-          { element: <RoomsAndCategoryPage/>, index: true },
-          { path: 'rooms-and-category', element: <RoomsAndCategoryPage/> },
-
-
-          { path: 'add-report', element: <ReportFormPage/> },
-          { path: 'report-details/:id', element: <ReportDetailsPage/> },
-          { path: 'report-edit', element: <ReportEditForm/> },
-
-
-
-        ],
-      },
-      {
-        path: 'staff',
-        children: [
-          { element: <RoomsAndCategoryPage/>, index: true },
-          { path: 'rooms-and-category', element: <RoomsAndCategoryPage/> },
-          { path: 'add-staff', element: <StaffRegistrationForm/> },
-          { path: 'staff-management', element: <StaffManagement/> },
-          { path: 'report-edit', element: <ReportEditForm/> },
-
-
-
-        ],
-      },
-
-     
-     
-    ],
-  },
-];
+// Export routes function
+export const dashboardRoutes = DashboardRoutesWrapper;

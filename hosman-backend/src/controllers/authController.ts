@@ -283,25 +283,18 @@ export const logout = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const decoded: any = jwt.verify(token, SECRET_KEY);
-    if (!decoded?.id) {
-      res.status(401).json({ success: false, message: "Invalid token" });
-      return;
+    // Find the session with this token
+    const session = await Session.findOne({ token });
+
+    if (session) {
+      // Mark the session as inactive, but keep the role
+      await Session.updateOne(
+        { _id: session._id },
+        { isActive: false, logoutTime: new Date() }
+      );
     }
 
-    const session = await Session.findOneAndUpdate(
-      { userId: decoded.id, token },
-      { isActive: false, logoutTime: new Date(), token: null },
-      { new: true }
-    );
-
-    if (!session) {
-      res.status(400).json({ success: false, message: "Session not found" });
-      return; 
-    }
-
-    console.log("User session updated on logout:", session);
-
+    // Clear the auth cookie
     res.clearCookie("authToken", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -309,18 +302,10 @@ export const logout = async (req: Request, res: Response): Promise<void> => {
     });
 
     res.status(200).json({ success: true, message: "Logout successful", loggedOut: true });
-    return; 
-
   } catch (error: any) {
-    console.error("Logout Error:", error);
-    if (!res.headersSent) {
-      res.status(500).json({ success: false, message: "Logout failed", error: error.message });
-    }
+    res.status(500).json({ success: false, message: "Logout failed", error: error.message });
   }
 };
-
- 
-
 
 export const sessions = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -329,8 +314,7 @@ export const sessions = async (req: Request, res: Response): Promise<void> => {
 
     if (!sessions.length) {
       res.status(404).json({ success: false, message: "No sessions found" });
-      return
-      ;
+      return;
     }
 
     res.status(200).json({

@@ -10,7 +10,6 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useState } from 'react';
-import toast from 'react-hot-toast';
 import { useUser } from 'src/hooks/use-user';
 import { useAppDispatch } from 'src/store';
 
@@ -47,7 +46,7 @@ export function DeviceSessionPage(): React.ReactElement {
               {session?.isCurrentSession ? (
                 <Tooltip title="This will log you out of the current device.">
                   <LoadingButton
-                    variant="soft"
+                    variant="text"
                     color="primary"
                     loading={loading}
                     sx={{ marginLeft: '10px' }}
@@ -57,7 +56,7 @@ export function DeviceSessionPage(): React.ReactElement {
                 </Tooltip>
               ) : (
                 <Button
-                  variant="soft"
+                  variant="text"
                   color="primary"
                   disabled={loading}
                   sx={{ marginLeft: '10px' }}

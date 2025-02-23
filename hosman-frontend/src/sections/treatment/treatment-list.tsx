@@ -46,15 +46,7 @@ export default function TreatmentList() {
     if (treatmentToEdit) {
       console.log("Found treatment to edit:", treatmentToEdit);
 
-      navigate(paths.dashboard.Treatment.edit, {
-        state: {
-          treatmentId: treatmentToEdit._id,
-          treatment: treatmentToEdit.treatment,
-          department: treatmentToEdit.department,
-          specialization: treatmentToEdit.specialization,
-          price: treatmentToEdit.price,
-        },
-      });
+      navigate(paths.dashboard.Treatment.edit);
     } else {
       console.log("Treatment not found for ID:", _id);
     }
@@ -84,13 +76,7 @@ export default function TreatmentList() {
 
     try {
       await dispatch(deleteTreatmentById({ treatmentID: _id }));
-      const treatmentData = {
-        treatment: "",
-        department: "",
-        specialization: "",
-        price: 0,
-        treatmentId: "",
-      };
+      const treatmentData = {} as any;
       await dispatch(requestGetTreatment(treatmentData)); // Re-fetch after deletion
     } catch (error) {
       console.error("Error deleting treatment:", error);
@@ -137,12 +123,13 @@ export default function TreatmentList() {
               gap: 1.5,
               mr: { xs: 0, lg: 8 },
               flexWrap: "wrap", // Allow buttons to wrap on smaller screens
-              mb:.2
+              mb: 0.2,
             }}
           >
             {role === "Manager" && (
               <>
-                <Button sx={{mb:2}}
+                <Button
+                  sx={{ mb: 2 }}
                   variant="contained"
                   color="info"
                   size="small"
@@ -151,7 +138,7 @@ export default function TreatmentList() {
                   Add
                 </Button>
                 <Button
-                sx={{mb:2}}
+                  sx={{ mb: 2 }}
                   variant="contained"
                   color="error"
                   size="small"
@@ -167,61 +154,69 @@ export default function TreatmentList() {
 
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <TableContainer component={Paper}>
-            <Table>
+          <TableContainer component={Paper} sx={{ maxHeight: 900, maxWidth:"auto" }}>
+            <Table size="small">
               <TableHead>
-                <TableRow>
-                  <TableCell>ID</TableCell>
-                  <TableCell>Treatment</TableCell>
-                  <TableCell>Department</TableCell>
-                  <TableCell>Specialization</TableCell>
-                  <TableCell>Price</TableCell>
-                  <TableCell>Actions</TableCell>
+                <TableRow sx={{ height: "50px", }}>
+                  <TableCell sx={{ py: 0.5 }}>ID</TableCell>
+                  <TableCell sx={{ py: 0.5 }}>Treatment</TableCell>
+                  <TableCell sx={{ py: 0.5 }}>Department</TableCell>
+                  <TableCell sx={{ py: 0.5 }}>Specialization</TableCell>
+                  <TableCell sx={{ py: 0.5 }}>Price</TableCell>
+                  {role== "Manager"&&(
+                    
+                  <TableCell sx={{ py: 0.5 }}>Actions</TableCell>
+                  )}
+
                 </TableRow>
               </TableHead>
 
               <TableBody>
                 {treatmentData.map((treatment: any, index: number) => (
-                  <TableRow key={index}>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>{treatment.treatment}</TableCell>
-                    <TableCell>{treatment.department}</TableCell>
-                    <TableCell>{treatment.specialization}</TableCell>
-
-                    <TableCell>{treatment.price}</TableCell>
-
-                    <TableCell>
+                  <TableRow key={index} sx={{ height: "10px" }}>
+                    <TableCell sx={{ py: {
+                      xs:0.2,lg:1.3
+                    } }}>{index + 1}</TableCell>
+                    <TableCell sx={{ py: {
+                      xs:0.2,lg:1.3
+                    } }}>
+                      {treatment.treatment}
+                    </TableCell>
+                    <TableCell sx={{ py: {
+                      xs:0.2,lg:1.3
+                    } }}>
+                      {treatment.department}
+                    </TableCell>
+                    <TableCell sx={{ py: {
+                      xs:0.2,lg:1.3
+                    } }}>
+                      {treatment.specialization}
+                    </TableCell>
+                    <TableCell sx={{ py: {
+                      xs:0.2,lg:1.3
+                    } }}>{treatment.price}</TableCell>
+                    {role== "Manager" && (
+                      <TableCell sx={{ py: {
+                        xs:0.2,lg:1.3
+                      } }}>
                       <Box>
                         <IconButton
-                          onClick={() => {
-                            if (role === "Manager") {
-                              handleEdit(treatment._id);
-                            } else {
-                              console.log(
-                                "Edit functionality is only available for Managers"
-                              );
-                            }
-                          }}
+                          onClick={() => handleEdit(treatment._id)}
                           color="primary"
                         >
-                          <Edit />
+                          <Edit fontSize="small" />
                         </IconButton>
                         <IconButton
-                          onClick={() => {
-                            if (role === "Manager") {
-                              handleDelete(treatment._id);
-                            } else {
-                              console.log(
-                                "Delete functionality is only available for Managers"
-                              );
-                            }
-                          }}
+                          onClick={() => handleDelete(treatment._id)}
                           color="error"
                         >
-                          <Delete />
+                          <Delete fontSize="small" />
                         </IconButton>
                       </Box>
                     </TableCell>
+
+                    )}
+                    
                   </TableRow>
                 ))}
               </TableBody>

@@ -5,11 +5,9 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import ListItemText from '@mui/material/ListItemText';
 import Stack from '@mui/material/Stack';
 import Switch from '@mui/material/Switch';
-import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Form } from 'src/components/hook-form';
 import { useUser } from 'src/hooks/use-user';
-import { useAppDispatch } from 'src/store';
 
 type NotificationId =
   | 'generalNotificationsEnabled'
@@ -63,9 +61,7 @@ export function AccountNotifications() {
   const defaultValues = {
     browserNotificationsEnabled: data?.browserNotificationsEnabled,
     generalNotificationsEnabled: data?.generalNotificationsEnabled,
-    kaartxUpdatesEnabled: data?.kaartxUpdatesEnabled,
     newsAndAnnouncementsEnabled: data?.newsAndAnnouncementsEnabled,
-    sellerNotificationsEnabled: data?.sellerNotificationsEnabled,
     weeklyUpdatesEnabled: data?.weeklyUpdatesEnabled,
   };
 

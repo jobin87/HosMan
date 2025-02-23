@@ -19,7 +19,9 @@ const newStaffSchema = zod.object({
   Name: zod.string().min(1, { message: "Name is required" }),
   staffRegId: zod.string().min(1, { message: "Registration ID is required" }),
   experience: zod.string().min(1, { message: "Experience is required" }),
-  department: zod.string().min(1, { message: "Specialization is required" }),
+  department: zod.string().min(1, { message: "department is required" }),
+  Specialization: zod.string().min(1, { message: "Specialization is required" }),
+
   contactNumber: zod
     .string()
     .min(10, { message: "Contact number must be at least 10 digits" })
@@ -34,6 +36,7 @@ export const StaffRegistrationForm = () => {
     staffType: "",
     experience:"",
     department:"",
+    specialization:"",
     staffRegId: "",
     contactNumber: "",
   };
@@ -85,6 +88,8 @@ export const StaffRegistrationForm = () => {
           <Field.Text label="Registration ID" {...methods.register("staffRegId")} />
           <Field.Text label="Experience" {...methods.register("experience")} />
           <Field.Text label="department" {...methods.register("department")} />
+          <Field.Text label="specialization" {...methods.register("Specialization")} />
+
           <Field.Text label="Contact Number" {...methods.register("contactNumber")} />
           {errors.contactNumber && <span>{errors.contactNumber.message}</span>}
         </Box>

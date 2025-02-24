@@ -1,4 +1,3 @@
-
 import {
   Box,
   Typography,
@@ -99,21 +98,10 @@ export default function StaffsListingPage() {
                     "&:hover": { transform: "scale(1.05)" },
                   }}
                 >
-                  <CardContent
-                    sx={{
-                      width: "100%",
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                    }}
-                  >
+                  <CardContent>
                     <Typography
                       variant={isXs ? "body1" : "h6"}
-                      sx={{
-                        fontWeight: "bold",
-                        textAlign: "center", // Ensure alignment
-                        wordBreak: "break-word", // Allow name wrapping
-                      }}
+                      sx={{ fontWeight: "bold", textAlign: "center" }}
                     >
                       {department}
                     </Typography>
@@ -160,21 +148,10 @@ export default function StaffsListingPage() {
                     "&:hover": { transform: "scale(1.05)" },
                   }}
                 >
-                  <CardContent
-                    sx={{
-                      width: "100%",
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                    }}
-                  >
+                  <CardContent>
                     <Typography
                       variant={isXs ? "body1" : "h6"}
-                      sx={{
-                        fontWeight: "bold",
-                        textAlign: "center", // Ensure alignment
-                        wordBreak: "break-word", // Allow name wrapping
-                      }}
+                      sx={{ fontWeight: "bold", textAlign: "center" }}
                     >
                       {department}
                     </Typography>

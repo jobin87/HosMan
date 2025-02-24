@@ -3,13 +3,13 @@ import { Typography, Box, Button } from "@mui/material";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 
 const currentYearData = [
-  { date: "Jan", discharged: 80 },
+  { date: "Jan", discharged: 60 },
   { date: "Feb", discharged: 95 },
 ];
 
 const lastYearData = [
-  { date: "Jan", discharged: 80 },
-  { date: "Feb", discharged: 95 },
+  { date: "Jan", discharged: 60 },
+  { date: "Feb", discharged: 45 },
   { date: "Mar", discharged: 70 },
   { date: "Apr", discharged: 110 },
   { date: "May", discharged: 85 },

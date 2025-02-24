@@ -13944,6 +13944,7 @@
     "react-phone-number-input": "^3.4.11",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.1.5",
+    "recharts": "^2.15.1",
     "redux-deep-persist": "^1.0.7",
     "redux-persist": "^6.0.0",
     "simplebar-react": "^3.3.0",

@@ -19,7 +19,7 @@ export const SecondGrid = () => {
 
 
   return (
-    <Box sx={{ p: 3 }}>
+    <Box sx={{ mt:3 }}>
       {/* Header */}
       <Typography
         variant="h6"

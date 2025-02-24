@@ -84,7 +84,7 @@ export default function ReportListView() {
               </CardContent>
               <Button
                 variant="contained"
-                color="success"
+                color="info"
                 onClick={() => handleCategoryClick(category._id)}
                 sx={{
                   fontSize: "0.75rem",

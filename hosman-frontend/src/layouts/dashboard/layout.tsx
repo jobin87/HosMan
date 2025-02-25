@@ -12,7 +12,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 // import { _contacts, _notifications } from 'src/_mock';
 
 import { Logo } from 'src/components/logo';
-import { useSettingsContext } from 'src/components/settings';
+import { SettingsDrawer, useSettingsContext } from 'src/components/settings';
 
 import { Main } from './main';
 import { NavMobile } from './nav-mobile';
@@ -147,6 +147,7 @@ export function DashboardLayout({ sx, children, header, data }: DashboardLayoutP
             ),
             rightArea: (
               <Box display="flex" alignItems="center" gap={{ xs: 0, sm: 0.75 }}>
+                <SettingsDrawer/>
                 <AccountDrawer data={_account} />
               </Box>
             ),

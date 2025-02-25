@@ -8,10 +8,7 @@ import { dashboardRoutes } from './routes/dashboardRoutes';
 dotenv.config({ path: '.env.development' });
 const app = express();
 
-app.use(cors({
-  origin: 'http://localhost:5173',  // Allow frontend access
-  credentials: true                 // Allow cookies if needed
-}));
+app.use(cors());
 
 // Middleware
 app.use(express.json());

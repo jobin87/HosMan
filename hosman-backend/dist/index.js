@@ -9,9 +9,11 @@ const db_1 = require("./config/db");
 const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
 const cors_1 = __importDefault(require("cors"));
 const dashboardRoutes_1 = require("./routes/dashboardRoutes");
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
 dotenv_1.default.config({ path: '.env.development' });
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
+app.use((0, cookie_parser_1.default)());
 // Middleware
 app.use(express_1.default.json());
 (0, db_1.connectDb)();

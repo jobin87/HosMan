@@ -4,11 +4,15 @@ import { connectDb } from './config/db';
 import authRoutes from './routes/authRoutes';
 import cors from 'cors'
 import { dashboardRoutes } from './routes/dashboardRoutes';
+import cookieParser from "cookie-parser";
 
 dotenv.config({ path: '.env.development' });
 const app = express();
 
 app.use(cors());
+
+app.use(cookieParser());
+
 
 // Middleware
 app.use(express.json());

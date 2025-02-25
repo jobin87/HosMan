@@ -1,14 +1,11 @@
 import { Request, Response } from "express";
 import fs from "fs";
 import jwt from "jsonwebtoken";
-import path from "path";
 import User from "../models/user";
 import Session from "../models/session";
 const SECRET_KEY = "112eryt33";
 import nodemailer from "nodemailer";
 import crypto from "crypto";
-import { promises } from "readline";
-import Doctor from "../models/dashboard/staff";
 import bcrypt from 'bcryptjs';
 
 

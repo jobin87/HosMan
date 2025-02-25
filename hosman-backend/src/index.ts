@@ -9,10 +9,14 @@ import cookieParser from "cookie-parser";
 dotenv.config({ path: '.env.development' });
 const app = express();
 
+const authBaseUrl = process.env.VITE_AUTH_BASE_URL;
+
 app.use(
   cors({
-    origin: "http://localhost:5173", // Allow frontend to access API
-    credentials: true, // Enable cookies/auth headers
+    origin: "http://localhost:5173", // Allow frontend URL
+    credentials: true, // Allow cookies & authentication headers
+    methods: "GET,POST,PUT,DELETE", // Allow these request methods
+    allowedHeaders: "Content-Type,Authorization", // Allow these headers
   })
 );
 app.use(cookieParser());

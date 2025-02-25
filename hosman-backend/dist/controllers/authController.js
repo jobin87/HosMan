@@ -13,13 +13,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sessions = exports.logout = exports.login = exports.verifyEmail = exports.signup = void 0;
-const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = __importDefault(require("../models/user"));
 const session_1 = __importDefault(require("../models/session"));
 const SECRET_KEY = "112eryt33";
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const crypto_1 = __importDefault(require("crypto"));
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const transporter = nodemailer_1.default.createTransport({
     service: "Gmail",
     auth: {
@@ -80,7 +80,7 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             res.status(400).json({ success: false, message: "zipcode is required" });
         }
         // Hash the password
-        const hashedPassword = yield bcrypt_1.default.hash(password, 10);
+        const hashedPassword = yield bcryptjs_1.default.hash(password, 10);
         const verificationToken = crypto_1.default.randomBytes(32).toString("hex");
         // Create a new user and save it to the database
         const newUser = new user_1.default({
@@ -175,7 +175,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             return;
         }
         // Validate password
-        const isPasswordCorrect = yield bcrypt_1.default.compare(password, existingUser.password);
+        const isPasswordCorrect = yield bcryptjs_1.default.compare(password, existingUser.password);
         console.log("Password Match:", isPasswordCorrect);
         if (!isPasswordCorrect) {
             res.status(400).json({ success: false, message: "Incorrect password" });

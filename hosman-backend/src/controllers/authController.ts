@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import fs from "fs";
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import path from "path";
 import User from "../models/user";
@@ -10,6 +9,8 @@ import nodemailer from "nodemailer";
 import crypto from "crypto";
 import { promises } from "readline";
 import Doctor from "../models/dashboard/staff";
+import bcrypt from 'bcryptjs';
+
 
 const transporter = nodemailer.createTransport({
   service: "Gmail",

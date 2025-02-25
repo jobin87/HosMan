@@ -9,8 +9,12 @@ import cookieParser from "cookie-parser";
 dotenv.config({ path: '.env.development' });
 const app = express();
 
-app.use(cors());
-
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Allow frontend to access API
+    credentials: true, // Enable cookies/auth headers
+  })
+);
 app.use(cookieParser());
 
 

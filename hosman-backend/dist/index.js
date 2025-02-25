@@ -11,10 +11,7 @@ const cors_1 = __importDefault(require("cors"));
 const dashboardRoutes_1 = require("./routes/dashboardRoutes");
 dotenv_1.default.config({ path: '.env.development' });
 const app = (0, express_1.default)();
-app.use((0, cors_1.default)({
-    origin: 'http://localhost:5173', // Allow frontend access
-    credentials: true // Allow cookies if needed
-}));
+app.use((0, cors_1.default)());
 // Middleware
 app.use(express_1.default.json());
 (0, db_1.connectDb)();

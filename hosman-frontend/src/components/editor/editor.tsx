@@ -7,7 +7,7 @@ import TextAlignExtension from '@tiptap/extension-text-align';
 import PlaceholderExtension from '@tiptap/extension-placeholder';
 import { useState, useEffect, forwardRef, useCallback } from 'react';
 import CodeBlockLowlightExtension from '@tiptap/extension-code-block-lowlight';
-import { useEditor, EditorContent, ReactNodeViewRenderer } from '@tiptap/react';
+import { useEditor, EditorContent, ReactNodeViewRenderer, NodeViewProps } from '@tiptap/react';
 
 import Stack from '@mui/material/Stack';
 import Portal from '@mui/material/Portal';
@@ -79,7 +79,7 @@ export const Editor = forwardRef<HTMLDivElement, EditorProps>(
         }),
         CodeBlockLowlightExtension.extend({
           addNodeView() {
-            return ReactNodeViewRenderer(CodeHighlightBlock);
+            return ReactNodeViewRenderer(CodeHighlightBlock as unknown as React.FC<NodeViewProps>);
           },
         }).configure({ lowlight, HTMLAttributes: { class: editorClasses.content.codeBlock } }),
       ],

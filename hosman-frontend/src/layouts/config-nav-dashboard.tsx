@@ -119,5 +119,15 @@ export const navData = () => {
         },
       ],
     },
+    {
+      subheader:  "user-end appointment booking",
+      items: [
+        {
+          title: "appointment-book",
+          path: paths.dashboard.Appointment.form, // Ensure correct community path
+          icon: ICONS.inventory,
+        },
+      ],
+    },
   ];
 };

@@ -42,7 +42,11 @@ const userSchema = new mongoose.Schema(
     verificationToken: {
       type: String,  // <-- Add this field
     },
-    photoURL: { type: String, default: "" }
+    photoURL: {
+      type: [String], // Change from a single string to an array of strings
+      default: [],
+    },
+
   },
   { timestamps: true }
 );

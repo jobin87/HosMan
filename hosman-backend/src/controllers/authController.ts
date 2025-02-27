@@ -7,6 +7,10 @@ const SECRET_KEY = "112eryt33";
 import nodemailer from "nodemailer";
 import crypto from "crypto";
 import bcrypt from 'bcryptjs';
+import { AuthRequest } from "../middlewares/authMiddlewares";
+import multer from "multer";
+import path from "path";
+
 
 
 const transporter = nodemailer.createTransport({
@@ -16,6 +20,20 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASS, // App Password
   },
 });
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/"); // ✅ Store in "uploads" folder
+  },
+  filename: (req, file, cb) => {
+    const userId = req.body.userId; // ✅ Get `userId` from request body
+    if (!userId) {
+      return cb(new Error("User ID is required"), "default-image.jpg");
+    }
+    cb(null, `${userId}-${Date.now()}${path.extname(file.originalname)}`);
+  },
+});
+
+const upload = multer({ storage });
 
 export const signup = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -266,7 +284,50 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     console.error("Login Error:", err);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
+};  
+
+export const updateProfile = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    // ✅ Ensure `req.user` is set by the authentication middleware
+    if (!req.user || !req.user.id) {
+      res.status(401).json({ success: false, message: "Unauthorized access" });
+      return;
+    }
+
+    const userId = req.user.id; // ✅ Get user ID from authenticated request
+
+    // ✅ Ensure a file was uploaded
+    if (!req.file) {
+      res.status(400).json({ success: false, message: "No image uploaded" });
+      return;
+    }
+
+    const newImageUrl = `/uploads/${req.file.filename}`;
+
+    // ✅ Find the user and update their profile image
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { photoURL: newImageUrl },
+      { new: true }
+    );
+
+    if (!user) {
+      res.status(404).json({ success: false, message: "User not found" });
+      return;
+    }
+
+    res.json({
+      success: true,
+      message: "Profile image updated successfully",
+      photoURL: user.photoURL,
+    });
+  } catch (error) {
+    console.error("Error updating profile image:", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
 };
+
+
 
 export const logout = async (req: Request, res: Response): Promise<void> => {
   try {

@@ -1,9 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { basicInitialState, networkCallInitialState } from '../types';
+import {  basicInitialState, networkCallInitialState } from '../types';
 import {
   changeDefaultPassword,
   requestgetSessions,
+  requestProfilePhoto,
   // requestForgetPassword,
   requestResetPassword,
   requestSignInWithPassword,
@@ -20,7 +21,7 @@ const initialState = {
   forgetpassword: networkCallInitialState,
   resetpassword: networkCallInitialState,
   sessiondetails: networkCallInitialState,
-  userDocuments: [],
+  profilePhoto: basicInitialState,
 
   // ---------------------------------------
   onboarding: {
@@ -84,6 +85,26 @@ export const appReducer = createSlice({
       .addCase(requestSignInWithPassword.rejected, (state, action) => {
         state.auth.error = action.error;
         state.auth.loading = false;
+      })
+
+
+
+      .addCase(requestProfilePhoto.fulfilled, (state, action) => {
+        state.profilePhoto.loading = false;
+        state.profilePhoto.data = action.payload;
+
+        const { data} = action.payload;
+
+        if (data.photoURL) {
+          console.log("hejuuyto hoto")
+        }
+      })
+      .addCase(requestProfilePhoto.pending, (state) => {
+        state.profilePhoto.loading = true;
+      })
+      .addCase(requestProfilePhoto.rejected, (state, action) => {
+        state.profilePhoto.error = action.error;
+        state.profilePhoto.loading = false;
       })
 
       // Seller Registration

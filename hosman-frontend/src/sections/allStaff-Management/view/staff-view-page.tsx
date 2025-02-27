@@ -7,8 +7,11 @@ import {
   Divider,
   useMediaQuery,
   useTheme,
+  Button,
 } from "@mui/material";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { paths } from "src/routes/paths";
 import { useAppDispatch, useAppSelector } from "src/store";
 import { requestAllStaffList } from "src/store/all-staff/allStaffThunk";
 
@@ -17,10 +20,13 @@ export default function StaffsListingPage() {
   const theme = useTheme();
   const isXs = useMediaQuery(theme.breakpoints.down("sm")); // Check if screen is xs
 
+  const navigate = useNavigate();
+
   // Get staff data categorized by department
   const staffGroups: Record<string, any[]> = useAppSelector(
     (state) => state.allstaff.getStaffDetails?.data || {}
   );
+  console.log("staffertte:", staffGroups)
 
   // Define medical staff categories
   const medicalRoles = new Set([
@@ -57,6 +63,13 @@ export default function StaffsListingPage() {
     0
   );
 
+  const handleAddStaff = () => {
+    navigate(paths.dashboard.staff.addStaff);
+  };
+  const handleStaffClick = (department:string) => {
+    navigate(`${paths.dashboard.Appointment.department.replace(":id", department)}`);
+  };
+
   useEffect(() => {
     dispatch(requestAllStaffList());
   }, [dispatch]);
@@ -64,13 +77,24 @@ export default function StaffsListingPage() {
   return (
     <Box sx={{ p: 3 }}>
       {/* Total Staff Count */}
-      <Typography
-        variant={isXs ? "h6" : "h5"}
-        sx={{ mb: 3, fontWeight: "bold", textAlign: "center" }}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 3,
+        }}
       >
-        Total Staff: {totalStaffCount}
-      </Typography>
+        {/* Total Staff Count on the left */}
+        <Typography variant={isXs ? "h6" : "h5"} sx={{ fontWeight: "bold" }}>
+          Total Staff: {totalStaffCount}
+        </Typography>
 
+        {/* Add Staff Button on the right */}
+        <Button variant="contained" onClick={handleAddStaff}>
+          Add Staff
+        </Button>
+      </Box>
       {/* Medical Staff Section */}
       {medicalStaff.length > 0 && (
         <>
@@ -96,7 +120,10 @@ export default function StaffsListingPage() {
                     borderRadius: 2,
                     transition: "transform 0.2s ease-in-out",
                     "&:hover": { transform: "scale(1.05)" },
+                    
+                    
                   }}
+                  
                 >
                   <CardContent>
                     <Typography
@@ -112,6 +139,13 @@ export default function StaffsListingPage() {
                       Staff Count: {staffList.length}
                     </Typography>
                   </CardContent>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    // onClick={() => handleStaffClick(department.)}
+                  >
+                    View
+                  </Button>
                 </Card>
               </Grid>
             ))}

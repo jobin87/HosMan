@@ -12,6 +12,11 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import  appointmentImage from "src/assets/appointment.jpg";
+import  doctormanageImage from "src/assets/doctor-manage.png";
+import  reportsmanageImage from "src/assets/reports.png";
+
+
 
 export default function OnBoardingView() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -23,25 +28,19 @@ export default function OnBoardingView() {
       title: "Appointment Management",
       description:
         "Manage patient appointments, view doctor availability, and handle scheduling.",
-      image: "/images/appointments.svg",
-    },
-    {
-      title: "Doctors Management",
-      description:
-        "View doctor profiles, assign shifts, and track doctor schedules.",
-      image: "/images/doctors.svg",
+      image: appointmentImage,
     },
     {
       title: "Staff Management",
       description:
         "Manage hospital staff, assign roles, and track staff performance.",
-      image: "/images/staff.svg",
+      image: doctormanageImage,
     },
     {
       title: "Reports",
       description:
         "Generate reports on appointments, patient data, and staff performance.",
-      image: "/images/reports.svg",
+      image: reportsmanageImage,
     },
   ];
 
@@ -55,7 +54,7 @@ export default function OnBoardingView() {
     setOpenSnackbar(true); // Show toast before navigation
     setTimeout(() => {
       navigate("/dashboard"); // Navigate after a delay
-    }, 2000); // Delay to show the toast before redirecting
+    }, 600); // Delay to show the toast before redirecting
   };
 
   return (

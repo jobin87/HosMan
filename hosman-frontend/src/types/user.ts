@@ -160,6 +160,7 @@ export type IUserDetails = {
   sessions?: IUserSessionProps[];
   permissionId: string;
   photoURL:string;
+  currentProfile: string;
   newsAndAnnouncementsEnabled: boolean;
   weeklyUpdatesEnabled: boolean;
   generalNotificationsEnabled: boolean;

@@ -1,5 +1,5 @@
 import express from 'express';
-import {  login, logout, sessions, signup, verifyEmail } from '../controllers/authController';
+import {  login, logout, sessions, signup, updateProfile, verifyEmail } from '../controllers/authController';
 import { checkSession } from '../middlewares/authMiddlewares';
 
 const authRoutes = express.Router();
@@ -115,6 +115,11 @@ const authRoutes = express.Router();
  *       500:
  *         description: Internal server error
  */
+
+  
+  // ✅ Route for updating profile (with image & role update)
+  authRoutes.post("/update-profile", updateProfile);
+
 authRoutes.post('/registration', signup);
 authRoutes.get('/verify-email', verifyEmail);
 authRoutes.delete('/logout-current-session', checkSession, logout);

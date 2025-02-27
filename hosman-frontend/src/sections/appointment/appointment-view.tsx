@@ -20,7 +20,7 @@ import { LoadingButton } from '@mui/lab';
 const AppointmentSchema = zod.object({
   patientName: zod.string().min(1, { message: 'Patient Name is required!' }),
   department: zod.string().min(1, { message: 'Department is required!' }),
-  doctor: zod.string().min(1, { message: 'Doctor is required!' }),
+  doctorName: zod.string().min(1, { message: 'DoctorName is required!' }),
   appointmentTime: zod.string().min(1, { message: 'Appointment Time is required!' }),
   appointmentDate: zod.string().min(1, { message: 'Appointment Date is required!' }),
   payment: zod.string().min(1, { message: 'Payment is required!' }),
@@ -34,7 +34,7 @@ export function AppointmentForm() {
 
   const defaultValues = {
     department: '',
-    doctor: '',
+    doctorName: '',
     patientName: '',
     appointmentTime: '',
     appointmentDate: '',
@@ -140,10 +140,10 @@ export function AppointmentForm() {
             ))}
           </Field.Select>
 
-          <Field.Select label="Doctor" {...methods.register('doctor')}>
+          <Field.Select label="DoctorName" {...methods.register('doctorName')}>
             {filteredDoctors.length > 0 ? (
               filteredDoctors.map((doctor: any) => (
-                <MenuItem key={doctor._id} value={doctor._id}>
+                <MenuItem key={doctor._id} value={doctor.Name}>
                   {doctor.Name} {/* Show specialization of doctors only */}
                 </MenuItem>
               ))

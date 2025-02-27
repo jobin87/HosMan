@@ -1,6 +1,6 @@
 export interface AppointmentTypes {
   department: string;
-  doctor: string;
+  doctorName: string;
   patientName: string;
   appointmentTime: string;
   appointmentDate: string;

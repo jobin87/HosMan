@@ -7,10 +7,8 @@ import {
   ENDPOINT_ADMIN_USER_NOTIFICATION_SETTINGS,
   ENDPOINT_ADMIN_USER_UPDATE_PASSWORD,
   ENDPOINT_ADMIN_USER_UPDATE_PROFILE,
-  ENDPOINT_DOCUMENT_CREATE,
-  ENDPOINT_DOCUMENT_LIST,
-  ENDPOINT_DOCUMENT_UPDATE,
   ENDPOINT_FORGOT_PASSWORD,
+  ENDPOINT_PROFILE_UPDATE,
   ENDPOINT_RESET_PASSWORD,
   ENDPOINT_SESSION,
   ENDPOINT_UPDATE_PASSWORD,
@@ -22,9 +20,7 @@ import { persistor } from '..';
 // import { requestSellerOnboardingStatus } from '../patient/patientThunk';
 import { setUserLoggedOut } from './appReducer';
 import type {
-  docUrlUpdateProps,
-  fileListRequestProps,
-  IDocumentUpdateProps,
+ 
   IForgetPassword,
   IResetPassword,
    ISessionUpdateProps,
@@ -51,6 +47,30 @@ export const requestSignInWithPassword = createAsyncThunk(
 
     throw new Error('Something went wrong!');
 
+  }
+);
+export const requestProfilePhoto = createAsyncThunk(
+  "app/requestProfilePhoto",
+  async  ({ file }: { file: File }) => {
+    const formData = new FormData();
+    formData.append("profileImage", file);
+    const response = await makeNetworkCall({
+      method: API_METHODS.PATCH,
+      url: ENDPOINT_PROFILE_UPDATE,
+      data: formData,
+      extraHeaders: { "Content-Type": "multipart/form-data" }, // ✅ Correct header
+    });
+
+    console.log(response);
+
+    const { userLogged } = response?.data;
+
+    if (userLogged) {
+      return response?.data;
+    }
+
+    console.log(userLogged);
+    throw new Error("Something went wrong!");
   }
 );
 

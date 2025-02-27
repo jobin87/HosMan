@@ -4,10 +4,10 @@ import StaffModel from "../../models/dashboard/staff";
 
 export const appointments = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { department, doctor, patientName, appointmentTime, appointmentDate, payment } = req.body;
+    const { department, doctorName, patientName, appointmentTime, appointmentDate, payment } = req.body;
 
     // Check for missing fields
-    if (!department || !doctor || !patientName || !appointmentTime || !appointmentDate || !payment) {
+    if (!department || !doctorName || !patientName || !appointmentTime || !appointmentDate || !payment) {
      res.status(400).json({ message: 'All fields are required' });
      return
     }
@@ -15,7 +15,7 @@ export const appointments = async (req: Request, res: Response): Promise<void> =
     // Create and save the new appointment
     const newAppointment = new AppointmentModel({
       department,
-      doctor,
+      doctorName,
       patientName,
       appointmentTime,
       appointmentDate,

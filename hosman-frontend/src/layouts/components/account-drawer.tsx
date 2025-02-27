@@ -1,28 +1,24 @@
-import type { IconButtonProps } from '@mui/material/IconButton';
+import { useState, useCallback } from "react";
+import type { IconButtonProps } from "@mui/material/IconButton";
 
-import { useState, useCallback } from 'react';
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
+import Drawer from "@mui/material/Drawer";
+import MenuItem from "@mui/material/MenuItem";
+import { useTheme } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
 
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-import Drawer from '@mui/material/Drawer';
-import MenuItem from '@mui/material/MenuItem';
-import { useTheme } from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
+import { paths } from "src/routes/paths";
+import { useRouter, usePathname } from "src/routes/hooks";
+import { varAlpha } from "src/theme/styles";
+import { Scrollbar } from "src/components/scrollbar";
+import { AnimateAvatar } from "src/components/animate";
+import { AccountButton } from "./account-button";
+import { SignOutButton } from "./sign-out-button";
+import { useUser } from "src/hooks/use-user";
 
-import { paths } from 'src/routes/paths';
-import { useRouter, usePathname } from 'src/routes/hooks';
-
-import { varAlpha } from 'src/theme/styles';
-
-import { Label } from 'src/components/label';
-import { Scrollbar } from 'src/components/scrollbar';
-import { AnimateAvatar } from 'src/components/animate';
-
-
-import { AccountButton } from './account-button';
-import { SignOutButton } from './sign-out-button';
-import { useUser } from 'src/hooks/use-user';
+import EditIcon from "@mui/icons-material/Edit";
 
 // ----------------------------------------------------------------------
 
@@ -37,12 +33,14 @@ export type AccountDrawerProps = IconButtonProps & {
 
 export function AccountDrawer({ data = [], sx, ...other }: AccountDrawerProps) {
   const theme = useTheme();
-
   const router = useRouter();
 
-  const pathname = usePathname();
+  const { username, email, photoURL, role } = useUser();
 
-  const { username,email,photoURL,role} = useUser();
+  // State for profile images
+  const [currentPhoto, setCurrentPhoto] = useState(photoURL);
+  const [previousPhoto, setPreviousPhoto] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const [open, setOpen] = useState(false);
 
@@ -62,27 +60,103 @@ export function AccountDrawer({ data = [], sx, ...other }: AccountDrawerProps) {
     [handleCloseDrawer, router]
   );
 
+  // Handle profile image selection
+  const handlePhotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (file) {
+      setSelectedFile(file);
+
+
+      // Create a preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setCurrentPhoto(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Upload image to backend (example function)
+  const uploadProfilePicture = async () => {
+    if (!selectedFile) return;
+
+    const formData = new FormData();
+    formData.append("profileImage", selectedFile);
+
+    try {
+      const response = await fetch("https://your-api.com/api/users/update-profile", {
+        method: "POST",
+        body: formData,
+        credentials: "include",
+      });
+
+      if (!response.ok) throw new Error("Failed to upload image");
+
+      const data = await response.json();
+      setCurrentPhoto(data.imageUrl); // Update with new image URL from backend
+    } catch (error) {
+      console.error("Error updating profile picture:", error);
+    }
+  };
+
+  // Profile Image UI
   const renderAvatar = (
-    <AnimateAvatar
-      width={96}
-      slotProps={{
-        avatar: { src: photoURL, alt: username },
-        overlay: {
-          border: 2,
-          spacing: 3,
-          color: `linear-gradient(135deg, ${varAlpha(theme.vars.palette.primary.mainChannel, 0)} 25%, ${theme.vars.palette.primary.main} 100%)`,
-        },
-      }}
-    >
-      {username?.charAt(0).toUpperCase()}
-    </AnimateAvatar>
+    <Box sx={{ position: "relative", display: "inline-block" }}>
+      <AnimateAvatar
+        width={96}
+        slotProps={{
+          avatar: { src: currentPhoto || photoURL, alt: username },
+          overlay: {
+            border: 2,
+            spacing: 3,
+            color: `linear-gradient(135deg, ${varAlpha(
+              theme.vars.palette.primary.mainChannel,
+              0
+            )} 25%, ${theme.vars.palette.primary.main} 100%)`,
+          },
+        }}
+      >
+        {username?.charAt(0).toUpperCase()}
+      </AnimateAvatar>
+
+      {/* Hidden File Input */}
+      <input
+        type="file"
+        accept="image/*"
+        onChange={handlePhotoChange}
+        style={{ display: "none" }}
+        id="profile-photo-input"
+      />
+
+      {/* Edit Button Inside Avatar */}
+      <label htmlFor="profile-photo-input">
+        <IconButton
+          component="span"
+          sx={{
+            position: "absolute",
+            bottom: 8,
+            right: 8,
+            zIndex: 10,
+            bgcolor: "rgba(0, 0, 0, 0.6)",
+            color: "white",
+            p: 0.5,
+            borderRadius: "50%",
+            boxShadow: 2,
+            "&:hover": { bgcolor: "rgba(0, 0, 0, 0.8)" },
+          }}
+        >
+          <EditIcon fontSize="small" />
+        </IconButton>
+      </label>
+    </Box>
   );
 
   return (
     <>
       <AccountButton
         onClick={handleOpenDrawer}
-        photoURL={photoURL}
+        photoURL={currentPhoto}
         displayName={username}
         sx={sx}
         {...other}
@@ -97,89 +171,43 @@ export function AccountDrawer({ data = [], sx, ...other }: AccountDrawerProps) {
       >
         <IconButton
           onClick={handleCloseDrawer}
-          sx={{ top: 12, left: 12, zIndex: 9, position: 'absolute' }}
-        >
-          {/* <Iconify icon="mingcute:close-line" /> */}
-        </IconButton>
+          sx={{ top: 12, left: 12, zIndex: 9, position: "absolute" }}
+        />
 
         <Scrollbar>
           <Stack alignItems="center" sx={{ pt: 8 }}>
             {renderAvatar}
+
             <Typography variant="subtitle1" noWrap sx={{ mt: 2 }}>
-              User : {role},{username}
+              User: {role}, {username}
             </Typography>
 
-            <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }} noWrap>
+            <Typography variant="body2" sx={{ color: "text.secondary", mt: 0.5 }} noWrap>
               {email}
             </Typography>
-          </Stack>
 
-          {/* <Stack direction="row" spacing={1} flexWrap="wrap" justifyContent="center" sx={{ p: 3 }}>
-            {[...Array(3)].map((_, index) => (
-              <Tooltip
-                key={_mock.fullName(index + 1)}
-                title={`Switch to: ${_mock.fullName(index + 1)}`}
-              >
-                <Avatar
-                  alt={_mock.fullName(index + 1)}
-                  src={_mock.image.avatar(index + 1)}
-                  onClick={() => {}}
-                />
-              </Tooltip>
-            ))}
-
-            <Tooltip title="Add account">
-              <IconButton
-                sx={{
-                  bgcolor: varAlpha(theme.vars.palette.grey['500Channel'], 0.08),
-                  border: `dashed 1px ${varAlpha(theme.vars.palette.grey['500Channel'], 0.32)}`,
-                }}
-              >
-                <Iconify icon="mingcute:add-line" />
-              </IconButton>
-            </Tooltip>
-          </Stack> */}
-
-          <Stack
-            sx={{
-              py: 3,
-              px: 2.5,
-              borderTop: `dashed 1px ${theme.vars.palette.divider}`,
-              borderBottom: `dashed 1px ${theme.vars.palette.divider}`,
-            }}
-          >
-            {data.map((option) => {
-              const rootLabel = pathname.includes('/dashboard') ? 'Home' : 'Dashboard';
-
-              const rootHref = pathname.includes('/dashboard') ? '/' : paths.dashboard.root;
-
-              return (
-                <MenuItem
-                  key={option.label}
-                  onClick={() => handleClickItem(option.label === 'Home' ? rootHref : option.href)}
+            {/* Previous Image Display */}
+            {previousPhoto && (
+              <Box sx={{ mt: 2, textAlign: "center" }}>
+                <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                  Previous Image:
+                </Typography>
+                <Box
+                  component="img"
+                  src={previousPhoto}
+                  alt="Previous Profile"
                   sx={{
-                    py: 1,
-                    color: 'text.secondary',
-                    '& svg': { width: 24, height: 24 },
-                    '&:hover': { color: 'text.primary' },
+                    width: 64,
+                    height: 64,
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                    border: `2px solid ${theme.vars.palette.divider}`,
+                    mt: 1,
                   }}
-                >
-                  {option.icon}
-
-                  <Box component="span" sx={{ ml: 2 }}>
-                    {option.label === 'Home' ? rootLabel : option.label}
-                  </Box>
-
-                  {option.info && (
-                    <Label color="error" sx={{ ml: 1 }}>
-                      {option.info}
-                    </Label>
-                  )}
-                </MenuItem>
-              );
-            })}
+                />
+              </Box>
+            )}
           </Stack>
-
         </Scrollbar>
 
         <Box sx={{ p: 2.5 }}>

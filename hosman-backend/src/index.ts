@@ -23,7 +23,7 @@ app.use(
       }
     },
     credentials: true, // Allow cookies & authentication headers
-    methods: "GET,POST,PUT,DELETE",
+    methods: "GET,POST,PUT,DELETE,PATCH",
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );

@@ -210,7 +210,7 @@ export function AccountDrawer({ data = [], sx, ...other }: AccountDrawerProps) {
           </Stack>
         </Scrollbar>
 
-        <Box sx={{ p: 2.5 }}>
+        <Box sx={{ p: 2.5 }} >
           <SignOutButton onClose={handleCloseDrawer} />
         </Box>
       </Drawer>

@@ -122,11 +122,21 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
       subject: "Verify Your Email",
       html: `
         <h2>Hello ${userName},</h2>
+        <p>Thank you for registering with us!</p>
         <p>Please verify your email by clicking the link below:</p>
         <a href="${verificationUrl}">Verify Email</a>
         <p>This link will expire in 24 hours.</p>
+        
+        <h3>Account Details:</h3>
+        <ul>
+          <li><strong>Name:</strong> ${userName}</li>
+          <li><strong>Email:</strong> ${userEmail}</li>
+        </ul>
+    
+        <p>If you did not sign up, please ignore this email.</p>
       `,
     };
+    
 
     await transporter.sendMail(mailOptions);
 

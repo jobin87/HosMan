@@ -49,7 +49,7 @@ export function SignOutButton({
   return (
     <Button
       fullWidth={fullWidth}
-      variant={'soft'}
+      variant={'contained'}
       size="large"
       color={color}
       onClick={handleLogout}

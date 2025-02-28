@@ -38,14 +38,20 @@ export default function ReportListView() {
     .flatMap((category: any) =>
       category.reports.filter((report: any) => report.isAssigned)
     )
-    .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()); // ✅ Sort assigned reports (latest first)
+    .sort(
+      (a, b) =>
+        new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+    ); // ✅ Sort assigned reports (latest first)
 
   const unassignedCategories = reportData
     .map((category: any) => ({
       ...category,
       reports: category.reports
         .filter((report: any) => !report.isAssigned)
-        .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()), // ✅ Sort unassigned reports (oldest first)
+        .sort(
+          (a, b) =>
+            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        ), // ✅ Sort unassigned reports (oldest first)
     }))
     .filter((category: any) => category.reports.length > 0);
 
@@ -114,10 +120,13 @@ export default function ReportListView() {
                       py: 0.5,
                       px: 1.5,
                       mt: 1,
+                      width: "auto", // Adjust width if needed or leave it auto to fit content
+                      display: "block", // Makes the button block-level, enabling centering
+                      margin: "0 auto", // Centers the button horizontally
                       border: "2px solid gainsboro",
                       transition: "transform 0.2s ease-in",
                       "&:hover": {
-                        transform: "scale(1.11)",
+                        transform: "scale(1.02)",
                         borderColor: "GrayText",
                       },
                     }}

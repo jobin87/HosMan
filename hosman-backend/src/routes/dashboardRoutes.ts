@@ -2,7 +2,7 @@ import express from 'express';
 import { appointments, getAppointments } from '../controllers/dashboard/appointment';
 import { getPatient, PatientAdded } from '../controllers/dashboard/patients';
 import { deleteAllTreatments, deleteTreatmentById, getTreatment, treatementAdded, updateTreatment } from '../controllers/dashboard/treatment';
-import { AddReports, getReports } from '../controllers/dashboard/report';
+import { AddReports, AssignWorkers, getReports } from '../controllers/dashboard/report';
 import {  getRoomsAndCategories, AddroomsAndCategories } from '../controllers/dashboard/roles';
 import { addStaff, getStaff, } from '../controllers/dashboard/staff';
 
@@ -30,6 +30,8 @@ dashboardRoutes.patch('/updateTreatmentById/:treatmentId',updateTreatment);
 //report
 dashboardRoutes.post('/report/addReportList',AddReports);
 dashboardRoutes.get('/report/getReport/:id?',getReports);
+dashboardRoutes.patch('/report/assignWorkers',AssignWorkers);
+
 
 //roomsAndCategories
 dashboardRoutes.post('/roles/addRoomsAndCategory',AddroomsAndCategories);

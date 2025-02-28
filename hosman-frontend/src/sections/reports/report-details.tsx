@@ -1,7 +1,10 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "src/store";
-import { getReportList } from "src/store/report/reportThunk";
+import {
+  createAssigningReports,
+  getReportList,
+} from "src/store/report/reportThunk";
 import {
   Typography,
   Table,
@@ -22,100 +25,145 @@ import {
   FormControl,
 } from "@mui/material";
 import { DashboardContent } from "src/layouts/dashboard";
-import axios from 'axios'; // Assuming you're using axios for API requests
+import { requestAllStaffList } from "src/store/all-staff/allStaffThunk";
 
 export default function ReportDetailsView() {
-  const { id } = useParams<{ id: string }>(); // Retrieve the category or report id from URL params
+  const { id } = useParams<{ id: string }>(); // Get category ID from URL
   const dispatch = useAppDispatch();
 
-  // Fetching the report data from the Redux store
-  const reportData = useAppSelector((state) => state.report.reportDetails.data || []);
-  const [loading, setLoading] = useState(true);
-  const [openDialog, setOpenDialog] = useState(false); // State for dialog visibility
-  const [selectedReport, setSelectedReport] = useState<any>(null); // State to store selected report for assignment
-  const [workerName, setWorkerName] = useState(""); // State for selected worker ID
-  const [assignedWorker, setAssignedWorker] = useState<string | null>(null); // State to track assigned worker
+  const reportData = useAppSelector(
+    (state) => state.report.reportDetails.data || []
+  );
+  const staffGroups = useAppSelector(
+    (state) => state.allstaff.getStaffDetails?.data?.groupedStaff || {}
+  );
 
+  const [loading, setLoading] = useState(true);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedReport, setSelectedReport] = useState<any>(null);
+  const [workerName, setWorkerName] = useState("");
+
+  // ✅ Fetch reports and staff details on component mount
   useEffect(() => {
     dispatch(getReportList({})).then(() => setLoading(false));
+    dispatch(requestAllStaffList());
   }, [dispatch]);
 
   if (loading) {
     return <Typography>Loading reports...</Typography>;
   }
 
-  // Loop through the grouped report data and find the specific category or report
-  const selectedCategory = reportData.find((category: any) => category._id === id);
+  // ✅ Find the selected category by ID
+  const selectedCategory = reportData.find(
+    (category: any) => category._id === id
+  );
+
+  // ✅ Extract reports from the selected category
   const filteredReports = selectedCategory ? selectedCategory.reports : [];
 
-  // Handle dialog open for a specific report
+  console.log("Selected Category Reports:", filteredReports);
+
+  // ✅ Open Dialog to Assign Worker
   const handleDialogOpen = (report: any) => {
-    setSelectedReport(report); // Set the selected report
-    setAssignedWorker(report.workerAssigned || null); // Set the current assigned worker if any
-    setOpenDialog(true); // Open the dialog
+    setSelectedReport(report);
+    setWorkerName(report.workerAssigned || ""); // Default to assigned worker if exists
+    setOpenDialog(true);
+    console.log("Selected Report:", report);
   };
 
-  // Handle dialog close
+  // ✅ Close Dialog
   const handleDialogClose = () => {
-    setOpenDialog(false); // Close the dialog
-    setSelectedReport(null); // Clear selected report
-    setWorkerName(""); // Clear worker selection
+    setOpenDialog(false);
+    setSelectedReport(null);
   };
 
-  // Handle worker assignment (POST request)
+  // ✅ Assign Worker to Report
   const assignWorkerToReport = async () => {
+    if (!selectedReport || !workerName) {
+      console.error(
+        "Missing report or worker name:",
+        selectedReport,
+        workerName
+      );
+      return;
+    }
+
     try {
-      // Sending POST request to backend
-      const response = await axios.post('/api/reports/assign-worker', {
-        reportId: selectedReport._id,
-        workerName: workerName,
-      });
-      console.log("Worker assigned:", response.data);
+      const response = await dispatch(
+        createAssigningReports({
+          reportId: selectedReport._id, // ✅ Ensure _id is sent!
+          assignedWorker: workerName,
+        })
+      );
 
-      // Update assigned worker state to trigger button text change
-      setAssignedWorker(workerName);
+      if (response.meta.requestStatus === "fulfilled") {
+        console.log("✅ Worker assigned successfully:", selectedReport._id);
 
-      // Optionally, update the Redux store or UI to reflect the assignment
-      handleDialogClose(); // Close dialog after assignment
+        // ✅ Update the UI immediately
+        setSelectedReport((prev) =>
+          prev ? { ...prev, workerAssigned: workerName } : prev
+        );
+
+        // ✅ Update the state to reflect the assigned worker in reports
+        const updatedReports = filteredReports.map((report) =>
+          report._id === selectedReport._id
+            ? { ...report, workerAssigned: workerName }
+            : report
+        );
+
+        // ✅ Refresh report list after assignment
+        dispatch(getReportList({}));
+
+        console.log("Updated Reports List:", updatedReports);
+      } else {
+        console.error("❌ Assignment failed:", response);
+      }
+
+      setOpenDialog(false);
     } catch (error) {
-      console.error("Error assigning worker:", error);
+      console.error("❌ Error assigning worker:", error);
     }
   };
 
   return (
     <DashboardContent>
       <Typography variant="h6" sx={{ mb: 2 }}>
-        Reports for Category: {selectedCategory ? selectedCategory._id : "Unknown"}
+        Reports for Category:{" "}
+        {selectedCategory ? selectedCategory._id : "Unknown"}
       </Typography>
 
-      {/* Display the reports for the selected category */}
+      {/* ✅ Display Reports Table */}
       {filteredReports.length > 0 ? (
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Seq. No</TableCell> {/* Display sequential number */}
+                <TableCell>Seq. No</TableCell>
                 <TableCell>Description</TableCell>
                 <TableCell>Room No</TableCell>
-                <TableCell>Assign Worker</TableCell> {/* Button column */}
+                <TableCell>Assign Worker</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {filteredReports.map((report: any, index: number) => (
                 <TableRow key={report._id}>
-                  <TableCell>{index + 1}</TableCell> {/* Sequential ID starts from 1 */}
+                  <TableCell>{index + 1}</TableCell>
                   <TableCell>{report.description}</TableCell>
                   <TableCell>{report.roomNo}</TableCell>
                   <TableCell>
-                    {/* Assign Worker Button */}
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => handleDialogOpen(report)}
-                      disabled={!!assignedWorker} // Disable if worker is already assigned
-                    >
-                      {assignedWorker ? 'Assigned' : 'Assign'} {/* Change button text */}
-                    </Button>
+                    {report.isAssigned ? ( // ✅ Check if `isAssigned` is true
+                      <Typography sx={{ fontWeight: "bold", color: "green" }}>
+                        Assigned
+                      </Typography>
+                    ) : (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => handleDialogOpen(report)}
+                      >
+                        Assign
+                      </Button>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
@@ -126,11 +174,13 @@ export default function ReportDetailsView() {
         <Typography>No reports found for this category.</Typography>
       )}
 
-      {/* Dialog for assigning worker */}
+      {/* ✅ Assign Worker Dialog */}
       <Dialog open={openDialog} onClose={handleDialogClose}>
         <DialogTitle>Assign Worker</DialogTitle>
         <DialogContent>
-          <Typography variant="body2">Assign a worker to the selected report</Typography>
+          <Typography variant="body2">
+            Assign a worker to the selected report
+          </Typography>
           <FormControl fullWidth margin="dense">
             <InputLabel id="worker-select-label">Worker</InputLabel>
             <Select
@@ -139,10 +189,16 @@ export default function ReportDetailsView() {
               onChange={(e) => setWorkerName(e.target.value)}
               label="Worker Name"
             >
-              {/* Replace with your actual worker list */}
-              <MenuItem value="worker1">Worker 1</MenuItem>
-              <MenuItem value="worker2">Worker 2</MenuItem>
-              <MenuItem value="worker3">Worker 3</MenuItem>
+              {staffGroups &&
+                Object.entries(staffGroups).flatMap(([_, staffList]) =>
+                  (staffList as { _id: string; Name: string }[]).map(
+                    (worker) => (
+                      <MenuItem key={worker._id} value={worker.Name}>
+                        {worker.Name}
+                      </MenuItem>
+                    )
+                  )
+                )}
             </Select>
           </FormControl>
         </DialogContent>

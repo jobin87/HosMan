@@ -22,6 +22,7 @@ import { StaffRegistrationForm } from 'src/sections/roomsAndStaff/add-staff';
 import StaffManagement from 'src/sections/allStaff-Management/view/staff-view-page';
 import { useUser } from 'src/hooks/use-user';
 import { Doctors } from 'src/sections/doctors/view/doctors';
+import StaffDetailsPage from 'src/sections/allStaff-Management/staff-details';
 
 const IndexPage = lazy(() => import('src/pages/home'));
 
@@ -105,6 +106,8 @@ const DashboardRoutesWrapper = () => {
             children: [
               { path: 'add-staff', element: <StaffRegistrationForm /> },
               { path: 'staff-management', element: <StaffManagement /> },
+              { path: 'staff-details/:id', element: <StaffDetailsPage /> },
+
             ],
           },
         ],

@@ -18,7 +18,8 @@ export const newTreatmentSchema = zod.object({
   department: zod.string().min(1, { message: "department is required" }),
   price: zod.string().regex(/^\$\d+$/, {
     message: "Price must be in the format $ followed by digits (e.g., $60)"}),
-  treatmentId: zod.string().min(1, { message: "Treatment ID is required" }),
+    treatmentId: zod.string().default(""), // Making treatmentId optional
+    
 });
 
 export type newTreatmentSchemaType = Zod.infer<typeof newTreatmentSchema>;
@@ -28,18 +29,16 @@ export const EditTreatmentData = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Get the treatment data passed via the navigate state
-  const treatmentData = location.state;
+  const treatmentData = location.state || {}; // Fallback to an empty object
 
-  // Set default values dynamically based on the passed treatment data
   const defaultValues = {
-    treatmentId: treatmentData?.treatmentId ? String(treatmentData.treatmentId) : "",
-    treatment: treatmentData?.treatment || "",
-    department: treatmentData?.department || "",
-    specialization: treatmentData?.specialization || "",
-    price: treatmentData?.price || 0,
+    treatmentId: treatmentData._id || "",  // Ensure the existing _id is used
+    treatment: treatmentData.treatment || "",
+    department: treatmentData.department || "",
+    specialization: treatmentData.specialization || "",
+    price: treatmentData.price ? String(treatmentData.price) : "", // Convert to string for input field
   };
-
+  
   const methods = useForm<newTreatmentSchemaType>({
     mode: "onSubmit",
     resolver: zodResolver(newTreatmentSchema),
@@ -54,8 +53,6 @@ export const EditTreatmentData = () => {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      console.log("Treatment ID being updated:", data.treatmentId);
-      console.log("Type of treatmentId:", typeof data.treatmentId);
       const updates: Partial<newTreatmentSchemaType> = {};
 
       // Compare form data with existing data and add only the changed fields
@@ -72,7 +69,6 @@ export const EditTreatmentData = () => {
         updates.price = data.price;
       }
       console.log("treatmentData:", treatmentData);
-      console.log("treatmentId in form data:", data.treatmentId);
 
       // If no updates, exit early
       if (Object.keys(updates).length === 0) {

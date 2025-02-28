@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { basicInitialState, networkCallInitialState } from '../types';
 import {
   addReportList,
+  createAssigningReports,
   getReportList,
   requestDeleteStaffRoles,
   requestEditStaffRoles,
@@ -13,6 +14,7 @@ const initialState = {
   edit: networkCallInitialState,
   delete: networkCallInitialState,
   reportDetails:basicInitialState,
+  assignWorkers: basicInitialState
 };
 
 export const reportReducer = createSlice({
@@ -67,6 +69,22 @@ export const reportReducer = createSlice({
       .addCase(getReportList.rejected, (state, action) => {
         state.reportDetails.loading = false;
         state.reportDetails.error = action.error;
+      })
+
+      //patch
+      .addCase(createAssigningReports.fulfilled, (state, action) => {
+        state.reportDetails.loading = false;
+        // Extract the reportdata array from the payload
+        state.assignWorkers.data = action.payload.reportdata || [];
+        console.log("Reports fetched:", action.payload);
+      })
+      
+      .addCase(createAssigningReports.pending, (state) => {
+        state.assignWorkers.loading = true;
+      })
+      .addCase(createAssigningReports.rejected, (state, action) => {
+        state.assignWorkers.loading = false;
+        state.assignWorkers.error = action.error;
       })
 
       // EDIT

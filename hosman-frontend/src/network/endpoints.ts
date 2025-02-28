@@ -35,6 +35,8 @@ export const ENDPOINT_STAFF_ROLES_CREATE = '/api/staff/v1/roles/staffRoles';
 //reports 
 export const ENDPOINT_REPORT_LIST_POST = '/api/staff/v1/report/addReportList'; //
 export const ENDPOINT_REPORT_LIST_GET = '/api/staff/v1/report/getReport/'; //
+export const ENDPOINT_ASSIGN_WORKERS_PATCH = '/api/staff/v1/report/assignWorkers'; //
+
 
 
 // /updateTreatmentById/:id

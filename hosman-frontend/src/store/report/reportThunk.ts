@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
   API_METHODS,
+  ENDPOINT_ASSIGN_WORKERS_PATCH,
   ENDPOINT_PERMISSION_DELETE,
   ENDPOINT_PERMISSION_DETAILS,
   ENDPOINT_PERMISSION_EDIT,
@@ -17,7 +18,7 @@ import type {  IEditRoles, IReportDataParams, IReportListParams, IRolesDetailsPa
 
 // Staff Permissions List
 export const addReportList = createAsyncThunk(
-  'roles/addReportList',
+  'reports/addReportList',
   async (params: IReportListParams) => {
     const response = await makeNetworkCall({
       method: API_METHODS.POST,
@@ -29,7 +30,7 @@ export const addReportList = createAsyncThunk(
   }
 );
 export const getReportList = createAsyncThunk(
-  'roles/getReportList',
+  'reports/getReportList',
   async (params: IReportDataParams) => {
     const response = await makeNetworkCall({
       method: API_METHODS.GET,
@@ -49,11 +50,23 @@ export const getReportList = createAsyncThunk(
     }
   }
 );
+export const createAssigningReports = createAsyncThunk(
+  "reports/createAssigningReports",
+  async (params: {  assignedWorker: string }) => {
+    const response = await makeNetworkCall({
+      method: API_METHODS.PATCH,
+      url: ENDPOINT_ASSIGN_WORKERS_PATCH,
+      data: params, // ✅ Send reportId and assignedWorker in the request body
+    });
+    console.log("pathhiih:",response?.data)
+    return response?.data;
+  }
+);
 
 
 // Staff Permission Details
 export const requestStaffRolesDetails = createAsyncThunk(
-  'roles/staffRolesDetails',
+  'reports/staffRolesDetails',
   async (params: IRolesDetailsParams) => {
     const response = await makeNetworkCall({
       method: API_METHODS.GET,
@@ -67,7 +80,7 @@ export const requestStaffRolesDetails = createAsyncThunk(
 
 // Edit Staff Role
 export const requestEditStaffRoles = createAsyncThunk(
-  'roles/requestEditStaffRoles',
+  'reports/requestEditStaffRoles',
   async (params: IEditRoles) => {
     const response = await makeNetworkCall({
       method: API_METHODS.PATCH,
@@ -83,7 +96,7 @@ export const requestEditStaffRoles = createAsyncThunk(
 
 // Delete Staff Role
 export const requestDeleteStaffRoles = createAsyncThunk(
-  'roles/requestDeleteStaffRoles',
+  'reports/requestDeleteStaffRoles',
   async (params: IRolesDetailsParams) => {
     const response = await makeNetworkCall({
       method: API_METHODS.DELETE,
@@ -92,3 +105,6 @@ export const requestDeleteStaffRoles = createAsyncThunk(
     return response?.data?.data;
   }
 );
+
+
+

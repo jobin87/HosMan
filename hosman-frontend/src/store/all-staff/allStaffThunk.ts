@@ -54,8 +54,8 @@ export const requestAllStaffList = createAsyncThunk(
         throw new Error("No data received from API");
       }
 
-      console.log("Staff Data:", response?.data?.data);
-      return response?.data?.data ?? []; // ✅ Ensure it never returns `undefined`
+      console.log("Staff Data:", response?.data);
+      return response?.data ?? []; // ✅ Ensure it never returns `undefined`
     } catch (error) {
       console.error("Error fetching staff list:", error);
       throw error;

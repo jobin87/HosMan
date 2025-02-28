@@ -11,38 +11,37 @@ import {
   Paper,
 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "src/store";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { requestAllStaffList } from "src/store/all-staff/allStaffThunk";
 
-export default function StaffDetailsPage() {
-  const { id } = useParams<{ id: string }>(); // Extract staff type (Doctor/Nurse) from URL
+export default function DepartmentDetailsPage() {
+  const { id } = useParams<{ id: string }>(); // Staff type from URL
   const dispatch = useAppDispatch();
 
-  // Fetch all staff data
+  // ✅ Fetch staff data grouped by staffType (Doctor, Nurse, etc.)
+  const staffGroups: Record<string, any[]> = useAppSelector(
+    (state) => state.allstaff.getStaffDetails?.data?.groupedStaff || {}
+  );
+
+  console.log("Staff Groups:", staffGroups); // Debugging log
+
   useEffect(() => {
-    dispatch(requestAllStaffList());
-  }, [dispatch]);
+    if (Object.keys(staffGroups).length === 0) {
+      dispatch(requestAllStaffList());
+    }
+  }, [dispatch, staffGroups]);
 
-  // Get staff data from Redux store
-  const { data, loading } = useAppSelector((state) => state.allstaff.getStaffDetails) || {
-    data: { Doctor: [], Nurse: [] },
-  };
+  // ✅ Ensure staffType exists in staffGroups
+  const selectedStaff = id ? staffGroups[id] || [] : [];
 
-  // Determine which staff type to display
-  const selectedStaff = id && data ? data[id] || [] : [];
-
-  if (loading) {
-    return <Typography>Loading...</Typography>;
-  }
-
-  if (!selectedStaff || selectedStaff.length === 0) {
-    return <Typography>No staff found for {id}</Typography>;
+  if (selectedStaff.length === 0) {
+    return <Typography>No staff members found for {id}.</Typography>;
   }
 
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2 }}>
-        {id} Details ({selectedStaff.length})
+        {id} Staff ({selectedStaff.length})
       </Typography>
 
       <TableContainer component={Paper}>
@@ -51,17 +50,15 @@ export default function StaffDetailsPage() {
             <TableRow>
               <TableCell><strong>Name</strong></TableCell>
               <TableCell><strong>Department</strong></TableCell>
-              <TableCell><strong>Experience (Years)</strong></TableCell>
-              <TableCell><strong>Contact Number</strong></TableCell>
+              <TableCell><strong>Experience</strong></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {selectedStaff.map((staff: any, index: number) => (
-              <TableRow key={index}>
+            {selectedStaff.map((staff: any) => (
+              <TableRow key={staff._id}>
                 <TableCell>{staff.Name}</TableCell>
                 <TableCell>{staff.department}</TableCell>
-                <TableCell>{staff.experience}</TableCell>
-                <TableCell>{staff.contactNumber}</TableCell>
+                <TableCell>{staff.experience} years</TableCell>
               </TableRow>
             ))}
           </TableBody>

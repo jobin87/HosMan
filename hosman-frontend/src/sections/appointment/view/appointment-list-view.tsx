@@ -24,12 +24,14 @@ export default function AppointmentListView() {
   const [searchDepartment, setSearchDepartment] = useState("");
 
   useEffect(() => {
-    const params= {} as any;
+    const params = {} as any;
     dispatch(getAppointmentData(params));
   }, [dispatch]);
 
   // Ensure data is an array before using it
-  const appointments = Array.isArray(data?.appointments) ? data.appointments : [];
+  const appointments = Array.isArray(data?.appointments)
+    ? data.appointments
+    : [];
 
   // Group appointments by department
   const departmentCounts = appointments.reduce((acc: any, appt: any) => {
@@ -50,7 +52,9 @@ export default function AppointmentListView() {
 
   // Navigate to the department page
   const handleDepartmentClick = (department: string) => {
-    navigate(`${paths.dashboard.Appointment.department.replace(":id", department)}`);
+    navigate(
+      `${paths.dashboard.Appointment.department.replace(":id", department)}`
+    );
   };
 
   return (
@@ -65,31 +69,74 @@ export default function AppointmentListView() {
         variant="outlined"
         value={searchDepartment}
         onChange={(e) => setSearchDepartment(e.target.value)}
-        sx={{ mb: 3, width: "100%" }}
+        sx={{
+          mb: 3,
+          width: "100%",
+          "& .MuiOutlinedInput-root": {
+            borderWidth: "2px", // Thicker border
+            "& fieldset": {
+              borderColor: "grey", // Change border color
+              borderWidth: "2px", // Increase border thickness
+            },
+            "&:hover fieldset": {
+              borderColor: "black", // Highlight on hover
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "black", // Border color when focused
+              borderWidth: "2.5px", // Even thicker on focus
+            },
+          },
+        }}
       />
 
       <Grid container spacing={3}>
         {filteredDepartments.length > 0 ? (
           filteredDepartments.map((dept: any) => (
-            <Grid item xs={12} sm={6} md={4} key={dept.department}>
-              <Card sx={{ textAlign: "center" }}>
-                <CardContent>
+            <Grid item xs={6} sm={6} md={2} key={dept.department}>
+              <Card
+                sx={{
+                  width: "100%",
+                  minHeight: 30,
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  textAlign: "center",
+                  boxShadow: 3,
+                  borderRadius: 2,
+                  transition: "transform 0.2s ease-in",
+                  border: "2px solid",
+                  borderColor: "gainsboro",
+                  "&:hover": {
+                    transform: "scale(1.11)",
+                    borderColor: "GrayText",
+                  },
+                }}
+              >
+                <CardContent
+                  sx={{
+                    padding: "8px",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
                   <Typography variant="h6" sx={{ fontWeight: "bold" }}>
                     {dept.department}
                   </Typography>
                   <Typography variant="body2" sx={{ color: "gray" }}>
-                    {dept.count} Appointments
+                    {dept.count}
                   </Typography>
-                </CardContent>
-                <CardActions sx={{ justifyContent: "center" }}>
                   <Button
                     variant="contained"
                     color="primary"
+                    size="small"
+                    sx={{ mt: 1 }} // Add margin-bottom to separate from text
                     onClick={() => handleDepartmentClick(dept.department)}
                   >
                     View
                   </Button>
-                </CardActions>
+                </CardContent>
               </Card>
             </Grid>
           ))

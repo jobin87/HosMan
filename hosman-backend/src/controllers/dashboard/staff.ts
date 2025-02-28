@@ -44,7 +44,7 @@ export const getStaff = async (req: Request, res: Response): Promise<void> => {
 
     res.status(200).json({
       message: "Staff grouped by staff type",
-      data: groupedStaff,
+      groupedStaff,
     });
   } catch (error) {
     res.status(500).json({ message: "Internal server error", error });

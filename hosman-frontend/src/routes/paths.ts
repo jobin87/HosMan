@@ -73,7 +73,9 @@ export const paths = {
     staff:{
       root:`${ROOTS.DASHBOARD}/user`,
        addStaff:`${ROOTS.DASHBOARD}/staff/add-staff`,
-       staffManagement:`${ROOTS.DASHBOARD}/staff/staff-management`
+       staffManagement:`${ROOTS.DASHBOARD}/staff/staff-management`,
+       staffDetails: `${ROOTS.DASHBOARD}/staff/staff-details/:id`,
+
 
     },
 

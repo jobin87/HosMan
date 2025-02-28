@@ -34,24 +34,24 @@ export default function TreatmentList() {
 
   const handleEdit = (_id: string) => {
     console.log("Editing treatment with ID:", _id);
-
-    // Ensure treatmentData is an array and _id exists
+  
     if (!Array.isArray(treatmentData)) {
       console.log("treatmentData is not an array:", treatmentData);
       return;
     }
-
+  
     const treatmentToEdit = treatmentData.find((item: any) => item._id === _id);
-
+  
     if (treatmentToEdit) {
       console.log("Found treatment to edit:", treatmentToEdit);
-
-      navigate(paths.dashboard.Treatment.edit);
+      
+      // Pass the treatment data to the edit page using navigate state
+      navigate(paths.dashboard.Treatment.edit, { state: treatmentToEdit });
     } else {
       console.log("Treatment not found for ID:", _id);
     }
   };
-
+  
   const handleAdd = () => {
     navigate(paths.dashboard.Treatment.newTreatMents);
     // Add edit functionality here

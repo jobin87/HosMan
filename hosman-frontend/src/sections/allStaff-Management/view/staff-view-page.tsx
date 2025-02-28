@@ -18,17 +18,18 @@ import { requestAllStaffList } from "src/store/all-staff/allStaffThunk";
 export default function StaffsListingPage() {
   const dispatch = useAppDispatch();
   const theme = useTheme();
-  const isXs = useMediaQuery(theme.breakpoints.down("sm")); // Check if screen is xs
-
+  const isXs = useMediaQuery(theme.breakpoints.down("sm"));
   const navigate = useNavigate();
 
-  // Get staff data categorized by department
+  // ✅ Fetch staff data grouped by staffType (Doctor, Nurse, etc.)
   const staffGroups: Record<string, any[]> = useAppSelector(
-    (state) => state.allstaff.getStaffDetails?.data || {}
+    (state) => state.allstaff.getStaffDetails?.data?.groupedStaff || {}
   );
-  console.log("staffertte:", staffGroups)
 
-  // Define medical staff categories
+  // ✅ Debugging Logs
+  console.log("Processed Staff Groups:", staffGroups);
+
+  // ✅ Define medical staff categories
   const medicalRoles = new Set([
     "Doctor",
     "Nurse",
@@ -49,25 +50,28 @@ export default function StaffsListingPage() {
     "Speech Therapist",
   ]);
 
-  // Split staff into Medical and Non-Medical categories
-  const medicalStaff = Object.entries(staffGroups).filter(([department]) =>
-    medicalRoles.has(department)
-  );
-  const nonMedicalStaff = Object.entries(staffGroups).filter(
-    ([department]) => !medicalRoles.has(department)
+  // ✅ Categorize staff by type (medical & non-medical)
+  const medicalStaff = Object.entries(staffGroups).filter(([staffType]) =>
+    medicalRoles.has(staffType)
   );
 
-  // Calculate total staff count
+  const nonMedicalStaff = Object.entries(staffGroups).filter(
+    ([staffType]) => !medicalRoles.has(staffType)
+  );
+
+  // ✅ Correct total staff count calculation
   const totalStaffCount = Object.values(staffGroups).reduce(
-    (total, group) => total + (group ? group.length : 0),
+    (total, staffList) =>
+      total + (Array.isArray(staffList) ? staffList.length : 0),
     0
   );
 
+  const handleStaffClick = (staffType: string) => {
+    navigate(paths.dashboard.staff.staffDetails.replace(":id", staffType));
+  };
+
   const handleAddStaff = () => {
     navigate(paths.dashboard.staff.addStaff);
-  };
-  const handleStaffClick = (department:string) => {
-    navigate(`${paths.dashboard.Appointment.department.replace(":id", department)}`);
   };
 
   useEffect(() => {
@@ -76,7 +80,7 @@ export default function StaffsListingPage() {
 
   return (
     <Box sx={{ p: 3 }}>
-      {/* Total Staff Count */}
+      {/* ✅ Total Staff Count */}
       <Box
         sx={{
           display: "flex",
@@ -85,17 +89,15 @@ export default function StaffsListingPage() {
           mb: 3,
         }}
       >
-        {/* Total Staff Count on the left */}
         <Typography variant={isXs ? "h6" : "h5"} sx={{ fontWeight: "bold" }}>
           Total Staff: {totalStaffCount}
         </Typography>
-
-        {/* Add Staff Button on the right */}
         <Button variant="contained" onClick={handleAddStaff}>
           Add Staff
         </Button>
       </Box>
-      {/* Medical Staff Section */}
+
+      {/* ✅ Medical Staff Section */}
       {medicalStaff.length > 0 && (
         <>
           <Typography
@@ -104,13 +106,13 @@ export default function StaffsListingPage() {
           >
             Medical Staff
           </Typography>
-          <Grid container spacing={2}>
-            {medicalStaff.map(([department, staffList]) => (
-              <Grid item xs={12} sm={6} md={4} key={department}>
+          <Grid container spacing={3}>
+            {medicalStaff.map(([staffType, staffList]) => (
+              <Grid item xs={6} sm={6} md={2} key={staffType}>
                 <Card
                   sx={{
                     width: "100%",
-                    minHeight: 120,
+                    minHeight: 70,
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "center",
@@ -118,34 +120,32 @@ export default function StaffsListingPage() {
                     textAlign: "center",
                     boxShadow: 3,
                     borderRadius: 2,
-                    transition: "transform 0.2s ease-in-out",
-                    "&:hover": { transform: "scale(1.05)" },
-                    
-                    
+                    transition: "transform 0.2s ease-in",
+                    border: "2px solid", // Add border
+                    borderColor: "gainsboro", // Use MUI theme color
+                    "&:hover": {
+                      transform: "scale(1.11)",
+                      borderColor: "GrayText",
+                    },
                   }}
-                  
                 >
                   <CardContent>
                     <Typography
                       variant={isXs ? "body1" : "h6"}
                       sx={{ fontWeight: "bold", textAlign: "center" }}
                     >
-                      {department}
+                      {`${staffType}${staffType.endsWith("s") ? "'" : "'s"}`}
                     </Typography>
-                    <Typography
-                      variant={isXs ? "body2" : "body1"}
-                      color="textSecondary"
+                    
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      sx={{ mt: 2 }}
+                      onClick={() => handleStaffClick(staffType)}
                     >
-                      Staff Count: {staffList.length}
-                    </Typography>
+                      View
+                    </Button>
                   </CardContent>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    // onClick={() => handleStaffClick(department.)}
-                  >
-                    View
-                  </Button>
                 </Card>
               </Grid>
             ))}
@@ -155,7 +155,7 @@ export default function StaffsListingPage() {
 
       <Divider sx={{ my: 4 }} />
 
-      {/* Non-Medical Staff Section */}
+      {/* ✅ Non-Medical Staff Section */}
       {nonMedicalStaff.length > 0 && (
         <>
           <Typography
@@ -165,36 +165,46 @@ export default function StaffsListingPage() {
             Non-Medical Staff
           </Typography>
           <Grid container spacing={2}>
-            {nonMedicalStaff.map(([department, staffList]) => (
-              <Grid item xs={12} sm={6} md={4} key={department}>
+            {nonMedicalStaff.map(([staffType, staffList]) => (
+              <Grid item xs={6} sm={6} md={2} key={staffType}>
                 <Card
-                  sx={{
-                    width: "100%",
-                    minHeight: 120,
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    textAlign: "center",
-                    boxShadow: 3,
-                    borderRadius: 2,
-                    transition: "transform 0.2s ease-in-out",
-                    "&:hover": { transform: "scale(1.05)" },
-                  }}
+                sx={{
+                  width: "100%",
+                  minHeight: 70,
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  textAlign: "center",
+                  boxShadow: 3,
+                  borderRadius: 2,
+                  transition: "transform 0.2s ease-in",
+                  border: "2px solid", // Add border
+                  borderColor: "gainsboro", // Use MUI theme color
+                  "&:hover": {
+                    transform: "scale(1.11)",
+                    borderColor: "GrayText",
+                  },
+                }}
+
+
                 >
                   <CardContent>
                     <Typography
                       variant={isXs ? "body1" : "h6"}
                       sx={{ fontWeight: "bold", textAlign: "center" }}
                     >
-                      {department}
+                      {`${staffType}${staffType.endsWith("s") ? "'" : "'s"}`}
                     </Typography>
-                    <Typography
-                      variant={isXs ? "body2" : "body1"}
-                      color="textSecondary"
+              
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      sx={{ mt: 2 }}
+                      onClick={() => handleStaffClick(staffType)}
                     >
-                      Staff Count: {staffList.length}
-                    </Typography>
+                      View
+                    </Button>
                   </CardContent>
                 </Card>
               </Grid>

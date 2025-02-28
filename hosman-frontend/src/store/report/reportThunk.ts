@@ -52,7 +52,7 @@ export const getReportList = createAsyncThunk(
 );
 export const createAssigningReports = createAsyncThunk(
   "reports/createAssigningReports",
-  async (params: {  assignedWorker: string }) => {
+  async (params: {  reportId: string,assignedWorker: string }) => {
     const response = await makeNetworkCall({
       method: API_METHODS.PATCH,
       url: ENDPOINT_ASSIGN_WORKERS_PATCH,

@@ -1,7 +1,7 @@
 import type { Theme } from '@mui/material/styles';
 import type { SettingsState } from 'src/components/settings';
 
-import { extendTheme } from '@mui/material/styles';
+import {  extendTheme } from '@mui/material/styles';
 
 import { setFont } from './styles/utils';
 import { overridesTheme } from './overrides-theme';

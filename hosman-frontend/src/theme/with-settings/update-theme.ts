@@ -43,15 +43,15 @@ export function updateCoreWithSettings(
   return {
     ...theme,
     colorSchemes: {
-      ...(typeof colorSchemes === "object" ? colorSchemes : { light: {}, dark: {} }), // ✅ Ensures colorSchemes is an object
+      ...colorSchemes,
       light: {
         palette: {
-          ...(typeof colorSchemes?.light?.palette === "object" ? colorSchemes.light.palette : {}), // ✅ Prevents undefined error
+          ...colorSchemes?.light?.palette,
+          /** [1] */
           primary: updatedPrimary,
+          /** [2] */
           background: {
-            ...(typeof colorSchemes?.light?.palette?.background === "object"
-              ? colorSchemes.light.palette.background
-              : {}),
+            ...colorSchemes?.light?.palette?.background,
             default: getBackgroundDefault(settings.contrast),
             defaultChannel: hexToRgbChannel(getBackgroundDefault(settings.contrast)),
           },
@@ -59,12 +59,12 @@ export function updateCoreWithSettings(
       },
       dark: {
         palette: {
-          ...(typeof colorSchemes?.dark?.palette === "object" ? colorSchemes.dark.palette : {}), // ✅ Prevents undefined error
+          ...colorSchemes?.dark?.palette,
+          /** [1] */
           primary: updatedPrimary,
         },
       },
     },
-    
     customShadows: {
       ...customShadows,
       /** [1] */

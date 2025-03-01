@@ -1,19 +1,22 @@
-import type { BoxProps } from '@mui/material/Box';
-
+import { BoxProps } from '@mui/material/Box';
 import { Children, isValidElement } from 'react';
-
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
-
 import { carouselClasses } from './classes';
 import { CarouselSlide } from './components/carousel-slide';
-
 import type { CarouselProps, CarouselOptions } from './types';
 
 // ----------------------------------------------------------------------
 
+// Define types for styling props based on CarouselOptions
 type StyledProps = Pick<CarouselOptions, 'axis' | 'slideSpacing'>;
 
+// Extend BoxProps to accept `component` prop for StyledContainer
+interface StyledContainerProps extends StyledProps, BoxProps {
+  component?: React.ElementType;  // Allow the `component` prop to be passed
+}
+
+// StyledRoot: The main container for the carousel
 export const StyledRoot = styled(Box, {
   shouldForwardProp: (prop) => prop !== 'axis',
 })<StyledProps>(({ axis }) => ({
@@ -26,9 +29,10 @@ export const StyledRoot = styled(Box, {
   }),
 }));
 
+// StyledContainer: The container that holds the slides
 export const StyledContainer = styled(Box, {
   shouldForwardProp: (prop) => prop !== 'axis' && prop !== 'slideSpacing',
-})<StyledProps>(({ axis, slideSpacing }) => ({
+})<StyledContainerProps>(({ axis, slideSpacing }) => ({
   display: 'flex',
   backfaceVisibility: 'hidden',
   ...(axis === 'x' && {
@@ -56,11 +60,10 @@ export function Carousel({
   const { mainRef, options } = carousel;
 
   const axis = options?.axis ?? 'x';
-
   const slideSpacing = options?.slideSpacing ?? '0px';
-
   const direction = options?.direction ?? 'ltr';
 
+  // Render children by wrapping them in CarouselSlide if they are valid elements
   const renderChildren = Children.map(children, (child) => {
     if (isValidElement(child)) {
       const reactChild = child as React.ReactElement<{ key?: React.Key }>;
@@ -84,7 +87,7 @@ export function Carousel({
       {...other}
     >
       <StyledContainer
-        component="ul"
+        component="ul"  // This makes StyledContainer render as <ul>
         axis={axis}
         slideSpacing={slideSpacing}
         className={carouselClasses.container}

@@ -1,7 +1,7 @@
 import type { IconButtonProps } from '@mui/material/IconButton';
 
 import { m } from 'framer-motion';
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
@@ -19,10 +19,8 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { Label } from 'src/components/label';
 import { Iconify } from 'src/components/iconify';
 import { varHover } from 'src/components/animate';
-import { Scrollbar } from 'src/components/scrollbar';
 import { CustomTabs } from 'src/components/custom-tabs';
 
-import { NotificationItem } from './notification-item';
 
 import type { NotificationItemProps } from './notification-item';
 
@@ -33,10 +31,7 @@ const TABS = [
   { value: 'staff', label: 'Staff', count: 12 },
   { value: 'Emergency', label: 'Emergency', count: 10 },
 ];
-const SubTABS = [
-  { value: 'Patients', label: 'Patients', count: 22 },
-  { value: 'staff', label: 'Staff', count: 12 },
-];
+
 
 // ----------------------------------------------------------------------
 
@@ -47,11 +42,8 @@ export type NotificationsDrawerProps = IconButtonProps & {
 export function NotificationsDrawer({ data = [], sx, ...other }: NotificationsDrawerProps) {
   const drawer = useBoolean();
 
-  const [currentTab, setCurrentTab] = useState('Emergency');
+  const currentTab='Emergency';
 
-  const handleChangeTab = useCallback((event: React.SyntheticEvent, newValue: string) => {
-    setCurrentTab(newValue);
-  }, []);
 
   const [notifications, setNotifications] = useState(data);
 
@@ -86,7 +78,7 @@ export function NotificationsDrawer({ data = [], sx, ...other }: NotificationsDr
   );
 
   const renderTabs = (
-    <CustomTabs variant="fullWidth" value={currentTab} onChange={handleChangeTab}>
+    <CustomTabs variant="fullWidth" value={currentTab}>
       {TABS.map((tab) => (
         <Tab
           key={tab.value}
@@ -110,41 +102,8 @@ export function NotificationsDrawer({ data = [], sx, ...other }: NotificationsDr
       ))}
     </CustomTabs>
   );
-  const renderSubTabs = (
-    <CustomTabs variant="fullWidth" value={currentTab} onChange={handleChangeTab}>
-      {SubTABS.map((tab) => (
-        <Tab
-          key={tab.value}
-          iconPosition="end"
-          value={tab.value}
-          label={tab.label}
-          icon={
-            <Label
-              variant={((tab.value === 'Patients' || tab.value === currentTab) && 'inverted') || 'soft'}
-              color={
-                (tab.value === 'staff' && 'info') ||
-                'default'
-              }
-            >
-              {tab.count}
-            </Label>
-          }
-        />
-      ))}
-    </CustomTabs>
-  );
+  
 
-  const renderList = (
-    <Scrollbar>
-      <Box component="ul">
-        {notifications?.map((notification) => (
-          <Box component="li" key={notification.id} sx={{ display: 'flex' }}>
-            <NotificationItem notification={notification} />
-          </Box>
-        ))}
-      </Box>
-    </Scrollbar>
-  );
 
   return (
     <>

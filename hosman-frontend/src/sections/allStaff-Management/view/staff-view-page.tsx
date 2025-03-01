@@ -107,7 +107,7 @@ export default function StaffsListingPage() {
             Medical Staff
           </Typography>
           <Grid container spacing={3}>
-            {medicalStaff.map(([staffType, staffList]) => (
+            {medicalStaff.map(([staffType]) => (
               <Grid item xs={6} sm={6} md={2} key={staffType}>
                 <Card
                   sx={{
@@ -165,7 +165,7 @@ export default function StaffsListingPage() {
             Non-Medical Staff
           </Typography>
           <Grid container spacing={2}>
-            {nonMedicalStaff.map(([staffType, staffList]) => (
+            {nonMedicalStaff.map(([staffType]) => (
               <Grid item xs={6} sm={6} md={2} key={staffType}>
                 <Card
                 sx={{

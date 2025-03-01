@@ -17,7 +17,6 @@ import { EditTreatmentData } from 'src/sections/treatment/edit-treatment';
 import ReportEditForm from 'src/sections/reports/edit-report';
 import ReportFormPage from 'src/sections/reports/report-form';
 import ReportDetailsPage from 'src/sections/reports/report-details';
-import RoomsAndCategoryPage from 'src/sections/reports/report-category-form';
 import { StaffRegistrationForm } from 'src/sections/roomsAndStaff/add-staff';
 import StaffManagement from 'src/sections/allStaff-Management/view/staff-view-page';
 import { useUser } from 'src/hooks/use-user';

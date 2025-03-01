@@ -5,7 +5,6 @@ import {
   Grid,
   Card,
   CardContent,
-  CardActions,
   Button,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";

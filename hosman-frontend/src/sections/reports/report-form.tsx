@@ -46,7 +46,6 @@ export default function ReportFormPage() {
     }
   }, [dispatch, roomroles]);
 
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [filteredRooms, setFilteredRooms] = useState<string[]>([]);
 
   const defaultValues = {
@@ -95,7 +94,6 @@ export default function ReportFormPage() {
 
   // Handle category change to filter available rooms
   const handleCategoryChange = (category: string) => {
-    setSelectedCategory(category);
     setValue("category", category);
 
     const categoryData = roomroles?.rooms?.find((room: any) => room.category === category);

@@ -72,7 +72,7 @@ export function SignUpForm() {
     resolver: zodResolver(NewUserSchema),
     defaultValues,
   });
-  const [isResendLoading, setIsResendLoading] = useState(false);
+  const isResendLoading= false;
 
   const {
     reset,

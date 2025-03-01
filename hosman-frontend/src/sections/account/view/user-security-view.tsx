@@ -12,7 +12,6 @@ import { Iconify } from 'src/components/iconify';
 
 import { useEffect } from 'react';
 import { AccountChangePassword } from '../account-change-password';
-import { AccountGeneral } from '../account-general';
 import { AccountNotifications } from '../account-notifications';
 import { DeviceSessionPage } from '../device-session-view';
 
@@ -51,14 +50,13 @@ export function SecurityView() {
         sx={{ mb: { xs: 3, md: 5 } }}
       />
 
-      <Tabs value={tabs.value} onChange={tabs.onChange} sx={{ mb: { xs: 3, md: 5 } }}>
+      <Tabs value={tabs.value} sx={{ mb: { xs: 3, md: 5 } }}>
         {TABS.map((tab) => (
           <Tab key={tab.value} label={tab.label} icon={tab.icon} value={tab.value} />
         ))}
       </Tabs>
 
       {/* Display the corresponding content based on the selected tab */}
-      {tabs.value === 'general' && <AccountGeneral />}
       {tabs.value === 'security' && <AccountChangePassword />}
       {tabs.value === 'notifications' && <AccountNotifications />}
       {tabs.value === 'devices' && <DeviceSessionPage />}

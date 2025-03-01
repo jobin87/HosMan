@@ -20,7 +20,7 @@ export function AuthGuard({ children }: Props) {
 
   const searchParams = useSearchParams();
 
-  const { loading, userLogged, sellerDetails } = useUser();
+  const { loading, userLogged,userDetails } = useUser();
 
   const [isChecking, setIsChecking] = useState<boolean>(true);
 
@@ -40,20 +40,20 @@ export function AuthGuard({ children }: Props) {
       return;
     }
 
-    if (!sellerDetails?.isSellerApproved) {
-      if (sellerDetails?.approvalStatus === SERVICE_STATUS.DECLINED) {
+    if (!userDetails?.isUserApproved) {
+      if (userDetails?.approvalStatus === SERVICE_STATUS.DECLINED) {
         router.replace(paths.onboarding.root);
         setIsChecking(false);
         return;
       }
 
-      if (sellerDetails?.approvalStatus === SERVICE_STATUS.UNDERVERIFICATION) {
+      if (userDetails?.approvalStatus === SERVICE_STATUS.UNDERVERIFICATION) {
         router.replace(paths.onboarding.root);
         setIsChecking(false);
         return;
       }
 
-      if (sellerDetails?.approvalStatus === SERVICE_STATUS.PENDING) {
+      if (userDetails?.approvalStatus === SERVICE_STATUS.PENDING) {
         //PENDING
         if (pathname?.split('/')?.[1] === 'onboarding') {
           setIsChecking(false);
@@ -67,7 +67,7 @@ export function AuthGuard({ children }: Props) {
     }
 
     setIsChecking(false);
-  }, [userLogged, sellerDetails, createQueryString, pathname, router]);
+  }, [userLogged, userDetails, createQueryString, pathname, router]);
 
   useEffect(() => {
     checkPermissions();

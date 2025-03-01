@@ -8,14 +8,14 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { useUser } from "src/hooks/use-user";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 
 // Component to display logged-in doctors
 export const SecondGrid = () => {
   const theme = useTheme();
   const isXs = useMediaQuery(theme.breakpoints.down("sm"));
-  const { username, role } = useUser(); // Get logged-in user info
-  const [loggedInDoctors, setLoggedInDoctors] = useState<any[]>([]);
+  const { username } = useUser(); // Get logged-in user info
+  const [loggedInDoctors] = useState<any[]>([]);
 
 
   return (

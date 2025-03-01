@@ -4,13 +4,10 @@ import type { IconButtonProps } from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Drawer from "@mui/material/Drawer";
-import MenuItem from "@mui/material/MenuItem";
 import { useTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 
-import { paths } from "src/routes/paths";
-import { useRouter, usePathname } from "src/routes/hooks";
 import { varAlpha } from "src/theme/styles";
 import { Scrollbar } from "src/components/scrollbar";
 import { AnimateAvatar } from "src/components/animate";
@@ -33,14 +30,15 @@ export type AccountDrawerProps = IconButtonProps & {
 
 export function AccountDrawer({ data = [], sx, ...other }: AccountDrawerProps) {
   const theme = useTheme();
-  const router = useRouter();
 
   const { username, email, photoURL, role } = useUser();
 
   // State for profile images
   const [currentPhoto, setCurrentPhoto] = useState(photoURL);
-  const [previousPhoto, setPreviousPhoto] = useState<string | null>(null);
+  const [previousPhoto] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  {selectedFile && <p>Selected File: {selectedFile.name}</p>}
+
 
   const [open, setOpen] = useState(false);
 
@@ -52,13 +50,6 @@ export function AccountDrawer({ data = [], sx, ...other }: AccountDrawerProps) {
     setOpen(false);
   }, []);
 
-  const handleClickItem = useCallback(
-    (path: string) => {
-      handleCloseDrawer();
-      router.push(path);
-    },
-    [handleCloseDrawer, router]
-  );
 
   // Handle profile image selection
   const handlePhotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,28 +68,6 @@ export function AccountDrawer({ data = [], sx, ...other }: AccountDrawerProps) {
     }
   };
 
-  // Upload image to backend (example function)
-  const uploadProfilePicture = async () => {
-    if (!selectedFile) return;
-
-    const formData = new FormData();
-    formData.append("profileImage", selectedFile);
-
-    try {
-      const response = await fetch("https://your-api.com/api/users/update-profile", {
-        method: "POST",
-        body: formData,
-        credentials: "include",
-      });
-
-      if (!response.ok) throw new Error("Failed to upload image");
-
-      const data = await response.json();
-      setCurrentPhoto(data.imageUrl); // Update with new image URL from backend
-    } catch (error) {
-      console.error("Error updating profile picture:", error);
-    }
-  };
 
   // Profile Image UI
   const renderAvatar = (

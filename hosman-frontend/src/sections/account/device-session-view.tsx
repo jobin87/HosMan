@@ -9,24 +9,13 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
 import { useUser } from 'src/hooks/use-user';
-import { useAppDispatch } from 'src/store';
 
-interface Session {
-  sessionId: string;
-  deviceId: string;
-  browserName: string;
-  browserVersion: string;
-  platform: string;
-  ipAddress: string;
-  location?: { country: string; region: string; city: string; timezone: string } | null;
-}
+
 
 export function DeviceSessionPage(): React.ReactElement {
   const { sessions } = useUser();
-  const dispatch = useAppDispatch();
-  const [loading, setLoading] = useState(false);
+  const loading= false;
 
  
   

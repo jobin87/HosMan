@@ -4,7 +4,6 @@ import {
   ENDPOINT_STAFF_GET,
   ENDPOINT_STAFF_MANAGEMENT_CREATE,
   ENDPOINT_STAFF_MANAGEMENT_DELETE,
-  ENDPOINT_STAFF_MANAGEMENT_DETAILS,
   ENDPOINT_STAFF_MANAGEMENT_EDIT,
   ENDPOINT_STAFF_CREATE,
   ENDPOINT_TREATMENT_ALL_DELETE,
@@ -15,7 +14,7 @@ import {
   ENDPOINT_TREATMENT_ADD,
 } from 'src/network';
 
-import type { adddoctorTypes, DoctorsList, IAllStaffCreateTypes, IAllStaffEditTypes, ITreatmentTypes, staffTypes } from './types';
+import type {  IAllStaffCreateTypes, IAllStaffEditTypes, ITreatmentTypes, staffTypes } from './types';
 
 // Staff Permissions List
 // export const requestAllStaffList = createAsyncThunk('all-staff/allStaffList', async () => {

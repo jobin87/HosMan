@@ -6,7 +6,6 @@ import { z as zod } from 'zod';
 import LoadingButton from '@mui/lab/LoadingButton';
 import Box from '@mui/material/Box';
 
-import { PasswordIcon } from 'src/assets/icons';
 import { paths } from 'src/routes/paths';
 
 import { Field, Form } from 'src/components/hook-form';
@@ -90,7 +89,6 @@ export function ForgotPasswordView() {
   return (
     <Box textAlign={'center'}>
       <FormHead
-        icon={<PasswordIcon />}
         title="Forgot your password?"
         description="Please enter the email address associated with your account and we'll email you a link to reset your password."
       />

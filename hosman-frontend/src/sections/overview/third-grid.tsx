@@ -1,5 +1,4 @@
 import { Typography } from "@mui/material";
-import { useUser } from "src/hooks/use-user";
 
 export const ThirdGrid = () => {
 

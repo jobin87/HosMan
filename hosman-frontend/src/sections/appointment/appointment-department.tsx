@@ -11,7 +11,7 @@ import {
   Paper,
 } from '@mui/material';
 import { useAppDispatch, useAppSelector } from 'src/store';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { getAppointmentData } from 'src/store/appointment/appointmentThunk';
 
 export default function DepartmentDetailsPage() {
@@ -19,7 +19,6 @@ export default function DepartmentDetailsPage() {
   console.log("ueyhjsks",data)
   const { id } = useParams<{ id: string }>(); // Department name from URL
   const dispatch = useAppDispatch();
-  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     if (!data) {

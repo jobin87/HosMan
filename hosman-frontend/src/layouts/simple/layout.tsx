@@ -27,7 +27,7 @@ export type SimpleLayoutProps = {
   };
 };
 
-export function SimpleLayout({ sx, children, header, content }: SimpleLayoutProps) {
+export function SimpleLayout({ sx, children, header}: SimpleLayoutProps) {
   const layoutQuery: Breakpoint = 'md';
 
   return (

@@ -1,25 +1,7 @@
-import { Box, Grid, Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, PieChart, Pie, Cell, Legend } from "recharts";
+import { Box, Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 
-// Sample Data for Leave Requests by Department
-const departmentLeaveStats = [
-  { department: "Cardiology", requests: 15 },
-  { department: "Surgery", requests: 20 },
-  { department: "Emergency", requests: 10 },
-  { department: "Pediatrics", requests: 8 },
-  { department: "Radiology", requests: 12 },
-  { department: "Neurology", requests: 18 },
-];
-
-// Sample Data for Leave Status Breakdown
-const leaveStatusData = [
-  { name: "Approved", value: 50 },
-  { name: "Pending", value: 20 },
-  { name: "Rejected", value: 10 },
-];
 
 // Colors for Pie Chart
-const COLORS = ["#66B3FF", "#FFD966", "#FF6666"];
 
 // Sample Data for Recent Leave Requests
 const recentLeaveRequests = [

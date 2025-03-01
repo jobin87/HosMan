@@ -60,9 +60,8 @@ export function CenteredSignInView() {
   });
 
   const {
-    reset,
     handleSubmit,
-    formState: { isSubmitting, errors },
+    formState: { isSubmitting },
   } = methods;
   // console.log(errors);
 

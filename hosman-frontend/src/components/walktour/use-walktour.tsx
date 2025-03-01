@@ -1,5 +1,4 @@
 import type { StoreHelpers, CallBackProps } from 'react-joyride';
-
 import { STATUS } from 'react-joyride';
 import { useRef, useState } from 'react';
 
@@ -8,7 +7,7 @@ import type { UseWalktourProps, UseWalktourReturn } from './types';
 // ----------------------------------------------------------------------
 
 export function useWalktour({ steps, defaultRun }: UseWalktourProps): UseWalktourReturn {
-  const helpers = useRef<StoreHelpers>();
+  const helpers = useRef<StoreHelpers | null>(null); // ✅ FIX: Set initial value to null
 
   const [run, setRun] = useState(!!defaultRun);
 

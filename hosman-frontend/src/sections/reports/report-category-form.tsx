@@ -1,17 +1,9 @@
 import {
-    Grid,
     Typography,
     Box,
     Stack,
-    FormControl,
-    InputLabel,
-    MenuItem,
-    Select,
-    TextField,
   } from "@mui/material";
   import { useAppDispatch } from "src/store";
-  import { useNavigate } from "react-router-dom";
-  import { paths } from "src/routes/paths";
   import { z as zod } from "zod";
   import { useForm } from "react-hook-form";
   import { zodResolver } from "@hookform/resolvers/zod";
@@ -28,7 +20,6 @@ import { createRoomRoles } from "src/store/roles/roleThunk";
   });
   
   export default function RoomsAndCategoryPage() {
-    const navigate = useNavigate();
     const dispatch = useAppDispatch();
   
     const defaultValues = {

@@ -1,7 +1,7 @@
 import type { Theme } from '@mui/material/styles';
 import type { SettingsState } from 'src/components/settings';
 
-import { experimental_extendTheme as extendTheme } from '@mui/material/styles';
+import { extendTheme } from '@mui/material/styles';
 
 import { setFont } from './styles/utils';
 import { overridesTheme } from './overrides-theme';
@@ -51,7 +51,7 @@ export function createTheme(
 
 // ----------------------------------------------------------------------
 
-function shouldSkipGeneratingVar(keys: string[], value: string | number): boolean {
+function shouldSkipGeneratingVar(keys: string[] ): boolean {
   const skipGlobalKeys = [
     'mixins',
     'overlays',

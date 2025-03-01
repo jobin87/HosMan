@@ -5,31 +5,25 @@ import { m } from 'framer-motion';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import { alpha as hexAlpha } from '@mui/material/styles';
 
-import { paths } from 'src/routes/paths';
 
 import { CONFIG } from 'src/config-global';
 import { varAlpha, bgGradient } from 'src/theme/styles';
 
 import { Label } from 'src/components/label';
 
-import { useMockedUser } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
 export function NavUpgrade({ sx, ...other }: StackProps) {
-  const { user } = useMockedUser();
 
   return (
     <Stack sx={{ px: 2, py: 5, textAlign: 'center', ...sx }} {...other}>
       <Stack alignItems="center">
         <Box sx={{ position: 'relative' }}>
-          <Avatar src={user?.photoURL} alt={user?.displayName} sx={{ width: 48, height: 48 }}>
-            {user?.displayName?.charAt(0).toUpperCase()}
-          </Avatar>
+          
 
           <Label
             color="success"

@@ -5,13 +5,12 @@ import { useMemo, useState, useCallback } from 'react';
 export type UseTabsReturn = {
   value: string;
   setValue: React.Dispatch<React.SetStateAction<string>>;
-  onChange: (event: React.SyntheticEvent, newValue: string) => void;
 };
 
 export function useTabs(defaultValue: string): UseTabsReturn {
   const [value, setValue] = useState(defaultValue);
 
-  const onChange = useCallback((event: React.SyntheticEvent, newValue: string) => {
+  const onChange = useCallback(( newValue: string) => {
     setValue(newValue);
   }, []);
 

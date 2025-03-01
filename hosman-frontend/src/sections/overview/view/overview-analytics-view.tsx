@@ -1,8 +1,6 @@
 import { Grid, Paper, Box, Typography } from "@mui/material";
 import { DashboardContent } from "src/layouts/dashboard";
-import { FirstGrid } from "../first-grid";
-import { SecondGrid } from "../second-grid";
-import { ThirdGrid } from "../third-grid";
+
 import { Patientsdischarge } from "../patient-discharge";
 import AppointmentsChartPage from "../appointment-chart";
 import BloodBankPage from "../blood-bank";

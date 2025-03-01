@@ -2,8 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 import { basicInitialState } from '../types';
 import {
   getAppointmentData,
-  // getAppointmentData,
-  requestAppointmentSaved,
 } from './appointmentThunk';
 
 const initialState = {

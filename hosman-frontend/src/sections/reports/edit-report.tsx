@@ -1,11 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoadingButton } from "@mui/lab";
-import { Box, Button, Card, Grid, Stack, Typography } from "@mui/material";
+import { Box, Card, Grid, Stack, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import { Field, Form } from "src/components/hook-form";
 import { paths } from "src/routes/paths";
-import { useAppDispatch } from "src/store";
 import { z as zod } from "zod";
 
 export const newReportSchema = zod.object({
@@ -23,8 +22,6 @@ export type newReportSchemaType = Zod.infer<typeof newReportSchema>;
 
 export default function ReportEditForm() {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const location = useLocation();
 
   const defaultValues = {
     description: "",
@@ -46,7 +43,7 @@ export default function ReportEditForm() {
   } = methods;
   console.log("error:",errors);
 
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = handleSubmit(async () => {
     try {
       console.log("treatmentData:");
       console.log("treatmentId in form data:");

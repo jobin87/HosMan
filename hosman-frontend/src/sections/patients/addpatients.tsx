@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { useAppDispatch } from "src/store";
 import { requestAddPatientList } from "src/store/patient/patientThunk";
 import { z as zod } from "zod";
-import { NewDoctorSchema } from "../doctors/add-doctor";
 import { Field, Form } from "src/components/hook-form";
 import { Box, Card, Stack, Typography } from "@mui/material";
 import { LoadingButton } from "@mui/lab";

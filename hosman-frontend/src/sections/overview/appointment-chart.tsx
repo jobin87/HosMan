@@ -1,4 +1,4 @@
-import { Box, Grid, Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button } from "@mui/material";
+import { Box,Typography } from "@mui/material";
 import { useState } from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 
@@ -35,7 +35,7 @@ const LastyearAppointmentState=[
 
 
 export default function AppointmentsChartPage() {
-      const [showPreviousYear, setShowPreviousYear] = useState(false);
+      const [showPreviousYear] = useState(false);
     
   return (
     <Box >

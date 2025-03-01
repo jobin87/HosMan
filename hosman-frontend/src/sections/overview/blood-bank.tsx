@@ -135,7 +135,7 @@ export default function BloodBankPage() {
               dataKey="value"
               label
             >
-              {bloodAvailability.map((entry, index) => (
+              {bloodAvailability.map((index:any) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>

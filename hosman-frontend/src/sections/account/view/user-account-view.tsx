@@ -51,7 +51,7 @@ export function AccountView() {
         sx={{ mb: { xs: 3, md: 5 } }}
       />
 
-      <Tabs value={tabs.value} onChange={tabs.onChange} sx={{ mb: { xs: 3, md: 5 } }}>
+      <Tabs value={tabs.value}  sx={{ mb: { xs: 3, md: 5 } }}>
         {TABS.map((tab) => (
           <Tab key={tab.value} label={tab.label} icon={tab.icon} value={tab.value} />
         ))}

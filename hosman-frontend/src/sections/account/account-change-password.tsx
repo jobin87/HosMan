@@ -8,11 +8,9 @@ import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import Stack from '@mui/material/Stack';
 
-import toast from 'react-hot-toast';
 import { Field, Form } from 'src/components/hook-form';
 import { Iconify } from 'src/components/iconify';
 import { useBoolean } from 'src/hooks/use-boolean';
-import { useAppDispatch } from 'src/store';
 
 // ----------------------------------------------------------------------
 
@@ -42,7 +40,6 @@ export const ChangePassWordSchema = zod
 // ----------------------------------------------------------------------
 
 export function AccountChangePassword() {
-  const dispatch = useAppDispatch();
   const passwordVisibility = useBoolean();
 
   const methods = useForm<ChangePassWordSchemaType>({
@@ -55,8 +52,6 @@ export function AccountChangePassword() {
   });
 
   const {
-    handleSubmit,
-    reset,
     formState: { isSubmitting },
   } = methods;
 
@@ -87,7 +82,7 @@ export function AccountChangePassword() {
   return (
     <Form methods={methods} >
       <Card sx={{ p: 3, gap: 3, display: 'flex', flexDirection: 'column' }}>
-        {['currentPassword', 'newPassword', 'confirmPassword'].map((field, index) => (
+        {['currentPassword', 'newPassword', 'confirmPassword'].map((field) => (
           <Field.Text
             key={field}
             name={field}

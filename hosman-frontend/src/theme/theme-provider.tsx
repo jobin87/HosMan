@@ -26,7 +26,7 @@ export function ThemeProvider({ children }: Props) {
 
   const settings = useSettingsContext();
 
-  const theme = createTheme(currentLang?.systemValue, settings);
+  const theme = createTheme(currentLang?.systemValue);
 
   return (
     <CssVarsProvider

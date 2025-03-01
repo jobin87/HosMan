@@ -1,6 +1,5 @@
 import type { Breakpoint, SxProps, Theme } from '@mui/material/styles';
 
-import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 
@@ -47,11 +46,7 @@ export function AuthCenteredLayout({ sx, children, header }: AuthCenteredLayoutP
           slotProps={{ container: { maxWidth: false } }}
           sx={{ position: { [layoutQuery]: 'fixed' }, ...header?.sx }}
           slots={{
-            topArea: (
-              <Alert severity="info" sx={{ display: 'none', borderRadius: 0 }}>
-                This is an info Alert.
-              </Alert>
-            ),
+            
             leftArea: (
               <>
                 {/* -- Logo -- */}

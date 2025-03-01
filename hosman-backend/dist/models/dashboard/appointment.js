@@ -9,7 +9,7 @@ const appointmentSchema = new mongoose_1.default.Schema({
         type: String,
         required: true,
     },
-    doctor: {
+    doctorName: {
         type: String,
         required: true,
     },

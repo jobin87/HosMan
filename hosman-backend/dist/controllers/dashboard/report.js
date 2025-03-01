@@ -12,14 +12,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getReports = exports.AddReports = void 0;
+exports.AssignWorkers = exports.getReports = exports.AddReports = void 0;
 const uuid_1 = require("uuid");
 const report_1 = __importDefault(require("../../models/dashboard/report"));
+const mongoose_1 = __importDefault(require("mongoose"));
 const AddReports = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { description, category, roomNo } = req.body;
         if (!description || !category || !roomNo) {
-            res.status(400).json({ message: 'All fields are required' });
+            res.status(400).json({ message: "All fields are required" });
             return;
         }
         const reportId = `RPT-${(0, uuid_1.v4)()}`;
@@ -30,6 +31,7 @@ const AddReports = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             category,
             roomNo,
             dateReported,
+            isAssigned: false, // ✅ Default value when a report is created
         });
         yield newReport.save();
         res.status(201).json({ message: "Report added successfully", reportId: reportId, newReport });
@@ -47,37 +49,29 @@ exports.AddReports = AddReports;
 const getReports = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { reportId } = req.query;
-        // If a specific reportId is provided, fetch the report by that ID
         if (reportId) {
-            const existingReport = yield report_1.default.findOne({ reportId });
+            const existingReport = yield report_1.default.findById(reportId);
             if (existingReport) {
-                res.status(200).json({
-                    message: "Report found",
-                    report: existingReport,
-                });
+                res.status(200).json({ message: "Report found", report: existingReport });
             }
             else {
                 res.status(404).json({ message: "Report not found" });
             }
         }
         else {
-            // If no specific reportId is provided, fetch all reports and group by category
+            // ✅ Step 1: Sort reports globally by createdAt (ascending)
             const reportdata = yield report_1.default.aggregate([
+                { $sort: { createdAt: 1 } }, // Oldest reports first
                 {
                     $group: {
-                        _id: "$category", // Group by category field
-                        count: { $sum: 1 }, // Count the number of reports per category
-                        reports: { $push: "$$ROOT" }, // Push all reports under each category
+                        _id: "$category",
+                        count: { $sum: 1 },
+                        reports: { $push: "$$ROOT" }, // Maintain createdAt order within category
                     },
                 },
-                {
-                    $sort: { count: -1 }, // Optional: Sort categories by the count (descending)
-                },
+                { $sort: { "_id": 1 } } // ✅ Ensure categories appear in a consistent order
             ]);
-            res.status(200).json({
-                message: "All reports fetched successfully",
-                reportdata,
-            });
+            res.status(200).json({ message: "All reports fetched successfully", reportdata });
         }
     }
     catch (error) {
@@ -85,3 +79,31 @@ const getReports = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.getReports = getReports;
+const AssignWorkers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { reportId, assignedWorker } = req.body;
+        console.log("🔍 Received Request - Report ID:", reportId, "Worker:", assignedWorker);
+        if (!reportId) {
+            res.status(400).json({ message: "reportId is required" });
+            return;
+        }
+        // ✅ Convert `reportId` to ObjectId to match MongoDB `_id`
+        const objectId = new mongoose_1.default.Types.ObjectId(reportId);
+        // ✅ Find by `_id` instead of `reportId`
+        const existingReport = yield report_1.default.findById(objectId);
+        if (!existingReport) {
+            console.log("❌ Report not found for ID:", reportId);
+            res.status(404).json({ message: "Report not found" });
+            return;
+        }
+        // ✅ Update assigned worker & isAssigned status
+        const updatedReport = yield report_1.default.findByIdAndUpdate(objectId, { $set: { assignedWorker, isAssigned: !!assignedWorker } }, { new: true });
+        console.log("✅ Worker Assigned Successfully:", updatedReport);
+        res.status(200).json({ message: "Worker assigned successfully", updatedReport });
+    }
+    catch (error) {
+        console.error("❌ Server error:", error.message);
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+});
+exports.AssignWorkers = AssignWorkers;

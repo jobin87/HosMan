@@ -45,7 +45,10 @@ const userSchema = new mongoose_1.default.Schema({
     verificationToken: {
         type: String, // <-- Add this field
     },
-    photoURL: { type: String, default: "" }
+    photoURL: {
+        type: [String], // Change from a single string to an array of strings
+        default: [],
+    },
 }, { timestamps: true });
 const User = mongoose_1.default.model('User', userSchema);
 exports.default = User;

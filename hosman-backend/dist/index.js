@@ -10,21 +10,33 @@ const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
 const cors_1 = __importDefault(require("cors"));
 const dashboardRoutes_1 = require("./routes/dashboardRoutes");
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
-dotenv_1.default.config({ path: '.env.development' });
+dotenv_1.default.config({ path: ".env.development" });
 const app = (0, express_1.default)();
+const authBaseUrl = process.env.VITE_AUTH_BASE_URL;
+const allowedOrigins = ["http://localhost:5173", "https://hosman-r67h.onrender.com"];
 app.use((0, cors_1.default)({
-    origin: "http://localhost:5173", // Allow frontend to access API
-    credentials: true, // Enable cookies/auth headers
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        }
+        else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true, // Allow cookies & authentication headers
+    methods: "GET,POST,PUT,DELETE,PATCH",
+    allowedHeaders: ["Content-Type", "Authorization"],
 }));
+app.options("*", (0, cors_1.default)()); // Handle preflight requests
 app.use((0, cookie_parser_1.default)());
 // Middleware
 app.use(express_1.default.json());
 (0, db_1.connectDb)();
-app.use('/api/auth/v1/', authRoutes_1.default);
-app.use('/api/staff/v1/', dashboardRoutes_1.dashboardRoutes);
+app.use("/api/auth/v1/", authRoutes_1.default);
+app.use("/api/staff/v1/", dashboardRoutes_1.dashboardRoutes);
 // Routes
-app.get('/', (req, res) => {
-    res.send('Hello, TypeScript World!');
+app.get("/", (req, res) => {
+    res.send("Hello, TypeScript World!");
 });
 // Start the server
 const PORT = process.env.PORT || 3000;

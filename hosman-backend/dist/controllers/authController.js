@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sessions = exports.logout = exports.login = exports.verifyEmail = exports.signup = void 0;
+exports.sessions = exports.logout = exports.updateProfile = exports.login = exports.verifyEmail = exports.signup = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = __importDefault(require("../models/user"));
 const session_1 = __importDefault(require("../models/session"));
@@ -20,6 +20,8 @@ const SECRET_KEY = "112eryt33";
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const crypto_1 = __importDefault(require("crypto"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const multer_1 = __importDefault(require("multer"));
+const path_1 = __importDefault(require("path"));
 const transporter = nodemailer_1.default.createTransport({
     service: "Gmail",
     auth: {
@@ -27,6 +29,19 @@ const transporter = nodemailer_1.default.createTransport({
         pass: process.env.EMAIL_PASS, // App Password
     },
 });
+const storage = multer_1.default.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "uploads/"); // ✅ Store in "uploads" folder
+    },
+    filename: (req, file, cb) => {
+        const userId = req.body.userId; // ✅ Get `userId` from request body
+        if (!userId) {
+            return cb(new Error("User ID is required"), "default-image.jpg");
+        }
+        cb(null, `${userId}-${Date.now()}${path_1.default.extname(file.originalname)}`);
+    },
+});
+const upload = (0, multer_1.default)({ storage });
 const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { userName, role, userRegNum, specialization, userEmail, password, zipCode } = req.body;
@@ -102,9 +117,18 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             subject: "Verify Your Email",
             html: `
         <h2>Hello ${userName},</h2>
+        <p>Thank you for registering with us!</p>
         <p>Please verify your email by clicking the link below:</p>
         <a href="${verificationUrl}">Verify Email</a>
         <p>This link will expire in 24 hours.</p>
+        
+        <h3>Account Details:</h3>
+        <ul>
+          <li><strong>Name:</strong> ${userName}</li>
+          <li><strong>Email:</strong> ${userEmail}</li>
+        </ul>
+    
+        <p>If you did not sign up, please ignore this email.</p>
       `,
         };
         yield transporter.sendMail(mailOptions);
@@ -235,6 +259,38 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.login = login;
+const updateProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        // ✅ Ensure `req.user` is set by the authentication middleware
+        if (!req.user || !req.user.id) {
+            res.status(401).json({ success: false, message: "Unauthorized access" });
+            return;
+        }
+        const userId = req.user.id; // ✅ Get user ID from authenticated request
+        // ✅ Ensure a file was uploaded
+        if (!req.file) {
+            res.status(400).json({ success: false, message: "No image uploaded" });
+            return;
+        }
+        const newImageUrl = `/uploads/${req.file.filename}`;
+        // ✅ Find the user and update their profile image
+        const user = yield user_1.default.findByIdAndUpdate(userId, { photoURL: newImageUrl }, { new: true });
+        if (!user) {
+            res.status(404).json({ success: false, message: "User not found" });
+            return;
+        }
+        res.json({
+            success: true,
+            message: "Profile image updated successfully",
+            photoURL: user.photoURL,
+        });
+    }
+    catch (error) {
+        console.error("Error updating profile image:", error);
+        res.status(500).json({ success: false, message: "Internal server error" });
+    }
+});
+exports.updateProfile = updateProfile;
 const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const authHeader = req.headers.authorization;

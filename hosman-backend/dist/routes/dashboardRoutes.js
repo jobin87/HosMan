@@ -30,6 +30,7 @@ exports.dashboardRoutes.patch('/updateTreatmentById/:treatmentId', treatment_1.u
 //report
 exports.dashboardRoutes.post('/report/addReportList', report_1.AddReports);
 exports.dashboardRoutes.get('/report/getReport/:id?', report_1.getReports);
+exports.dashboardRoutes.patch('/report/assignWorkers', report_1.AssignWorkers);
 //roomsAndCategories
 exports.dashboardRoutes.post('/roles/addRoomsAndCategory', roles_1.AddroomsAndCategories);
 exports.dashboardRoutes.get('/roles/getRoomsAndCategory', roles_1.getRoomsAndCategories);

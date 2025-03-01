@@ -15,31 +15,35 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkSession = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const session_1 = __importDefault(require("../models/session"));
+const multer_1 = __importDefault(require("multer"));
 const SECRET_KEY = "112eryt33";
+const upload = (0, multer_1.default)({ dest: "uploads/" });
+// Middleware: Check if user session is active
 const checkSession = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
         const token = ((_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(" ")[1]) || req.cookies.authToken;
-        console.log("Token received:", token); // 🔍 Debugging
+        console.log("Token received:", token);
         if (!token) {
-            console.log("No token provided");
             res.status(401).json({ message: "Unauthorized: No token provided" });
+            return;
         }
         const decoded = jsonwebtoken_1.default.verify(token, SECRET_KEY);
-        console.log("Decoded token:", decoded); // 🔍 Debugging
+        console.log("Decoded token:", decoded);
         if (!decoded || !decoded.id) {
-            console.log("Invalid token structure");
             res.status(401).json({ message: "Invalid token" });
+            return;
         }
+        // Check if the session is active
         const session = yield session_1.default.findOne({ userId: decoded.id, token, isActive: true });
-        console.log("Session found:", session); // 🔍 Debugging
+        console.log("Session found:", session);
         if (!session) {
-            console.log("Session expired or not found");
             res.status(401).json({ message: "Session expired. Please log in again." });
+            return;
         }
         req.user = { id: decoded.id, email: decoded.email, role: decoded.role };
-        console.log("User set on req:", req.user); // 🔍 Debugging
-        next();
+        console.log("User set on req:", req.user);
+        next(); // ✅ Continue if authenticated
     }
     catch (error) {
         console.log("Authentication failed:", error);

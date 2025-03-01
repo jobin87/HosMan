@@ -16,16 +16,16 @@ exports.getAppointments = exports.appointments = void 0;
 const appointment_1 = __importDefault(require("../../models/dashboard/appointment"));
 const appointments = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { department, doctor, patientName, appointmentTime, appointmentDate, payment } = req.body;
+        const { department, doctorName, patientName, appointmentTime, appointmentDate, payment } = req.body;
         // Check for missing fields
-        if (!department || !doctor || !patientName || !appointmentTime || !appointmentDate || !payment) {
+        if (!department || !doctorName || !patientName || !appointmentTime || !appointmentDate || !payment) {
             res.status(400).json({ message: 'All fields are required' });
             return;
         }
         // Create and save the new appointment
         const newAppointment = new appointment_1.default({
             department,
-            doctor,
+            doctorName,
             patientName,
             appointmentTime,
             appointmentDate,

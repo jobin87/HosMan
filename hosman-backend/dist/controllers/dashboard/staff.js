@@ -52,7 +52,7 @@ const getStaff = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         console.log("Grouped staff data:", JSON.stringify(groupedStaff, null, 2));
         res.status(200).json({
             message: "Staff grouped by staff type",
-            data: groupedStaff,
+            groupedStaff,
         });
     }
     catch (error) {

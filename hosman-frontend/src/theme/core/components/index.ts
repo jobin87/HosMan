@@ -18,6 +18,7 @@ import { drawer } from './drawer';
 import { select } from './select';
 import { rating } from './rating';
 import { slider } from './slider';
+import { button } from './button';
 import { fab } from './button-fab';
 import { tooltip } from './tooltip';
 import { popover } from './popover';
@@ -65,6 +66,7 @@ export const components = {
   ...slider,
   ...rating,
   ...select,
+  ...button,
   ...stepper,
   ...tooltip,
   ...popover,

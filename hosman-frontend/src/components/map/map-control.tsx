@@ -13,14 +13,14 @@ export function MapControl({ hideScale, hideGeolocate, hideFullscreen, hideNavig
   return (
     <>
       {!hideGeolocate && (
-        <GeolocateControl position="top-left" positionOptions={{ enableHighAccuracy: true }} />
+        <GeolocateControl positionOptions={{ enableHighAccuracy: true }} />
       )}
 
-      {!hideFullscreen && <FullscreenControl position="top-left" />}
+      {!hideFullscreen && <FullscreenControl />}
 
-      {!hideScale && <ScaleControl position="bottom-left" />}
+      {!hideScale && <ScaleControl />}
 
-      {!hideNavigation && <NavigationControl position="bottom-left" />}
+      {!hideNavigation && <NavigationControl />}
     </>
   );
 }

@@ -1,6 +1,6 @@
-import type { MapRef, MapProps } from 'react-map-gl';
+import MapGL, { MapProps, MapRef } from 'react-map-gl/mapbox';  // If using Mapbox
+// OR
 
-import MapGL from 'react-map-gl';
 import { forwardRef } from 'react';
 
 import { CONFIG } from 'src/config-global';

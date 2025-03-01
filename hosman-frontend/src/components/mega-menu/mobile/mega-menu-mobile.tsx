@@ -55,7 +55,7 @@ export function MegaMenuMobile({
   }, [pathname]);
 
   const renderButton = slots?.button ? (
-    cloneElement(slots.button, { onClick: handleOpenDrawer })
+    cloneElement(slots.button)
   ) : (
     <IconButton onClick={handleOpenDrawer}>
       <SvgIcon>

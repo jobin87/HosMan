@@ -16,7 +16,6 @@ export default function useCurrentColorScheme({
   defaultMode = 'light',
   defaultLightColorScheme = 'light',
   defaultDarkColorScheme = 'dark',
-  supportedColorSchemes = ['light', 'dark'],
   modeStorageKey = 'colorMode',
   colorSchemeStorageKey = 'colorScheme',
 }: UseCurrentColorSchemeOptions) {

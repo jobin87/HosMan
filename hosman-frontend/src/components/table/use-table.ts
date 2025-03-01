@@ -67,9 +67,7 @@ export function useTable(props?: UseTableProps): UseTableReturn {
     setSelected([]);
   }, []);
 
-  const onChangePage = useCallback((event: unknown, newPage: number) => {
-    setPage(newPage);
-  }, []);
+  
 
   const onResetPage = useCallback(() => {
     setPage(0);
@@ -126,7 +124,6 @@ export function useTable(props?: UseTableProps): UseTableReturn {
     onSelectAllRows,
     //
     onSort,
-    onChangePage,
     onChangeDense,
     onResetPage,
     onChangeRowsPerPage,

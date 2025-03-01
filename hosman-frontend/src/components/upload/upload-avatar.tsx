@@ -136,7 +136,9 @@ export function UploadAvatar({
 
       {helperText && helperText}
 
-      <RejectionFiles files={fileRejections} />
+      <RejectionFiles files={[...fileRejections]} />
+
+
     </>
   );
 }

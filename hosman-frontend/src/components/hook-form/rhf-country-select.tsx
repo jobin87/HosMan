@@ -13,7 +13,7 @@ export function RHFCountrySelect({
 }: CountrySelectProps & {
   name: string;
 }) {
-  const { control, setValue } = useFormContext();
+  const { control} = useFormContext();
 
   return (
     <Controller
@@ -23,7 +23,6 @@ export function RHFCountrySelect({
         <CountrySelect
           id={`rhf-country-select-${name}`}
           value={field.value}
-          onChange={(event, newValue) => setValue(name, newValue, { shouldValidate: true })}
           error={!!error}
           helperText={error?.message ?? helperText}
           {...other}

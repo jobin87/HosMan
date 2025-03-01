@@ -15,10 +15,10 @@ import { fileData } from '../../file-thumbnail';
 // ----------------------------------------------------------------------
 
 type RejectionFilesProps = PaperProps & {
-  files: FileRejection[];
+  files?: FileRejection[]; // ✅ Make `files` optional
 };
 
-export function RejectionFiles({ files, sx, className, ...other }: RejectionFilesProps) {
+export function RejectionFiles({ files = [], sx, className, ...other }: RejectionFilesProps) { 
   if (!files.length) {
     return null;
   }

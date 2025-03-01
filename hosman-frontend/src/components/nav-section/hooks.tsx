@@ -51,7 +51,7 @@ export function useNavItem({
   /**
    * Render @icon
    */
-  let renderIcon = null;
+  let renderIcon: React.ReactNode = null; // ✅ Fix: Explicitly define type
 
   if (icon && render?.navIcon && typeof icon === 'string') {
     renderIcon = render?.navIcon[icon];
@@ -62,7 +62,7 @@ export function useNavItem({
   /**
    * Render @info
    */
-  let renderInfo = null;
+  let renderInfo: React.ReactNode = null; // ✅ Fix: Explicitly define type
 
   if (info && render?.navInfo && Array.isArray(info)) {
     const [key, value] = info;

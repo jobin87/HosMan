@@ -112,6 +112,17 @@
     "@emotion/weak-memoize" "^0.4.0"
     stylis "4.2.0"
 
+"@emotion/css@^11.7.1":
+  version "11.13.5"
+  resolved "https://registry.npmjs.org/@emotion/css/-/css-11.13.5.tgz#db2d3be6780293640c082848e728a50544b9dfa4"
+  integrity sha512-wQdD0Xhkn3Qy2VNcIzbLP9MR8TafI0MJb7BEAXKp+w4+XqErksWR4OXomuDzPsN4InLdGhVe6EYcn2ZIUCpB8w==
+  dependencies:
+    "@emotion/babel-plugin" "^11.13.5"
+    "@emotion/cache" "^11.13.5"
+    "@emotion/serialize" "^1.3.3"
+    "@emotion/sheet" "^1.4.0"
+    "@emotion/utils" "^1.4.2"
+
 "@emotion/hash@^0.9.2":
   version "0.9.2"
   resolved "https://registry.npmjs.org/@emotion/hash/-/hash-0.9.2.tgz#ff9221b9f58b4dfe61e619a7788734bd63f6898b"
@@ -1145,6 +1156,11 @@
   resolved "https://registry.npmjs.org/@types/estree/-/estree-1.0.6.tgz"
   integrity sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==
 
+"@types/geojson@*":
+  version "7946.0.16"
+  resolved "https://registry.npmjs.org/@types/geojson/-/geojson-7946.0.16.tgz#8ebe53d69efada7044454e3305c19017d97ced2a"
+  integrity sha512-6C8nqWur3j98U6+lXDfTUWIfgvZU+EumvpHKcYjujKH7woYyLj2sUmff0tRhrqM7BohUw7Pz3ZB1jj2gW9Fvmg==
+
 "@types/hast@^3.0.0":
   version "3.0.4"
   resolved "https://registry.npmjs.org/@types/hast/-/hast-3.0.4.tgz#1d6b39993b82cea6ad783945b0508c25903e15aa"
@@ -1168,6 +1184,13 @@
   version "4.17.15"
   resolved "https://registry.npmjs.org/@types/lodash/-/lodash-4.17.15.tgz#12d4af0ed17cc7600ce1f9980cec48fc17ad1e89"
   integrity sha512-w/P33JFeySuhN6JLkysYUK2gEmy9kHHFN7E8ro0tkfmlDOgxBDzWEZ/J8cWA+fHqFevpswDTFZnDx+R9lbL6xw==
+
+"@types/mapbox-gl@*":
+  version "3.4.1"
+  resolved "https://registry.npmjs.org/@types/mapbox-gl/-/mapbox-gl-3.4.1.tgz#b6a1b81b802e62fb7e1d1d13a97ccece63b232a3"
+  integrity sha512-NsGKKtgW93B+UaLPti6B7NwlxYlES5DpV5Gzj9F75rK5ALKsqSk15CiEHbOnTr09RGbr6ZYiCdI+59NNNcAImg==
+  dependencies:
+    "@types/geojson" "*"
 
 "@types/markdown-it@^14.0.0":
   version "14.1.2"
@@ -1216,10 +1239,27 @@
   resolved "https://registry.npmjs.org/@types/react-dom/-/react-dom-19.0.3.tgz#0804dfd279a165d5a0ad8b53a5b9e65f338050a4"
   integrity sha512-0Knk+HJiMP/qOZgMyNFamlIjw9OFCsyC2ZbigmEEyXXixgre6IQpm/4V+r3qH4GC1JPvRJKInw+on2rV6YZLeA==
 
+"@types/react-map-gl@^6.1.7":
+  version "6.1.7"
+  resolved "https://registry.npmjs.org/@types/react-map-gl/-/react-map-gl-6.1.7.tgz#c3e81ccd21c31cee8fe1576eab894cf6d4be9f0a"
+  integrity sha512-szkfkWd3FbySDkxyn0MDj9yzD8XYk+RIi4od6sGb3lVHNBGcW20G2v2vcq2N5k18UYAdqAoKGSYuHkGV4JOCrA==
+  dependencies:
+    "@types/geojson" "*"
+    "@types/mapbox-gl" "*"
+    "@types/react" "*"
+    "@types/viewport-mercator-project" "*"
+
 "@types/react-transition-group@^4.4.11", "@types/react-transition-group@^4.4.12":
   version "4.4.12"
   resolved "https://registry.npmjs.org/@types/react-transition-group/-/react-transition-group-4.4.12.tgz#b5d76568485b02a307238270bfe96cb51ee2a044"
   integrity sha512-8TV6R3h2j7a91c+1DXdJi3Syo69zzIZbz7Lg5tORM5LEJG7X/E6a1V3drRyBRZq7/utz7A+c4OgYLiLcYGHG6w==
+
+"@types/react@*":
+  version "19.0.10"
+  resolved "https://registry.npmjs.org/@types/react/-/react-19.0.10.tgz#d0c66dafd862474190fe95ce11a68de69ed2b0eb"
+  integrity sha512-JuRQ9KXLEjaUNjTWpzuR231Z2WpIwczOkBEIvbHNCzQefFIT0L8IqE6NV6ULLyC1SI/i234JnDoMkfg+RjQj2g==
+  dependencies:
+    csstype "^3.0.2"
 
 "@types/react@^18.3.12":
   version "18.3.18"
@@ -1250,6 +1290,13 @@
   version "0.0.6"
   resolved "https://registry.npmjs.org/@types/use-sync-external-store/-/use-sync-external-store-0.0.6.tgz#60be8d21baab8c305132eb9cb912ed497852aadc"
   integrity sha512-zFDAD+tlpf2r4asuHEj0XH6pY6i0g5NeAHPn+15wk3BV6JA69eERFXC1gyGThDkVa1zCyKr5jox1+2LbV/AMLg==
+
+"@types/viewport-mercator-project@*":
+  version "6.1.6"
+  resolved "https://registry.npmjs.org/@types/viewport-mercator-project/-/viewport-mercator-project-6.1.6.tgz#74874286099e9506943c3f868c9cbeaf2a6d1559"
+  integrity sha512-uWrbqhRXFeiT6CAvRjf0BkQKRkKED+ofrPhglKpUktQML3463dEPiA4iwe7cZQs6m49Zo/g03rL7ChMLiE5Z8w==
+  dependencies:
+    gl-matrix "^3.2.0"
 
 "@ungap/structured-clone@^1.0.0":
   version "1.3.0"
@@ -1600,7 +1647,20 @@ embla-carousel-autoplay@^8.5.2:
   resolved "https://registry.npmjs.org/embla-carousel-autoplay/-/embla-carousel-autoplay-8.5.2.tgz#b24f2b5523282113ad2f2289a8e9a0bee7877e4e"
   integrity sha512-27emJ0px3q/c0kCHCjwRrEbYcyYUPfGO3g5IBWF1i7714TTzE6L9P81V6PHLoSMAKJ1aHoT2e7YFOsuFKCbyag==
 
-embla-carousel@^8.5.2:
+embla-carousel-react@^8.5.2:
+  version "8.5.2"
+  resolved "https://registry.npmjs.org/embla-carousel-react/-/embla-carousel-react-8.5.2.tgz#f79f6c36690596fe2aceec994372ab84bfbfd9cc"
+  integrity sha512-Tmx+uY3MqseIGdwp0ScyUuxpBgx5jX1f7od4Cm5mDwg/dptEiTKf9xp6tw0lZN2VA9JbnVMl/aikmbc53c6QFA==
+  dependencies:
+    embla-carousel "8.5.2"
+    embla-carousel-reactive-utils "8.5.2"
+
+embla-carousel-reactive-utils@8.5.2:
+  version "8.5.2"
+  resolved "https://registry.npmjs.org/embla-carousel-reactive-utils/-/embla-carousel-reactive-utils-8.5.2.tgz#914bf99c3d91e0809282fc1d14df3d1453f222c1"
+  integrity sha512-QC8/hYSK/pEmqEdU1IO5O+XNc/Ptmmq7uCB44vKplgLKhB/l0+yvYx0+Cv0sF6Ena8Srld5vUErZkT+yTahtDg==
+
+embla-carousel@8.5.2, embla-carousel@^8.5.2:
   version "8.5.2"
   resolved "https://registry.npmjs.org/embla-carousel/-/embla-carousel-8.5.2.tgz#95eb936d14a1b9a67b9207a0fde1f25259a5d692"
   integrity sha512-xQ9oVLrun/eCG/7ru3R+I5bJ7shsD8fFwLEY7yPe27/+fDHCNj0OT5EoG5ZbFyOxOcG6yTwW8oTz/dWyFnyGpg==
@@ -1747,6 +1807,11 @@ get-value@^2.0.2, get-value@^2.0.6:
   version "2.0.6"
   resolved "https://registry.npmjs.org/get-value/-/get-value-2.0.6.tgz#dc15ca1c672387ca76bd37ac0a395ba2042a2c28"
   integrity sha512-Ln0UQDlxH1BapMu3GPtf7CuYNwRZf2gwCuPqbyG6pB8WfmFpzqcy4xtAaAMUhnNqjMKTiCPZG2oMT3YSx8U2NA==
+
+gl-matrix@^3.2.0:
+  version "3.4.3"
+  resolved "https://registry.npmjs.org/gl-matrix/-/gl-matrix-3.4.3.tgz#fc1191e8320009fd4d20e9339595c6041ddc22c9"
+  integrity sha512-wcCp8vu8FT22BnvKVPjXa/ICBWRq/zjFfdofZy1WSpQZpphblv12/bOQLBC1rMM7SGOFS9ltVmKOHil5+Ml7gA==
 
 globals@^11.1.0:
   version "11.12.0"
@@ -3060,6 +3125,13 @@ react-merge-refs@2.1.1:
   resolved "https://registry.npmjs.org/react-merge-refs/-/react-merge-refs-2.1.1.tgz#e46763f8f1b881c0226ee54a1a2a10ffefba0233"
   integrity sha512-jLQXJ/URln51zskhgppGJ2ub7b2WFKGq3cl3NYKtlHoTG+dN2q7EzWrn3hN3EgPsTMvpR9tpq5ijdp7YwFZkag==
 
+react-organizational-chart@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.npmjs.org/react-organizational-chart/-/react-organizational-chart-2.2.1.tgz#876641081303349f611d3a24a9488bff38fba677"
+  integrity sha512-JORmpLeYzCVtztdqCHsnKL8H3WiLRPHjohgh/PxQoszLuaQ+l3F8YefKSfpcBPZJhHwy3SlqjFjPC28a3Hh3QQ==
+  dependencies:
+    "@emotion/css" "^11.7.1"
+
 react-phone-number-input@^3.4.11:
   version "3.4.11"
   resolved "https://registry.npmjs.org/react-phone-number-input/-/react-phone-number-input-3.4.11.tgz#d1120ef5323311eaed5ea46ca9ecfcadd5255b6a"
@@ -3357,6 +3429,11 @@ simplebar-react@^3.3.0:
   integrity sha512-sxzy+xRuU41He4tT4QLGYutchtOuye/xxVeq7xhyOiwMiHNK1ZpvbOTyy+7P0i7gfpXLGTJ8Bep8+4Mhdgtz/g==
   dependencies:
     simplebar-core "^1.3.0"
+
+sonner@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.npmjs.org/sonner/-/sonner-2.0.1.tgz#f41774b2e0ee770152458a336570a4d577d03e6f"
+  integrity sha512-FRBphaehZ5tLdLcQ8g2WOIRE+Y7BCfWi5Zyd8bCvBjiW8TxxAyoWZIxS661Yz6TGPqFQ4VLzOF89WEYhfynSFQ==
 
 sort-asc@^0.2.0:
   version "0.2.0"

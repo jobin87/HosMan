@@ -2,7 +2,6 @@ import type { Theme, SxProps, Breakpoint } from '@mui/material/styles';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
-import Alert from '@mui/material/Alert';
 
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
@@ -47,11 +46,7 @@ export function AuthSplitLayout({ sx, section, children, header }: AuthSplitLayo
           slotProps={{ container: { maxWidth: false } }}
           sx={{ position: { [layoutQuery]: 'fixed' }, ...header?.sx }}
           slots={{
-            topArea: (
-              <Alert severity="info" sx={{ display: 'none', borderRadius: 0 }}>
-                This is an info Alert.
-              </Alert>
-            ),
+           
             leftArea: (
               <>
                 {/* -- Logo -- */}

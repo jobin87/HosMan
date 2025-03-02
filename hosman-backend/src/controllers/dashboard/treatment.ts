@@ -10,26 +10,39 @@ import { promises } from "readline"
 import Treatment from "../../models/dashboard/treatment";
 import mongoose from "mongoose";
 
-export const treatementAdded = async(req:Request,res:Response):Promise<void>=>{
-  try{
-    const {treatment,specialization,department,price,id}= req.body
-    const existingDoctor = await Treatment.findOne({department})
 
-    if(existingDoctor){
-        res.status(400).json({message:"doctor already registered"})
+
+export const treatementAdded = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { treatment, specialization, department, price, id } = req.body;
+
+    // ✅ Correct check for duplicate treatments
+    const existingTreatment = await Treatment.findOne({ 
+      treatment, specialization, department 
+    });
+
+    if (existingTreatment) {
+       res.status(400).json({ message: "Treatment already registered", success: false });
+       return
     }
-    else{ 
-        const newTreatment = new Treatment({treatment,specialization,department,price,id})
-        await newTreatment.save();
-        res.status(201).json({ message: "Patient added successfully", Treatment: newTreatment, treatmentAdded:true });
-    }
 
-  }
-  catch(error){
-    res.status(500).json({message:"internal server error ", error})
-  }
+    const newTreatment = new Treatment({ treatment, specialization, department, price, id });
+    await newTreatment.save();
 
-}
+     res.status(201).json({ 
+      message: "Treatment added successfully", 
+      Treatment: newTreatment, 
+      success: true, 
+      treatmentAdded: true 
+    });
+    return
+
+  } catch (error) {
+    console.error("Error adding treatment:", error);
+    res.status(500).json({ message: "Internal server error", success: false, error });
+  }
+};
+
 
 export const getTreatment = async (req: Request, res: Response): Promise<void> => {
   try {

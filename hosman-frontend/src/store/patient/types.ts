@@ -1,6 +1,6 @@
 export interface IPatientParams {
   age: number;
-  patientRegId: number;
+  patientRegId: string;
   patientName: string;
   disease?: string;
   contactNumber:number;

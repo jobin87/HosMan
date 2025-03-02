@@ -17,7 +17,7 @@ export const requestAddPatientList = createAsyncThunk(
       url: ENDPOINT_PATIENT_POST,
       data: params,
     });
-    return response?.data?.data;
+    return response?.data;
   }
 );
 export const requestGetPatient = createAsyncThunk(

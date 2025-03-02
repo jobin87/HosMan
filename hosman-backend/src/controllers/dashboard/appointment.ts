@@ -8,18 +8,30 @@ export const appointments = async (req: Request, res: Response): Promise<void> =
 
     // Check for missing fields
     if (!department || !doctorName || !patientName || !appointmentTime || !appointmentDate || !payment) {
-     res.status(400).json({ message: 'All fields are required' });
-     return
+      res.status(400).json({ message: "All fields are required" });
+      return;
     }
 
-    // Create and save the new appointment
+    // ✅ Check if an appointment already exists for the same doctor, date, and time
+    const existingAppointment = await AppointmentModel.findOne({
+      doctorName,
+      appointmentDate,
+      appointmentTime
+    });
+
+    if (existingAppointment) {
+      res.status(409).json({ message: "This appointment slot is already booked. Please choose another time." });
+      return;
+    }
+
+    // ✅ Create and save the new appointment
     const newAppointment = new AppointmentModel({
       department,
       doctorName,
       patientName,
       appointmentTime,
       appointmentDate,
-      payment,
+      payment
     });
 
     console.log("New appointment object:", newAppointment);
@@ -28,6 +40,7 @@ export const appointments = async (req: Request, res: Response): Promise<void> =
     res.status(201).json({
       message: "Appointment booked successfully",
       appointment: newAppointment,
+      success: true
     });
   } catch (error: any) {
     console.error("Appointment creation error:", error);

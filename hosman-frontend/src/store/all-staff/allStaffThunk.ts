@@ -73,8 +73,8 @@ export const requestAddTreatment= createAsyncThunk(
     url: ENDPOINT_TREATMENT_ADD,
     data: params,
   })
-  console.log(response)
-  return response?.data?.data
+  console.log(response ,"response:")
+  return response?.data
 }
 )
 export const requestGetTreatment = createAsyncThunk(

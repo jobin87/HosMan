@@ -9,26 +9,24 @@ import crypto from "crypto";
 import { promises } from "readline"
 import Patient from "../../models/dashboard/patient";
 
-export const PatientAdded = async(req:Request,res:Response):Promise<void>=>{
-  try{
-    const {patientName,contactNumber, disease,age,patientRegId,status}= req.body
-    const existingDoctor = await Patient.findOne({patientRegId})
+export const PatientAdded = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { patientName, contactNumber, disease, age, patientRegId } = req.body;
+    const existingPatient = await Patient.findOne({ patientRegId });
 
-    if(existingDoctor){
-        res.status(400).json({message:"doctor already registered"})
-    }
-    else{ 
-        const newPatient = new Patient({patientName,patientRegId,disease,age,contactNumber})
-        await newPatient.save();
-        res.status(201).json({ message: "Patient added successfully", doctor: newPatient, patientAdded:true });
+    if (existingPatient) {
+       res.status(400).json({ message: "Patient already registered" });
+       return
     }
 
-  }
-  catch(error){
-    res.status(500).json({message:"internal server error ", error})
-  }
+    const newPatient = new Patient({ patientName, patientRegId, disease, age, contactNumber });
+    await newPatient.save();
 
-}
+    res.status(201).json({ message: "Patient added successfully", patient: newPatient, patientAdded: true });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", error });
+  }
+};
 
 export const getPatient = async (req: Request, res: Response): Promise<void> => {
   try {

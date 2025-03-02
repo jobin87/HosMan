@@ -17,7 +17,8 @@ const initialState = {
   create: networkCallInitialState,
   edit: networkCallInitialState,
   delete: networkCallInitialState,
-  getStaffDetails:basicInitialState
+  getStaffDetails:basicInitialState,
+  treatmentvalue: false
 };
 
 export const allStaffReducer = createSlice({
@@ -29,6 +30,9 @@ export const allStaffReducer = createSlice({
     },
     setAllStaffDetails: (state, action) => {
       state.getStaffDetails = action.payload;
+    },
+    setTreatment: (state) =>{
+      state.treatmentvalue = true
     },
     setAllStaffCreate: (state, action) => {
       state.create = action.payload;

@@ -1,3 +1,4 @@
+import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Badge from '@mui/material/Badge';
 import Tooltip from '@mui/material/Tooltip';
@@ -22,7 +23,6 @@ import { defaultSettings } from '../config-settings';
 import { FullScreenButton } from './fullscreen-button';
 
 import type { SettingsDrawerProps } from '../types';
-import { Box } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -38,6 +38,14 @@ export function SettingsDrawer({
   hideColorScheme,
 }: SettingsDrawerProps) {
   const theme = useTheme();
+
+  if (!theme) {
+    console.error("Theme is not available");
+    return null; // or render some fallback UI
+  }
+
+  // Ensure you can access theme.palette safely
+  console.log(theme.palette); 
 
   const settings = useSettingsContext();
 

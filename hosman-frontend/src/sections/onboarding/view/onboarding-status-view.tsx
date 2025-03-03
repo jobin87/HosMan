@@ -122,20 +122,7 @@ export default function OnBoardingView() {
         </Fade>
       </Box>
 
-      <Snackbar
-        open={openSnackbar}
-        autoHideDuration={3000}
-        onClose={() => setOpenSnackbar(false)}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }} // Set position to top center
-      >
-        <Alert
-          onClose={() => setOpenSnackbar(false)}
-          severity="success"
-          variant="filled"
-        >
-          🎉 Welcome to the Dashboard!
-        </Alert>
-      </Snackbar>
+      
     </Container>
   );
 }

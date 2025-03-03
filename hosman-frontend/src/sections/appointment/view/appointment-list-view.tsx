@@ -6,14 +6,18 @@ import {
   Card,
   CardContent,
   Button,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { paths } from "src/routes/paths";
 import { useAppDispatch, useAppSelector } from "src/store";
 import { getAppointmentData } from "src/store/appointment/appointmentThunk";
 import { DashboardContent } from "src/layouts/dashboard";
+import { useUser } from "src/hooks/use-user";
 
 export default function AppointmentListView() {
+  const { role } = useUser();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { data } = useAppSelector((state) => state.appointment.appointmentData);
@@ -56,8 +60,33 @@ export default function AppointmentListView() {
     );
   };
 
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  // Show welcome message if the user is a manager
+  useEffect(() => {
+    if (role === "Doctor" || role ==="Nurse") {
+      setOpenSnackbar(true);
+    }
+  }, []);
+
+
   return (
     <DashboardContent>
+      {/* Snackbar for Welcome Message */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={800}
+        onClose={() => setOpenSnackbar(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={() => setOpenSnackbar(false)}
+          severity="success"
+          variant="filled"
+        >
+          🎉 Welcome to the Dashboard!
+        </Alert>
+      </Snackbar>
       <Typography variant="h6" sx={{ mb: 2 }}>
         Total Appointments: {appointments.length}
       </Typography>

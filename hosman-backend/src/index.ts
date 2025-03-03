@@ -9,7 +9,6 @@ import cookieParser from "cookie-parser";
 dotenv.config({ path: ".env.development" });
 
 const app = express();
-const authBaseUrl = process.env.VITE_AUTH_BASE_URL;
 
 const allowedOrigins = ["http://localhost:5173", "https://hosman-r67h.onrender.com"];
 

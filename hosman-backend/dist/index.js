@@ -12,7 +12,7 @@ const dashboardRoutes_1 = require("./routes/dashboardRoutes");
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 dotenv_1.default.config({ path: ".env.development" });
 const app = (0, express_1.default)();
-const allowedOrigins = ["http://localhost:5173", "https://67c5b01000181a008a813bdc--hosman-beta.netlify.app/auth/sign-in"];
+const allowedOrigins = ["http://localhost:5173", "https://hosman-beta.netlify.app"];
 app.use((0, cors_1.default)({
     origin: (origin, callback) => {
         if (!origin || allowedOrigins.includes(origin)) {

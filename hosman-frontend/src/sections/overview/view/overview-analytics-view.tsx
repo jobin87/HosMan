@@ -10,16 +10,25 @@ import { useUser } from "src/hooks/use-user";
 
 // Simulate fetching user role (Replace with actual authentication logic)
 
-function NavItem({ children, bgcolor }: { children: React.ReactNode; bgcolor: string }) {
+function NavItem({
+  children,
+  bgcolor,
+}: {
+  children: React.ReactNode;
+  bgcolor: string;
+}) {
   return (
-    <Paper elevation={2} sx={{ p: 2, textAlign: "center", height: "100%", bgcolor }}>
+    <Paper
+      elevation={2}
+      sx={{ p: 2, textAlign: "center", height: "100%", bgcolor }}
+    >
       {children}
     </Paper>
   );
 }
 
 export function OverviewAnalyticsView() {
-  const {role}= useUser(); // Replace this with your actual user role logic
+  const { role } = useUser(); // Replace this with your actual user role logic
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
@@ -39,7 +48,11 @@ export function OverviewAnalyticsView() {
         onClose={() => setOpenSnackbar(false)}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
-        <Alert onClose={() => setOpenSnackbar(false)} severity="success" variant="filled">
+        <Alert
+          onClose={() => setOpenSnackbar(false)}
+          severity="success"
+          variant="filled"
+        >
           🎉 Welcome to the Dashboard!
         </Alert>
       </Snackbar>
@@ -63,10 +76,16 @@ export function OverviewAnalyticsView() {
                     p: 2,
                   }}
                 >
-                  <Typography variant="h6" sx={{ fontWeight: "bold", color: "white" }}>
+                  <Typography
+                    variant="h6"
+                    sx={{ fontWeight: "bold", color: "white" }}
+                  >
                     Total Patients
                   </Typography>
-                  <Typography variant="h4" sx={{ fontWeight: "bold", color: "white" }}>
+                  <Typography
+                    variant="h4"
+                    sx={{ fontWeight: "bold", color: "white" }}
+                  >
                     1,200
                   </Typography>
                 </Box>
@@ -86,10 +105,16 @@ export function OverviewAnalyticsView() {
                     p: 2,
                   }}
                 >
-                  <Typography variant="h6" sx={{ fontWeight: "bold", color: "white" }}>
+                  <Typography
+                    variant="h6"
+                    sx={{ fontWeight: "bold", color: "white" }}
+                  >
                     Discharged Today
                   </Typography>
-                  <Typography variant="h4" sx={{ fontWeight: "bold", color: "white" }}>
+                  <Typography
+                    variant="h4"
+                    sx={{ fontWeight: "bold", color: "white" }}
+                  >
                     85
                   </Typography>
                 </Box>
@@ -109,10 +134,16 @@ export function OverviewAnalyticsView() {
                     p: 2,
                   }}
                 >
-                  <Typography variant="h6" sx={{ fontWeight: "bold", color: "white" }}>
+                  <Typography
+                    variant="h6"
+                    sx={{ fontWeight: "bold", color: "white" }}
+                  >
                     Scheduled Surgeries
                   </Typography>
-                  <Typography variant="h4" sx={{ fontWeight: "bold", color: "white" }}>
+                  <Typography
+                    variant="h4"
+                    sx={{ fontWeight: "bold", color: "white" }}
+                  >
                     45
                   </Typography>
                 </Box>

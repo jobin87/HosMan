@@ -40,30 +40,32 @@ export default function DepartmentDetailsPage() {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2 }}>
-        {id} Staff ({selectedStaff.length})
-      </Typography>
+    <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2 }}>
+      {id} Staff ({selectedStaff.length})
+    </Typography>
 
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell><strong>Name</strong></TableCell>
-              <TableCell><strong>Department</strong></TableCell>
-              <TableCell><strong>Experience</strong></TableCell>
+    <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell><strong>#</strong></TableCell> 
+            <TableCell><strong>Name</strong></TableCell>
+            <TableCell><strong>Department</strong></TableCell>
+            <TableCell><strong>Experience</strong></TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {selectedStaff.map((staff: any, index: number) => (
+            <TableRow key={staff._id}>
+              <TableCell>{index + 1}</TableCell>
+              <TableCell>{staff.Name}</TableCell>
+              <TableCell>{staff.department}</TableCell>
+              <TableCell>{staff.experience} years</TableCell>
             </TableRow>
-          </TableHead>
-          <TableBody>
-            {selectedStaff.map((staff: any) => (
-              <TableRow key={staff._id}>
-                <TableCell>{staff.Name}</TableCell>
-                <TableCell>{staff.department}</TableCell>
-                <TableCell>{staff.experience} years</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Box>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  </Box>
   );
 }

@@ -13,15 +13,19 @@ export type NewPatientSchemaType = zod.infer<typeof newPatientSchema>;
 
 export const newPatientSchema = zod.object({
   patientName: zod.string().min(1, { message: "Patient Name is required!" }),
-  age: zod.coerce.number().min(1, { message: "Age is required" }),
+  age: zod.coerce
+    .number()
+    .min(1, { message: "Age must be at least 1" })
+    .max(100, { message: "Age cannot be greater than 100" }), // ✅ Max age set to 100
   disease: zod.string().min(1, { message: "Disease name is required for analysis!" }),
   patientRegId: zod.string().min(1, { message: "Patient Registration ID is required" }),
   contactNumber: zod.coerce
     .number()
     .int()
-    .min(1000000000, { message: "Contact number must be at least 10 digits" }) // Min 10-digit number
-    .max(9999999999, { message: "Contact number must be at most 10 digits" }), // Max 10-digit number
+    .min(1000000000, { message: "Contact number must be exactly 10 digits" }) // ✅ Min 10-digit number
+    .max(9999999999, { message: "Contact number must be exactly 10 digits" }), // ✅ Max 10-digit number
 });
+
 
 
 
@@ -44,7 +48,7 @@ export const AddpatientsData = () => {
 
   const {
     handleSubmit,
-    formState: { isSubmitting, errors },
+    formState: { isSubmitting, },
   } = methods;
 
   const onSubmit = handleSubmit(async (data) => {

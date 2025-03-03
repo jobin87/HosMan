@@ -14,7 +14,7 @@ import {
 
 const initialState = {
   auth: {
-    ...basicInitialState,role:null
+    ...basicInitialState,role:null,
   },
   accessToken: null,
   userLogged: false,

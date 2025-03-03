@@ -54,6 +54,7 @@ export default function DepartmentDetailsPage() {
         <Table>
           <TableHead>
             <TableRow>
+            <TableCell><strong>#</strong></TableCell>
               <TableCell><strong> Name</strong></TableCell>
               <TableCell><strong>Doctor</strong></TableCell>
               <TableCell><strong> Time</strong></TableCell>
@@ -63,6 +64,7 @@ export default function DepartmentDetailsPage() {
           <TableBody>
             {filteredAppointments.map((appointment: any, index: number) => (
               <TableRow key={index}>
+                <TableCell>{index + 1}</TableCell>
                 <TableCell>{appointment.patientName}</TableCell>
                 <TableCell>{appointment.doctorName}</TableCell>
                 <TableCell>{appointment.appointmentTime}</TableCell>

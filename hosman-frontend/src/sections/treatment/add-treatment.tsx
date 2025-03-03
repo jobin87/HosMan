@@ -13,13 +13,16 @@ import { paths } from "src/routes/paths";
 // ----------------------------------------------------------------------
 
 export type NewTreatmentSchemaType = zod.infer<typeof newTreatmentSchema>;
-
 export const newTreatmentSchema = zod.object({
   specialization: zod.string().min(1, { message: "Specialization is required!" }),
   treatment: zod.string().min(1, { message: "Treatment name is required!" }),
   department: zod.string().min(1, { message: "Department is required!" }),
-  price: zod.string().regex(/^\$\d+$/, { message: "Price must be in the format $ followed by digits (e.g., $60)" }),
+  price: zod
+    .coerce.number({ invalid_type_error: "Price must be a valid number" }) // ✅ Ensure it's a number
+    .min(1, { message: "Price must be at least 1" })
+    .max(1000000, { message: "Price cannot exceed 1,000,000" }) // ✅ Prevent unrealistic values
 });
+
 
 export function AddTreatmentData() {
   const dispatch = useAppDispatch();
@@ -32,7 +35,7 @@ export function AddTreatmentData() {
       specialization: "",
       department: "",
       treatment: "",
-      price: "",
+      price: 0,
     },
   });
 
@@ -68,7 +71,11 @@ export function AddTreatmentData() {
             <Field.Text name="department" label="Department" />
             <Field.Text name="treatment" label="Treatment Name" />
             <Field.Text name="specialization" label="Specialization" />
-            <Field.Text name="price" label="Price" />
+            <Field.Text name="price" label="Price"  value={
+                methods.watch("price") === 0
+                  ? ""
+                  : methods.watch("price")
+              }/>
           </Box>
           <Stack alignItems="flex-end" sx={{ mt: 4 }}>
             <LoadingButton type="submit" variant="contained" loading={isSubmitting}>

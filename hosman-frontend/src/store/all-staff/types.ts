@@ -41,7 +41,7 @@ export interface ITreatmentTypes {
   specialization: string;
     department: string;
     treatment:  string;
-    price: string;
+    price: number;
 
 }
 
@@ -58,8 +58,8 @@ export interface staffTypes {
   staffType:string;
   Name: string;
   department: string;
-  experience: string;
-  contactNumber: string;
+  experience: number;
+  contactNumber: number;
   staffRegId: string;
 
 }

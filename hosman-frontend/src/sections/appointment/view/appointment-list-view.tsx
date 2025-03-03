@@ -20,7 +20,8 @@ export default function AppointmentListView() {
   const { role } = useUser();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { data } = useAppSelector((state) => state.appointment.appointmentData);
+  const { data , isLoading } = useAppSelector((state) => ({ data: state.appointment.appointmentData?.data,
+    isLoading: state.appointment.appointmentData.loading,}));
 
   console.log("Fetched Appointments:", data);
 
@@ -72,106 +73,118 @@ export default function AppointmentListView() {
 
   return (
     <DashboardContent>
-      {/* Snackbar for Welcome Message */}
-      <Snackbar
-        open={openSnackbar}
-        autoHideDuration={800}
+    {/* Snackbar for Welcome Message */}
+    <Snackbar
+      open={openSnackbar}
+      autoHideDuration={800}
+      onClose={() => setOpenSnackbar(false)}
+      anchorOrigin={{ vertical: "top", horizontal: "center" }}
+    >
+      <Alert
         onClose={() => setOpenSnackbar(false)}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        severity="success"
+        variant="filled"
       >
-        <Alert
-          onClose={() => setOpenSnackbar(false)}
-          severity="success"
-          variant="filled"
-        >
-          🎉 Welcome to the Dashboard!
-        </Alert>
-      </Snackbar>
-      <Typography variant="h6" sx={{ mb: 2 }}>
-        Total Appointments: {appointments.length}
+        🎉 Welcome to the Dashboard!
+      </Alert>
+    </Snackbar>
+
+    {/* ✅ Show loading indicator if data is still being fetched */}
+    {isLoading ? (
+      <Typography variant="h6" sx={{ textAlign: "center", mt: 3 }}>
+        Fetching appointments... ⏳
       </Typography>
+    ) : (
+      <>
+        <Typography variant="h6" sx={{ mb: 2 }}>
+          Total Appointments: {appointments.length}
+        </Typography>
 
-      {/* Search Input */}
-      <TextField
-        label="Search Department"
-        variant="outlined"
-        value={searchDepartment}
-        onChange={(e) => setSearchDepartment(e.target.value)}
-        sx={{
-          mb: 3,
-          width: "100%",
-          "& .MuiOutlinedInput-root": {
-            borderWidth: "2px", // Thicker border
-            "& fieldset": {
-              borderColor: "grey", // Change border color
-              borderWidth: "2px", // Increase border thickness
+        {/* Search Input */}
+        <TextField
+          label="Search Department"
+          variant="outlined"
+          value={searchDepartment}
+          onChange={(e) => setSearchDepartment(e.target.value)}
+          sx={{
+            mb: 3,
+            width: "100%",
+            "& .MuiOutlinedInput-root": {
+              borderWidth: "2px",
+              "& fieldset": {
+                borderColor: "grey",
+                borderWidth: "2px",
+              },
+              "&:hover fieldset": {
+                borderColor: "black",
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: "black",
+                borderWidth: "2.5px",
+              },
             },
-            "&:hover fieldset": {
-              borderColor: "black", // Highlight on hover
-            },
-            "&.Mui-focused fieldset": {
-              borderColor: "black", // Border color when focused
-              borderWidth: "2.5px", // Even thicker on focus
-            },
-          },
-        }}
-      />
+          }}
+        />
 
-      <Grid container spacing={3}>
-        {filteredDepartments.length > 0 ? (
-          filteredDepartments.map((dept: any) => (
-            <Grid item xs={6} sm={6} md={2} key={dept.department}>
-              <Card
-                sx={{
-                  width: "100%",
-                  minHeight: 30,
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  textAlign: "center",
-                  boxShadow: 3,
-                  borderRadius: 2,
-                  transition: "transform 0.2s ease-in",
-                  border: "2px solid",
-                  borderColor: "gainsboro",
-                  "&:hover": {
-                    transform: "scale(1.11)",
-                    borderColor: "GrayText",
-                  },
-                }}
-              >
-                <CardContent
+        <Grid container spacing={3}>
+          {filteredDepartments.length > 0 ? (
+            filteredDepartments.map((dept: any) => (
+              <Grid item xs={6} sm={6} md={2} key={dept.department}>
+                <Card
                   sx={{
-                    padding: "8px",
+                    width: "100%",
+                    minHeight: 30,
                     display: "flex",
                     flexDirection: "column",
+                    justifyContent: "center",
                     alignItems: "center",
+                    textAlign: "center",
+                    boxShadow: 3,
+                    borderRadius: 2,
+                    transition: "transform 0.2s ease-in",
+                    border: "2px solid",
+                    borderColor: "gainsboro",
+                    "&:hover": {
+                      transform: "scale(1.11)",
+                      borderColor: "GrayText",
+                    },
                   }}
                 >
-                  <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                    {dept.department}
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: "gray" }}>
-                    {dept.count}
-                  </Typography>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    size="small"
-                    sx={{ mt: 1 }} // Add margin-bottom to separate from text
-                    onClick={() => handleDepartmentClick(dept.department)}
+                  <CardContent
+                    sx={{
+                      padding: "8px",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
                   >
-                    View
-                  </Button>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))
-        ) : (
-          <Typography sx={{ mt: 2, ml: 3 }}>No appointments found.</Typography>
-        )}
-      </Grid>
-    </DashboardContent>
+                    <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                      {dept.department}
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: "gray" }}>
+                      {dept.count}
+                    </Typography>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="small"
+                      sx={{ mt: 1 }}
+                      onClick={() => handleDepartmentClick(dept.department)}
+                    >
+                      View
+                    </Button>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))
+          ) : (
+            <Typography sx={{ mt: 2, ml: 3 }}>
+              No appointments found.
+            </Typography>
+          )}
+        </Grid>
+      </>
+    )}
+  </DashboardContent>
   );
 }

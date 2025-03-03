@@ -16,7 +16,7 @@ import {
   makeNetworkCall,
 } from 'src/network';
 import { paths } from 'src/routes/paths';
-import { persistor } from '..';
+import { persistor, RootState } from '..';
 // import { requestSellerOnboardingStatus } from '../patient/patientThunk';
 import { setUserLoggedOut } from './appReducer';
 import type {
@@ -145,22 +145,36 @@ export const changeDefaultPassword = createAsyncThunk(
 );
 
 export const requestgetSessions = createAsyncThunk(
-  'app/getSessions',
-  async(params:ISessionUpdateProps )=>{
-    try{
-    const response = await makeNetworkCall({
-      method: API_METHODS.GET,
-      url: ENDPOINT_SESSION,
-      data: params,
-    });
-    console.log("resdddponsedd:", response)
-    return response?.data?.sessions;
-  } catch (error) {
-    console.error('Error during default password update in:', error);
-    throw error;
+  "app/getSessions",
+  async (params: ISessionUpdateProps, { getState }) => {
+    try {
+      // ✅ Get the token from Redux or fallback to localStorage
+      const state = getState() as RootState;
+      const token = state.app.accessToken || localStorage.getItem("authToken");
+      console.log("ytokensan:",token)
+
+      if (!token) {
+        throw new Error("No authentication token found");
+      }
+
+      const response = await makeNetworkCall({
+        method: API_METHODS.GET,
+        url: ENDPOINT_SESSION,
+        data: params,
+        extraHeaders: {
+          Authorization: `Bearer ${token}`,  // ✅ Include token in API request
+        },
+      });
+
+      console.log("API Response:", response);
+      return response?.data?.sessions;
+    } catch (error) {
+      console.error("Error fetching sessions:", error);
+      throw error;
+    }
   }
-}
 );
+
 
 
 // Upload Document

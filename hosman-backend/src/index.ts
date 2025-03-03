@@ -10,7 +10,7 @@ dotenv.config({ path: ".env.development" });
 
 const app = express();
 
-const allowedOrigins = ["http://localhost:5173", "https://hosman-r67h.onrender.com"];
+const allowedOrigins = ["http://localhost:5173", "https://67c5b01000181a008a813bdc--hosman-beta.netlify.app/auth/sign-in"];
 
 app.use(
   cors({

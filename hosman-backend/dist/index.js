@@ -12,20 +12,32 @@ const dashboardRoutes_1 = require("./routes/dashboardRoutes");
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 dotenv_1.default.config({ path: ".env.development" });
 const app = (0, express_1.default)();
-const allowedOrigins = ["http://localhost:5173", "https://hosman-beta.netlify.app"];
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://hosman-beta.netlify.app" // ✅ Removed trailing slash
+];
 app.use((0, cors_1.default)({
     origin: (origin, callback) => {
         if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
         }
         else {
+            console.log("Blocked by CORS:", origin); // ✅ Debugging
             callback(new Error("Not allowed by CORS"));
         }
     },
-    credentials: true, // Allow cookies & authentication headers
-    methods: "GET,POST,PUT,DELETE,PATCH",
+    credentials: true, // ✅ Allows cookies & authentication headers
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], // ✅ Ensure OPTIONS is allowed
     allowedHeaders: ["Content-Type", "Authorization"],
 }));
+// ✅ Explicitly handle CORS preflight OPTIONS requests
+app.options("*", (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", req.headers.origin || "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,PATCH,OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.status(200).end();
+});
 app.options("*", (0, cors_1.default)()); // Handle preflight requests
 app.use((0, cookie_parser_1.default)());
 // Middleware

@@ -10,7 +10,10 @@ dotenv.config({ path: ".env.development" });
 
 const app = express();
 
-const allowedOrigins = ["http://localhost:5173", "https://hosman-beta.netlify.app"];
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://hosman-beta.netlify.app" // ✅ Removed trailing slash
+];
 
 app.use(
   cors({
@@ -18,14 +21,25 @@ app.use(
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
+        console.log("Blocked by CORS:", origin); // ✅ Debugging
         callback(new Error("Not allowed by CORS"));
       }
     },
-    credentials: true, // Allow cookies & authentication headers
-    methods: "GET,POST,PUT,DELETE,PATCH",
+    credentials: true, // ✅ Allows cookies & authentication headers
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], // ✅ Ensure OPTIONS is allowed
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
+// ✅ Explicitly handle CORS preflight OPTIONS requests
+app.options("*", (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", req.headers.origin || "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,PATCH,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.status(200).end();
+});
+
 
 app.options("*", cors()); // Handle preflight requests
 app.use(cookieParser());

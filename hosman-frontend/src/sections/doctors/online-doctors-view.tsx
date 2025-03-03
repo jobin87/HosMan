@@ -92,7 +92,7 @@ export default function OnlineDoctorsList() {
                     sx={{
                       fontSize: "0.9rem",
                       py: 2,
-                      color: doctor.isActive ? "#89CFF0" : "#A0A0A0",
+                      color: doctor.isActive ? "blue" : "#A0A0A0",
                     }}
                   >
                     {doctor.isActive ? "Online" : "Offline"}

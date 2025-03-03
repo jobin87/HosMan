@@ -17,19 +17,18 @@ const SECRET_KEY = "112eryt33";
 const patient_1 = __importDefault(require("../../models/dashboard/patient"));
 const PatientAdded = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { patientName, contactNumber, disease, age, patientRegId, status } = req.body;
-        const existingDoctor = yield patient_1.default.findOne({ patientRegId });
-        if (existingDoctor) {
-            res.status(400).json({ message: "doctor already registered" });
+        const { patientName, contactNumber, disease, age, patientRegId } = req.body;
+        const existingPatient = yield patient_1.default.findOne({ patientRegId });
+        if (existingPatient) {
+            res.status(400).json({ message: "Patient already registered" });
+            return;
         }
-        else {
-            const newPatient = new patient_1.default({ patientName, patientRegId, disease, age, contactNumber });
-            yield newPatient.save();
-            res.status(201).json({ message: "Patient added successfully", doctor: newPatient, patientAdded: true });
-        }
+        const newPatient = new patient_1.default({ patientName, patientRegId, disease, age, contactNumber });
+        yield newPatient.save();
+        res.status(201).json({ message: "Patient added successfully", patient: newPatient, patientAdded: true });
     }
     catch (error) {
-        res.status(500).json({ message: "internal server error ", error });
+        res.status(500).json({ message: "Internal server error", error });
     }
 });
 exports.PatientAdded = PatientAdded;

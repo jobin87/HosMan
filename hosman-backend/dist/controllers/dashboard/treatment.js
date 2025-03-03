@@ -19,18 +19,27 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const treatementAdded = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { treatment, specialization, department, price, id } = req.body;
-        const existingDoctor = yield treatment_1.default.findOne({ department });
-        if (existingDoctor) {
-            res.status(400).json({ message: "doctor already registered" });
+        // ✅ Correct check for duplicate treatments
+        const existingTreatment = yield treatment_1.default.findOne({
+            treatment, specialization, department
+        });
+        if (existingTreatment) {
+            res.status(400).json({ message: "Treatment already registered", success: false });
+            return;
         }
-        else {
-            const newTreatment = new treatment_1.default({ treatment, specialization, department, price, id });
-            yield newTreatment.save();
-            res.status(201).json({ message: "Patient added successfully", Treatment: newTreatment, treatmentAdded: true });
-        }
+        const newTreatment = new treatment_1.default({ treatment, specialization, department, price, id });
+        yield newTreatment.save();
+        res.status(201).json({
+            message: "Treatment added successfully",
+            Treatment: newTreatment,
+            success: true,
+            treatmentAdded: true
+        });
+        return;
     }
     catch (error) {
-        res.status(500).json({ message: "internal server error ", error });
+        console.error("Error adding treatment:", error);
+        res.status(500).json({ message: "Internal server error", success: false, error });
     }
 });
 exports.treatementAdded = treatementAdded;

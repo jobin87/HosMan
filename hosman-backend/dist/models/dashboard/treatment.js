@@ -14,7 +14,7 @@ const treatmentSchema = new mongoose_1.default.Schema({
         required: true,
     },
     price: {
-        type: String,
+        type: Number,
         required: true,
     },
     treatment: {

@@ -18,21 +18,24 @@ const staffSchema = new mongoose_1.default.Schema({
     department: {
         type: String,
         required: true,
+        trim: true,
     },
     experience: {
-        type: String,
+        type: Number,
         required: true,
-        trim: true,
+        min: 1,
     },
     contactNumber: {
-        type: String,
+        type: Number,
         required: true,
-        trim: true,
+        min: 1000000000,
+        max: 999999999999999,
     },
     staffRegId: {
         type: String,
         required: true,
+        trim: true,
     },
 }, { timestamps: true });
-const StaffModel = mongoose_1.default.model('StaffModel', staffSchema);
+const StaffModel = mongoose_1.default.model("StaffModel", staffSchema);
 exports.default = StaffModel;

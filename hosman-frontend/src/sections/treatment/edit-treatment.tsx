@@ -16,9 +16,8 @@ export const newTreatmentSchema = zod.object({
     .min(1, { message: "specialization is required" }),
   treatment: zod.string().min(1, { message: "Treatment name is required" }),
   department: zod.string().min(1, { message: "department is required" }),
-  price: zod.string().regex(/^\$\d+$/, {
-    message: "Price must be in the format $ followed by digits (e.g., $60)"}),
-    treatmentId: zod.string().default(""), // Making treatmentId optional
+  price: zod.number().min(1, { message: "Price must be a positive number" }), // Ensure price is a valid number
+  treatmentId: zod.string().default(""),
     
 });
 
@@ -36,7 +35,7 @@ export const EditTreatmentData = () => {
     treatment: treatmentData.treatment || "",
     department: treatmentData.department || "",
     specialization: treatmentData.specialization || "",
-    price: treatmentData.price ? String(treatmentData.price) : "", // Convert to string for input field
+    price: treatmentData.price ?  0 : undefined, // Convert to string for input field
   };
   
   const methods = useForm<newTreatmentSchemaType>({

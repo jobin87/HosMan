@@ -80,10 +80,11 @@ export default function StaffsListingPage() {
   };
 
   useEffect(() => {
-    if (staffGroups === undefined || (Array.isArray(staffGroups) && staffGroups.length === 0)) {
-    dispatch(requestAllStaffList());
+    if (!staffGroups || Object.keys(staffGroups).length === 0) {
+      dispatch(requestAllStaffList());
     }
-  }, [dispatch,staffGroups?.length]);
+  }, [dispatch, Object.keys(staffGroups || {}).length]); // Ensures proper re-fetching
+  
 
   return (
     <DashboardContent>

@@ -32,6 +32,9 @@ export default function TreatmentList() {
     useAppSelector((state) => state.allstaff.treatmentDetails.data) || [];
   const role = useAppSelector((state) => state.app.auth.role);
 
+  const isLoading =
+    useAppSelector((state) => state.allstaff.treatmentDetails.loading) || [];
+
   const handleEdit = (_id: string) => {
     console.log("Editing treatment with ID:", _id);
   
@@ -95,6 +98,17 @@ export default function TreatmentList() {
       console.error("Error deleting treatment:", error);
     }
   };
+  
+  if (isLoading) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
+        <Typography>
+        Fetching appointments... ⏳
+        </Typography>
+      </Box>
+    );
+  }
+  
 
   return (
     <Box sx={{ p: 3 }}>

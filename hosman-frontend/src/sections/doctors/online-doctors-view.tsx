@@ -19,6 +19,8 @@ export default function OnlineDoctorsList() {
   const dispatch = useAppDispatch();
   const { role } = useUser();
   const data = useAppSelector((state) => state.app.sessiondetails) || {};
+  const isLoading = useAppSelector((state) => state.app.sessiondetails.loading) || {};
+
 
   useEffect(() => {
     const params = {} as any;
@@ -33,6 +35,16 @@ export default function OnlineDoctorsList() {
       hour12: true,
     });
   };
+
+  if (isLoading) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
+        <Typography>
+        Fetching appointments... ⏳
+        </Typography>
+      </Box>
+    );
+  }
 
   const sessions = Array.isArray(data) ? data : [];
   const doctors = sessions.filter((session: any) => session.role === "Doctor");

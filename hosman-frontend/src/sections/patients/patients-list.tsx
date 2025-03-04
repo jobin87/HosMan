@@ -22,7 +22,7 @@ import { requestGetPatient } from "src/store/patient/patientThunk";
 export default function PatientList() {
   const dispatch = useAppDispatch();
   const navigate= useNavigate()
-  const { data } = useAppSelector((state) => state.patients.patientlist);
+  const { data ,loading } = useAppSelector((state) => state.patients.patientlist);
   const role = useAppSelector((state) => state.app.auth.role);
 
 
@@ -34,6 +34,16 @@ export default function PatientList() {
   const handleAddPatientClick = () => {
     navigate(paths.dashboard.patients.patientForm); // Navigate to patient form page
   };
+  
+  if (loading) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
+        <Typography>
+        Fetching appointments... ⏳
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ p: 3 }}>

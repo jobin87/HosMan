@@ -12,6 +12,7 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Box,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { paths } from "src/routes/paths";
@@ -28,6 +29,11 @@ export default function ReportListView() {
     (state) => state.report.reportDetails.data || []
   );
 
+  const isLoading = useAppSelector(
+    (state) => state.report.reportDetails.loading || []
+  );
+
+
   // Fetch reports on component mount
   useEffect(() => {
     dispatch(getReportList({}));
@@ -39,7 +45,7 @@ export default function ReportListView() {
       category.reports.filter((report: any) => report.isAssigned)
     )
     .sort(
-      (a, b) =>
+      (a:any, b:any) =>
         new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
     ); // ✅ Sort assigned reports (latest first)
 
@@ -49,7 +55,7 @@ export default function ReportListView() {
       reports: category.reports
         .filter((report: any) => !report.isAssigned)
         .sort(
-          (a, b) =>
+          (a:any, b:any) =>
             new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
         ), // ✅ Sort unassigned reports (oldest first)
     }))
@@ -59,6 +65,16 @@ export default function ReportListView() {
   const handleCategoryClick = (category: string) => {
     navigate(`${paths.dashboard.Reports.details.replace(":id", category)}`);
   };
+
+  if (isLoading) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
+        <Typography>
+        Fetching appointments... ⏳
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <DashboardContent>

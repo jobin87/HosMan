@@ -26,6 +26,9 @@ export default function StaffsListingPage() {
     (state) => state.allstaff.getStaffDetails?.data?.groupedStaff || {}
   );
 
+  const loading = useAppSelector((state) => state.allstaff.getStaffDetails?.loading);
+
+
   // ✅ Debugging Logs
   console.log("Processed Staff Groups:", staffGroups);
 
@@ -77,6 +80,16 @@ export default function StaffsListingPage() {
   useEffect(() => {
     dispatch(requestAllStaffList());
   }, [dispatch]);
+
+  if (loading) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
+        <Typography>
+        Fetching appointments... ⏳
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ p: 3 }}>

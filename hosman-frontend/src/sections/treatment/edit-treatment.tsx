@@ -102,13 +102,13 @@ export const EditTreatmentData = () => {
           gridTemplateColumns={{ xs: "1fr", sm: "1fr 1fr" }}
           gap={2}
         >
-          <Field.Text label="Department" {...methods.register("department")} />
-          <Field.Text label="Treatment" {...methods.register("treatment")} />
+          <Field.Text label="Department" name="department" />
+          <Field.Text label="Treatment" name="treatment"/>
           <Field.Text
             label="Specialization"
-            {...methods.register("specialization")}
+            name="specialization"
           />
-          <Field.Text label="Price" {...methods.register("price")} />
+          <Field.Text label="Price" name="price" />
         </Box>
         <Stack alignItems="flex-end" sx={{ mt: 3 }}>
           <LoadingButton

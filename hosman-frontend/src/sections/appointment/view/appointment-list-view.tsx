@@ -70,24 +70,30 @@ export default function AppointmentListView() {
     }
   }, []);
 
+  useEffect(() => {
+    // Check if welcome message was already shown in this session
+    const hasShownWelcome = sessionStorage.getItem("welcomeMessageShown");
+
+    if (role === "Manager" && !hasShownWelcome) {
+      setOpenSnackbar(true);
+      sessionStorage.setItem("welcomeMessageShown", "true"); // Mark as shown
+    }
+  }, [role]);
+
 
   return (
     <DashboardContent>
     {/* Snackbar for Welcome Message */}
     <Snackbar
-      open={openSnackbar}
-      autoHideDuration={800}
-      onClose={() => setOpenSnackbar(false)}
-      anchorOrigin={{ vertical: "top", horizontal: "center" }}
-    >
-      <Alert
+        open={openSnackbar}
+        autoHideDuration={2000}
         onClose={() => setOpenSnackbar(false)}
-        severity="success"
-        variant="filled"
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
-        🎉 Welcome to the Dashboard!
-      </Alert>
-    </Snackbar>
+        <Alert onClose={() => setOpenSnackbar(false)} severity="success" variant="filled">
+          🎉 Welcome to the Dashboard!
+        </Alert>
+      </Snackbar>
 
     {/* ✅ Show loading indicator if data is still being fetched */}
     {isLoading ? (

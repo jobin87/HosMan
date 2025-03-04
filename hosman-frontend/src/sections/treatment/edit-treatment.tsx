@@ -16,9 +16,11 @@ export const newTreatmentSchema = zod.object({
     .min(1, { message: "specialization is required" }),
   treatment: zod.string().min(1, { message: "Treatment name is required" }),
   department: zod.string().min(1, { message: "department is required" }),
-  price: zod.number().min(1, { message: "Price must be a positive number" }), // Ensure price is a valid number
   treatmentId: zod.string().default(""),
-    
+  price: zod.preprocess(
+    (val) => (typeof val === "string" ? Number(val) : val), 
+    zod.number().min(1, { message: "Price must be a positive number" })
+  ), // Convert price before validation
 });
 
 export type newTreatmentSchemaType = Zod.infer<typeof newTreatmentSchema>;

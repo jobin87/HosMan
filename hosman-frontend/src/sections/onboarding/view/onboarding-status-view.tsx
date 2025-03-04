@@ -68,13 +68,6 @@ export default function OnBoardingView() {
           management system. Let’s walk you through the key features.
         </Typography>
 
-        {/* Progress Indicator */}
-        <Box mb={4}>
-          <CircularProgress
-            variant="determinate"
-            value={(currentStep / steps.length) * 100}
-          />
-        </Box>
 
         {/* Onboarding Step */}
         <Fade in={true} timeout={1000}>

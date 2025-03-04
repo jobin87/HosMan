@@ -8,6 +8,7 @@ import {
   Button,
   Snackbar,
   Alert,
+  Box,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { paths } from "src/routes/paths";
@@ -20,17 +21,24 @@ export default function AppointmentListView() {
   const { role } = useUser();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { data , isLoading } = useAppSelector((state) => ({ data: state.appointment.appointmentData?.data,
-    isLoading: state.appointment.appointmentData.loading,}));
+  const { data, loading } = useAppSelector(
+    (state) => state.appointment.appointmentData
+  );
 
   console.log("Fetched Appointments:", data);
 
   const [searchDepartment, setSearchDepartment] = useState("");
 
   useEffect(() => {
-    const params = {} as any;
-    dispatch(getAppointmentData(params));
-  }, [dispatch]);
+    // Fetch only if data is undefined or empty
+    if (
+      !data ||
+      (Array.isArray(data.appointments) && data.appointments.length === 0)
+    ) {
+      const params = {} as any;
+      dispatch(getAppointmentData(params));
+    }
+  }, [dispatch, data?.appointments?.length]);
 
   // Ensure data is an array before using it
   const appointments = Array.isArray(data?.appointments)
@@ -65,7 +73,7 @@ export default function AppointmentListView() {
 
   // Show welcome message if the user is a manager
   useEffect(() => {
-    if (role === "Doctor" || role ==="Nurse") {
+    if (role === "Doctor" || role === "Nurse") {
       setOpenSnackbar(true);
     }
   }, []);
@@ -80,117 +88,128 @@ export default function AppointmentListView() {
     }
   }, [role]);
 
-
   return (
     <DashboardContent>
-    {/* Snackbar for Welcome Message */}
-    <Snackbar
+      {/* Snackbar for Welcome Message */}
+      <Snackbar
         open={openSnackbar}
         autoHideDuration={2000}
         onClose={() => setOpenSnackbar(false)}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
-        <Alert onClose={() => setOpenSnackbar(false)} severity="success" variant="filled">
+        <Alert
+          onClose={() => setOpenSnackbar(false)}
+          severity="success"
+          variant="filled"
+        >
           🎉 Welcome to the Dashboard!
         </Alert>
       </Snackbar>
 
-    {/* ✅ Show loading indicator if data is still being fetched */}
-    {isLoading ? (
-      <Typography variant="h6" sx={{ textAlign: "center", mt: 3 }}>
-        Fetching appointments... ⏳
-      </Typography>
-    ) : (
-      <>
-        <Typography variant="h6" sx={{ mb: 2 }}>
-          Total Appointments: {appointments.length}
-        </Typography>
-
-        {/* Search Input */}
-        <TextField
-          label="Search Department"
-          variant="outlined"
-          value={searchDepartment}
-          onChange={(e) => setSearchDepartment(e.target.value)}
+      {/* ✅ Show loading indicator if data is still being fetched */}
+      {loading ? (
+        <Box
           sx={{
-            mb: 3,
-            width: "100%",
-            "& .MuiOutlinedInput-root": {
-              borderWidth: "2px",
-              "& fieldset": {
-                borderColor: "grey",
-                borderWidth: "2px",
-              },
-              "&:hover fieldset": {
-                borderColor: "black",
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: "black",
-                borderWidth: "2.5px",
-              },
-            },
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "80vh", // Makes sure it's centered vertically
+            width: "100%", // Ensures full width coverage
           }}
-        />
+        >
+          <Typography variant="h6">Fetching appointments... ⏳</Typography>
+        </Box>
+      ) : (
+        <>
+          <Typography variant="h6" sx={{ mb: 2 }}>
+            Total Appointments: {appointments.length}
+          </Typography>
 
-        <Grid container spacing={3}>
-          {filteredDepartments.length > 0 ? (
-            filteredDepartments.map((dept: any) => (
-              <Grid item xs={6} sm={6} md={2} key={dept.department}>
-                <Card
-                  sx={{
-                    width: "100%",
-                    minHeight: 30,
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    textAlign: "center",
-                    boxShadow: 3,
-                    borderRadius: 2,
-                    transition: "transform 0.2s ease-in",
-                    border: "2px solid",
-                    borderColor: "gainsboro",
-                    "&:hover": {
-                      transform: "scale(1.11)",
-                      borderColor: "GrayText",
-                    },
-                  }}
-                >
-                  <CardContent
+          {/* Search Input */}
+          <TextField
+            label="Search Department"
+            variant="outlined"
+            value={searchDepartment}
+            onChange={(e) => setSearchDepartment(e.target.value)}
+            sx={{
+              mb: 3,
+              width: "100%",
+              "& .MuiOutlinedInput-root": {
+                borderWidth: "2px",
+                "& fieldset": {
+                  borderColor: "grey",
+                  borderWidth: "2px",
+                },
+                "&:hover fieldset": {
+                  borderColor: "black",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "black",
+                  borderWidth: "2.5px",
+                },
+              },
+            }}
+          />
+
+          <Grid container spacing={3}>
+            {filteredDepartments.length > 0 ? (
+              filteredDepartments.map((dept: any) => (
+                <Grid item xs={6} sm={6} md={2} key={dept.department}>
+                  <Card
                     sx={{
-                      padding: "8px",
+                      width: "100%",
+                      minHeight: 30,
                       display: "flex",
                       flexDirection: "column",
+                      justifyContent: "center",
                       alignItems: "center",
+                      textAlign: "center",
+                      boxShadow: 3,
+                      borderRadius: 2,
+                      transition: "transform 0.2s ease-in",
+                      border: "2px solid",
+                      borderColor: "gainsboro",
+                      "&:hover": {
+                        transform: "scale(1.11)",
+                        borderColor: "GrayText",
+                      },
                     }}
                   >
-                    <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                      {dept.department}
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: "gray" }}>
-                      {dept.count}
-                    </Typography>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      size="small"
-                      sx={{ mt: 1 }}
-                      onClick={() => handleDepartmentClick(dept.department)}
+                    <CardContent
+                      sx={{
+                        padding: "8px",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                      }}
                     >
-                      View
-                    </Button>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))
-          ) : (
-            <Typography sx={{ mt: 2, ml: 3 }}>
-              No appointments found.
-            </Typography>
-          )}
-        </Grid>
-      </>
-    )}
-  </DashboardContent>
+                      <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                        {dept.department}
+                      </Typography>
+                      <Typography variant="body2" sx={{ color: "gray" }}>
+                        {dept.count}
+                      </Typography>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        size="small"
+                        sx={{ mt: 1 }}
+                        onClick={() => handleDepartmentClick(dept.department)}
+                      >
+                        View
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))
+            ) : (
+              <Typography sx={{ mt: 2, ml: 3 }}>
+                No appointments found.
+              </Typography>
+            )}
+          </Grid>
+        </>
+      )}
+    </DashboardContent>
   );
 }

@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { DashboardContent } from "src/layouts/dashboard";
 import { paths } from "src/routes/paths";
 import { useAppDispatch, useAppSelector } from "src/store";
 import { requestAllStaffList } from "src/store/all-staff/allStaffThunk";
@@ -26,8 +27,9 @@ export default function StaffsListingPage() {
     (state) => state.allstaff.getStaffDetails?.data?.groupedStaff || {}
   );
 
-  const loading = useAppSelector((state) => state.allstaff.getStaffDetails?.loading);
-
+  const loading = useAppSelector(
+    (state) => state.allstaff.getStaffDetails?.loading
+  );
 
   // ✅ Debugging Logs
   console.log("Processed Staff Groups:", staffGroups);
@@ -78,28 +80,20 @@ export default function StaffsListingPage() {
   };
 
   useEffect(() => {
+    if (staffGroups === undefined || (Array.isArray(staffGroups) && staffGroups.length === 0)) {
     dispatch(requestAllStaffList());
-  }, [dispatch]);
-
-  if (loading) {
-    return (
-      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
-        <Typography>
-        Fetching staffList... ⏳
-        </Typography>
-      </Box>
-    );
-  }
+    }
+  }, [dispatch,staffGroups?.length]);
 
   return (
-    <Box sx={{ p: 3 }}>
+    <DashboardContent>
       {/* ✅ Total Staff Count */}
       <Box
         sx={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          mb: 3,
+          mt:4,
         }}
       >
         <Typography variant={isXs ? "h6" : "h5"} sx={{ fontWeight: "bold" }}>
@@ -110,121 +104,134 @@ export default function StaffsListingPage() {
         </Button>
       </Box>
 
-      {/* ✅ Medical Staff Section */}
-      {medicalStaff.length > 0 && (
+      {loading ? (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "80vh", // Makes sure it's centered vertically
+            width: "100%", // Ensures full width coverage
+          }}
+        >
+          <Typography variant="h6">Fetching Appointments... ⏳</Typography>
+        </Box>
+      ) : (
         <>
-          <Typography
-            variant={isXs ? "subtitle1" : "h6"}
-            sx={{ mb: 2, fontWeight: "bold", color: "primary.main" }}
-          >
-            Medical Staff
-          </Typography>
-          <Grid container spacing={3}>
-            {medicalStaff.map(([staffType]) => (
-              <Grid item xs={6} sm={6} md={2} key={staffType}>
-                <Card
-                  sx={{
-                    width: "100%",
-                    minHeight: 70,
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    textAlign: "center",
-                    boxShadow: 3,
-                    borderRadius: 2,
-                    transition: "transform 0.2s ease-in",
-                    border: "2px solid", // Add border
-                    borderColor: "gainsboro", // Use MUI theme color
-                    "&:hover": {
-                      transform: "scale(1.11)",
-                      borderColor: "GrayText",
-                    },
-                  }}
-                >
-                  <CardContent>
-                    <Typography
-                      variant={isXs ? "body1" : "h6"}
-                      sx={{ fontWeight: "bold", textAlign: "center" }}
+          {medicalStaff.length > 0 && (
+            <>
+              <Typography
+                variant={isXs ? "subtitle1" : "h6"}
+                sx={{ mb: 2, fontWeight: "bold", color: "primary.main" }}
+              >
+                Medical Staff
+              </Typography>
+              <Grid container spacing={3}>
+                {medicalStaff.map(([staffType]) => (
+                  <Grid item xs={6} sm={6} md={2} key={staffType}>
+                    <Card
+                      sx={{
+                        width: "100%",
+                        minHeight: 70,
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        textAlign: "center",
+                        boxShadow: 3,
+                        borderRadius: 2,
+                        transition: "transform 0.2s ease-in",
+                        border: "2px solid", // Add border
+                        borderColor: "gainsboro", // Use MUI theme color
+                        "&:hover": {
+                          transform: "scale(1.11)",
+                          borderColor: "GrayText",
+                        },
+                      }}
                     >
-                      {`${staffType}${staffType.endsWith("s") ? "'" : "'s"}`}
-                    </Typography>
-                    
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      sx={{ mt: 2 }}
-                      onClick={() => handleStaffClick(staffType)}
-                    >
-                      View
-                    </Button>
-                  </CardContent>
-                </Card>
+                      <CardContent>
+                        <Typography
+                          variant={isXs ? "body1" : "h6"}
+                          sx={{ fontWeight: "bold", textAlign: "center" }}
+                        >
+                          {`${staffType}${staffType.endsWith("s") ? "'" : "'s"}`}
+                        </Typography>
+
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          sx={{ mt: 2 }}
+                          onClick={() => handleStaffClick(staffType)}
+                        >
+                          View
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                ))}
               </Grid>
-            ))}
-          </Grid>
+            </>
+          )}
+
+          <Divider sx={{ my: 4 }} />
+
+          {/* ✅ Non-Medical Staff Section */}
+          {nonMedicalStaff.length > 0 && (
+            <>
+              <Typography
+                variant={isXs ? "subtitle1" : "h6"}
+                sx={{ mb: 2, fontWeight: "bold", color: "secondary.main" }}
+              >
+                Non-Medical Staff
+              </Typography>
+              <Grid container spacing={2}>
+                {nonMedicalStaff.map(([staffType]) => (
+                  <Grid item xs={6} sm={6} md={2} key={staffType}>
+                    <Card
+                      sx={{
+                        width: "100%",
+                        minHeight: 70,
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        textAlign: "center",
+                        boxShadow: 3,
+                        borderRadius: 2,
+                        transition: "transform 0.2s ease-in",
+                        border: "2px solid", // Add border
+                        borderColor: "gainsboro", // Use MUI theme color
+                        "&:hover": {
+                          transform: "scale(1.11)",
+                          borderColor: "GrayText",
+                        },
+                      }}
+                    >
+                      <CardContent>
+                        <Typography
+                          variant={isXs ? "body1" : "h6"}
+                          sx={{ fontWeight: "bold", textAlign: "center" }}
+                        >
+                          {`${staffType}${staffType.endsWith("s") ? "'" : "'s"}`}
+                        </Typography>
+
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          sx={{ mt: 2 }}
+                          onClick={() => handleStaffClick(staffType)}
+                        >
+                          View
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                ))}
+              </Grid>
+            </>
+          )}
         </>
       )}
-
-      <Divider sx={{ my: 4 }} />
-
-      {/* ✅ Non-Medical Staff Section */}
-      {nonMedicalStaff.length > 0 && (
-        <>
-          <Typography
-            variant={isXs ? "subtitle1" : "h6"}
-            sx={{ mb: 2, fontWeight: "bold", color: "secondary.main" }}
-          >
-            Non-Medical Staff
-          </Typography>
-          <Grid container spacing={2}>
-            {nonMedicalStaff.map(([staffType]) => (
-              <Grid item xs={6} sm={6} md={2} key={staffType}>
-                <Card
-                sx={{
-                  width: "100%",
-                  minHeight: 70,
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  textAlign: "center",
-                  boxShadow: 3,
-                  borderRadius: 2,
-                  transition: "transform 0.2s ease-in",
-                  border: "2px solid", // Add border
-                  borderColor: "gainsboro", // Use MUI theme color
-                  "&:hover": {
-                    transform: "scale(1.11)",
-                    borderColor: "GrayText",
-                  },
-                }}
-
-
-                >
-                  <CardContent>
-                    <Typography
-                      variant={isXs ? "body1" : "h6"}
-                      sx={{ fontWeight: "bold", textAlign: "center" }}
-                    >
-                      {`${staffType}${staffType.endsWith("s") ? "'" : "'s"}`}
-                    </Typography>
-              
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      sx={{ mt: 2 }}
-                      onClick={() => handleStaffClick(staffType)}
-                    >
-                      View
-                    </Button>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </>
-      )}
-    </Box>
+    </DashboardContent>
   );
 }

@@ -1,4 +1,4 @@
-import {  useEffect } from "react";
+import { useEffect } from "react";
 import {
   Typography,
   Grid,
@@ -13,6 +13,7 @@ import {
   TableRow,
   Paper,
   Box,
+  CircularProgress, // ✅ Loading indicator
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { paths } from "src/routes/paths";
@@ -24,42 +25,43 @@ export default function ReportListView() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  // Fetching report data from the Redux store
-  const {data,loading} = useAppSelector(
+  // ✅ Ensure data is initialized correctly
+  const { data, loading } = useAppSelector(
     (state) => state.report.reportDetails
-  )|| [];
+  ) || { data: [] };
+  console.log("datederer", data);
 
-  // Fetch reports on component mount
+  // ✅ Fetch only if data is missing
   useEffect(() => {
-      if (!data || data.length === 0) {
-    const params= {} as any
-    dispatch(getReportList(params));
-      }
-  }, [dispatch]);
+    if (!data || data.length === 0) {
+      const params = {} as any;
+      dispatch(getReportList(params));
+    }
+  }, [dispatch, data]);
 
-  // Separate assigned and unassigned reports
-  const assignedReports = data.data
+  // ✅ Ensure data exists before accessing properties
+  const assignedReports = (data ?? [])
     .flatMap((category: any) =>
       category.reports.filter((report: any) => report.isAssigned)
     )
     .sort(
-      (a:any, b:any) =>
+      (a: any, b: any) =>
         new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-    ); // ✅ Sort assigned reports (latest first)
+    );
 
-  const unassignedCategories = data.data
+  const unassignedCategories = (data ?? [])
     .map((category: any) => ({
       ...category,
       reports: category.reports
         .filter((report: any) => !report.isAssigned)
         .sort(
-          (a:any, b:any) =>
+          (a: any, b: any) =>
             new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-        ), // ✅ Sort unassigned reports (oldest first)
+        ),
     }))
     .filter((category: any) => category.reports.length > 0);
 
-  // Handle navigation to report details page
+  // ✅ Handle navigation
   const handleCategoryClick = (category: string) => {
     navigate(`${paths.dashboard.Reports.details.replace(":id", category)}`);
   };
@@ -78,8 +80,8 @@ export default function ReportListView() {
     <DashboardContent>
       <Typography variant="h6" sx={{ mb: 2 }}>
         Total Reports:{" "}
-        {data.data.reduce(
-          (acc: any, category: any) => acc + category.count,
+        {(data && Array.isArray(data) ? data : []).reduce(
+          (acc: any, category: any) => acc + (category.count || 0),
           0
         )}
       </Typography>
@@ -134,9 +136,9 @@ export default function ReportListView() {
                       py: 0.5,
                       px: 1.5,
                       mt: 1,
-                      width: "auto", // Adjust width if needed or leave it auto to fit content
-                      display: "block", // Makes the button block-level, enabling centering
-                      margin: "0 auto", // Centers the button horizontally
+                      width: "auto",
+                      display: "block",
+                      margin: "0 auto",
                       border: "2px solid gainsboro",
                       transition: "transform 0.2s ease-in",
                       "&:hover": {

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import {  basicInitialState, networkCallInitialState } from '../types';
+import {  basicInitialArrayState, basicInitialState, networkCallInitialState } from '../types';
 import {
   changeDefaultPassword,
   requestgetSessions,
@@ -20,7 +20,7 @@ const initialState = {
   userLogged: false,
   forgetpassword: networkCallInitialState,
   resetpassword: networkCallInitialState,
-  sessiondetails: networkCallInitialState,
+  sessiondetails: basicInitialArrayState,
   profilePhoto: basicInitialState,
 
   // ---------------------------------------
@@ -157,7 +157,15 @@ export const appReducer = createSlice({
 
       //sessions
       .addCase(requestgetSessions.fulfilled, (state, action) => {
-        state.sessiondetails= action.payload
+        state.sessiondetails.loading = false;
+        state.sessiondetails.data= action.payload;
+      })
+      .addCase(requestgetSessions.pending, (state) => {
+        state.sessiondetails.loading = true;
+      })
+      .addCase(requestgetSessions.rejected, (state, action) => {
+        state.sessiondetails.error = action.error;
+        state.sessiondetails.loading = false;
       })
 
       // Change Default Password

@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useAppDispatch } from "src/store";
-import { z as zod } from "zod";
+import { number, z as zod } from "zod";
 import { Field, Form } from "src/components/hook-form";
 import { Box, Card, Stack, Typography } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
@@ -35,7 +35,7 @@ export const EditTreatmentData = () => {
     treatment: treatmentData.treatment || "",
     department: treatmentData.department || "",
     specialization: treatmentData.specialization || "",
-    price: treatmentData.price ?  0 : undefined, // Convert to string for input field
+    price: treatmentData.price ? Number(treatmentData.price) : 0, // Convert to string for input field
   };
   
   const methods = useForm<newTreatmentSchemaType>({

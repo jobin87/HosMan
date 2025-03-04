@@ -154,7 +154,7 @@ export const requestgetSessions = createAsyncThunk(
       console.log("ytokensan:",token)
 
       if (!token) {
-        throw new Error("No authentication token found");
+        throw new Error("No  token found");
       }
 
       const response = await makeNetworkCall({

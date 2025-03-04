@@ -71,7 +71,12 @@ export default function OnlineDoctorsList() {
                   <TableCell sx={{ fontSize: "0.9rem", py: 2 }}>
                     Specialized
                   </TableCell>
-                  
+                  <TableCell sx={{ fontSize: "0.9rem", py: 2 }}>
+                    Status
+                  </TableCell>
+                  <TableCell sx={{ fontSize: "0.9rem", py: 2 }}>
+                    Connect
+                  </TableCell>
                   {role === "Manager" && (
                     <TableCell
                       sx={{ fontSize: "0.9rem", py: 2, whiteSpace: "nowrap" }}

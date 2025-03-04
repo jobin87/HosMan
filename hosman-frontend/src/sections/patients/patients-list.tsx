@@ -27,19 +27,22 @@ export default function PatientList() {
 
 
   useEffect(() => {
-    dispatch(requestGetPatient(data));
-    console.log("data:ss:", data);
-  },[dispatch,data?.length]);
+    if (!data || data.length === 0) {
+      const params={} as any
+      dispatch(requestGetPatient(params)); // ✅ Fetch only if data is missing
+    }
+  }, [dispatch, data]); // ✅ Runs only when `data` is empty
+  
 
   const handleAddPatientClick = () => {
     navigate(paths.dashboard.patients.patientForm); // Navigate to patient form page
   };
-  
+
   if (loading) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
         <Typography>
-        Fetching appointments... ⏳
+        Fetching patients... ⏳
         </Typography>
       </Box>
     );

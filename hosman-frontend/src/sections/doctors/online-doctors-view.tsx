@@ -18,14 +18,17 @@ import { requestgetSessions } from "src/store/app/appThunk";
 export default function OnlineDoctorsList() {
   const dispatch = useAppDispatch();
   const { role } = useUser();
-  const data = useAppSelector((state) => state.app.sessiondetails) || {};
-  const isLoading = useAppSelector((state) => state.app.sessiondetails.loading) || {};
+  const { data , loading} = useAppSelector((state) => state.app.sessiondetails) || {};
 
 
   useEffect(() => {
-    const params = {} as any;
-    dispatch(requestgetSessions(params)); // Fetch sessions
-  }, [dispatch]);
+    if (!data || data.length === 0) {
+      const params = {} as any;
+      dispatch(requestgetSessions(params)); // ✅ Fetch only if data is missing
+    }
+  }, [dispatch, data]);
+  
+  
 
   const formatToIST = (utcTime: string) => {
     return new Date(utcTime).toLocaleTimeString("en-IN", {
@@ -36,11 +39,11 @@ export default function OnlineDoctorsList() {
     });
   };
 
-  if (isLoading) {
+  if (loading) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
         <Typography>
-        Fetching appointments... ⏳
+        Fetching doctors... ⏳
         </Typography>
       </Box>
     );

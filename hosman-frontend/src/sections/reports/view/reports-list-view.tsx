@@ -25,22 +25,20 @@ export default function ReportListView() {
   const dispatch = useAppDispatch();
 
   // Fetching report data from the Redux store
-  const reportData = useAppSelector(
-    (state) => state.report.reportDetails.data || []
-  );
-
-  const isLoading = useAppSelector(
-    (state) => state.report.reportDetails.loading || []
-  );
-
+  const {data,loading} = useAppSelector(
+    (state) => state.report.reportDetails
+  )|| [];
 
   // Fetch reports on component mount
   useEffect(() => {
-    dispatch(getReportList({}));
+      if (!data || data.length === 0) {
+    const params= {} as any
+    dispatch(getReportList(params));
+      }
   }, [dispatch]);
 
   // Separate assigned and unassigned reports
-  const assignedReports = reportData
+  const assignedReports = data.data
     .flatMap((category: any) =>
       category.reports.filter((report: any) => report.isAssigned)
     )
@@ -49,7 +47,7 @@ export default function ReportListView() {
         new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
     ); // ✅ Sort assigned reports (latest first)
 
-  const unassignedCategories = reportData
+  const unassignedCategories = data.data
     .map((category: any) => ({
       ...category,
       reports: category.reports
@@ -66,11 +64,11 @@ export default function ReportListView() {
     navigate(`${paths.dashboard.Reports.details.replace(":id", category)}`);
   };
 
-  if (isLoading) {
+  if (loading) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
         <Typography>
-        Fetching appointments... ⏳
+        Fetching reports... ⏳
         </Typography>
       </Box>
     );
@@ -80,7 +78,7 @@ export default function ReportListView() {
     <DashboardContent>
       <Typography variant="h6" sx={{ mb: 2 }}>
         Total Reports:{" "}
-        {reportData.reduce(
+        {data.data.reduce(
           (acc: any, category: any) => acc + category.count,
           0
         )}

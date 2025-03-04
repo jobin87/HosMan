@@ -85,7 +85,7 @@ export default function StaffsListingPage() {
     return (
       <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
         <Typography>
-        Fetching appointments... ⏳
+        Fetching staffList... ⏳
         </Typography>
       </Box>
     );

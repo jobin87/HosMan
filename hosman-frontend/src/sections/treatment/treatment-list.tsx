@@ -28,22 +28,20 @@ import { useEffect } from "react";
 export default function TreatmentList() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const treatmentData =
-    useAppSelector((state) => state.allstaff.treatmentDetails.data) || [];
+  const {data ,loading} =
+    useAppSelector((state) => state.allstaff.treatmentDetails) || [];
   const role = useAppSelector((state) => state.app.auth.role);
 
-  const isLoading =
-    useAppSelector((state) => state.allstaff.treatmentDetails.loading) || [];
 
   const handleEdit = (_id: string) => {
     console.log("Editing treatment with ID:", _id);
   
-    if (!Array.isArray(treatmentData)) {
-      console.log("treatmentData is not an array:", treatmentData);
+    if (!Array.isArray(data)) {
+      console.log("data is not an array:", data);
       return;
     }
   
-    const treatmentToEdit = treatmentData.find((item: any) => item._id === _id);
+    const treatmentToEdit = data.find((item: any) => item._id === _id);
   
     if (treatmentToEdit) {
       console.log("Found treatment to edit:", treatmentToEdit);
@@ -61,15 +59,11 @@ export default function TreatmentList() {
   };
 
   useEffect(() => {
-    const treatmentData = {
-      treatment: "",
-      department: "",
-      specialization: "",
-      price: 0,
-      treatmentId: "",
-    };
-    dispatch(requestGetTreatment(treatmentData));
-  }, [dispatch]);
+    if (!data || data.length === 0) {
+      const params = {} as any
+      dispatch(requestGetTreatment(params)); // ✅ Fetch only if missing
+    }
+  }, [dispatch, data]);
 
   const handleDelete = async (_id: string) => {
     const isConfirmed = window.confirm(
@@ -79,8 +73,8 @@ export default function TreatmentList() {
 
     try {
       await dispatch(deleteTreatmentById({ treatmentID: _id }));
-      const treatmentData = {} as any;
-      await dispatch(requestGetTreatment(treatmentData)); // Re-fetch after deletion
+      const params = {} as any;
+      await dispatch(requestGetTreatment(params)); // Re-fetch after deletion
     } catch (error) {
       console.error("Error deleting treatment:", error);
     }
@@ -93,17 +87,17 @@ export default function TreatmentList() {
 
     try {
       await dispatch(deleteAllTreatments());
-      await dispatch(requestGetTreatment(treatmentData)); // Re-fetch after deletion
+      await dispatch(requestGetTreatment(data)); // Re-fetch after deletion
     } catch (error) {
       console.error("Error deleting treatment:", error);
     }
   };
-  
-  if (isLoading) {
+
+  if (loading) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
         <Typography>
-        Fetching appointments... ⏳
+        Fetching treatments... ⏳
         </Typography>
       </Box>
     );
@@ -186,7 +180,7 @@ export default function TreatmentList() {
               </TableHead>
 
               <TableBody>
-                {treatmentData.map((treatment: any, index: number) => (
+                {data.map((treatment: any, index: number) => (
                   <TableRow key={index} sx={{ height: "10px" }}>
                     <TableCell sx={{ py: {
                       xs:0.2,lg:1.3

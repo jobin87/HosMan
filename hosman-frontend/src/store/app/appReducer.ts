@@ -77,6 +77,7 @@ export const appReducer = createSlice({
           state.accessToken = accessToken;
           state.userLogged = true;
         }
+        localStorage.setItem("token", accessToken);
         console.log(accessToken)
       })
       .addCase(requestSignInWithPassword.pending, (state) => {

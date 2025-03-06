@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sessions = exports.logout = exports.updateProfile = exports.login = exports.verifyEmail = exports.signup = void 0;
+exports.sessions = exports.logout = exports.upload = exports.updateProfile = exports.login = exports.verifyEmail = exports.signup = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = __importDefault(require("../models/user"));
 const session_1 = __importDefault(require("../models/session"));
@@ -35,7 +35,8 @@ const storage = multer_1.default.diskStorage({
         cb(null, "uploads/"); // ✅ Store in "uploads" folder
     },
     filename: (req, file, cb) => {
-        const userId = req.body.userId; // ✅ Get `userId` from request body
+        var _a;
+        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id; // ✅ Get user ID from authentication
         if (!userId) {
             return cb(new Error("User ID is required"), "default-image.jpg");
         }
@@ -43,6 +44,7 @@ const storage = multer_1.default.diskStorage({
     },
 });
 const upload = (0, multer_1.default)({ storage });
+exports.upload = upload;
 const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { userName, role, userRegNum, specialization, userEmail, password, zipCode, department } = req.body;
@@ -140,6 +142,7 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             message: "Signup successful! Please check your email to verify your account.",
             userWithRoleRequested: true,
             verificationToken,
+            photoURL: "https://i.pinimg.com/736x/3b/33/47/3b3347c6e29f5b364d7b671b6a799943.jpg",
         });
     }
     catch (error) {
@@ -254,6 +257,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             email: existingUser.userEmail,
             username: existingUser.userName,
             role: existingUser.role,
+            photoURL: "https://i.pinimg.com/736x/3b/33/47/3b3347c6e29f5b364d7b671b6a799943.jpg",
         });
     }
     catch (err) {

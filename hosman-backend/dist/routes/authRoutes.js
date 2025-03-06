@@ -119,7 +119,6 @@ const authRoutes = express_1.default.Router();
  *         description: Internal server error
  */
 // ✅ Route for updating profile (with image & role update)
-authRoutes.post("/update-profile", authController_1.updateProfile);
 authRoutes.post('/registration', authController_1.signup);
 authRoutes.get('/verify-email', authController_1.verifyEmail);
 authRoutes.delete('/logout-current-session', authMiddlewares_1.checkSession, authController_1.logout);

@@ -21,20 +21,20 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASS, // App Password
   },
 });
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/"); // ✅ Store in "uploads" folder
-  },
-  filename: (req, file, cb) => {
-    const userId = req.body.userId; // ✅ Get `userId` from request body
-    if (!userId) {
-      return cb(new Error("User ID is required"), "default-image.jpg");
-    }
-    cb(null, `${userId}-${Date.now()}${path.extname(file.originalname)}`);
-  },
-});
-
-const upload = multer({ storage });
+  const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, "uploads/"); // ✅ Store in "uploads" folder
+    },
+    filename: (req, file, cb) => {
+      const userId = (req as AuthRequest).user?.id; // ✅ Get user ID from authentication
+      if (!userId) {
+        return cb(new Error("User ID is required"), "default-image.jpg");
+      }
+      cb(null, `${userId}-${Date.now()}${path.extname(file.originalname)}`);
+    },
+  });
+  
+  const upload = multer({ storage });
 
 export const signup = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -149,6 +149,8 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
         "Signup successful! Please check your email to verify your account.",
       userWithRoleRequested: true,
       verificationToken,
+      photoURL: "https://i.pinimg.com/736x/3b/33/47/3b3347c6e29f5b364d7b671b6a799943.jpg",
+
     });
   } catch (error) {
     res
@@ -283,6 +285,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       email: existingUser.userEmail,
       username: existingUser.userName,
       role: existingUser.role,
+      photoURL: "https://i.pinimg.com/736x/3b/33/47/3b3347c6e29f5b364d7b671b6a799943.jpg",
     });
   } catch (err) {
     console.error("Login Error:", err);
@@ -295,7 +298,7 @@ export const updateProfile = async (req: AuthRequest, res: Response): Promise<vo
   try {
     // ✅ Ensure `req.user` is set by the authentication middleware
     if (!req.user || !req.user.id) {
-      res.status(401).json({ success: false, message: "Unauthorized access" });
+       res.status(401).json({ success: false, message: "Unauthorized access" });
       return;
     }
 
@@ -303,7 +306,7 @@ export const updateProfile = async (req: AuthRequest, res: Response): Promise<vo
 
     // ✅ Ensure a file was uploaded
     if (!req.file) {
-      res.status(400).json({ success: false, message: "No image uploaded" });
+       res.status(400).json({ success: false, message: "No image uploaded" });
       return;
     }
 
@@ -317,7 +320,7 @@ export const updateProfile = async (req: AuthRequest, res: Response): Promise<vo
     );
 
     if (!user) {
-      res.status(404).json({ success: false, message: "User not found" });
+       res.status(404).json({ success: false, message: "User not found" });
       return;
     }
 
@@ -332,6 +335,8 @@ export const updateProfile = async (req: AuthRequest, res: Response): Promise<vo
   }
 };
 
+// ✅ Export multer upload middleware
+export { upload };
 
 
 export const logout = async (req: Request, res: Response): Promise<void> => {
@@ -364,7 +369,7 @@ export const logout = async (req: Request, res: Response): Promise<void> => {
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
     });
-    notifySessionUpdate(req.app.locals.io);
+     notifySessionUpdate(req.app.locals.io);
 
     res.status(200).json({ success: true, message: "Logout successful", loggedOut: true });
   } catch (error: any) {

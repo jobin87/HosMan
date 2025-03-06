@@ -48,8 +48,8 @@ const userSchema = new mongoose.Schema(
       type: String,  // <-- Add this field
     },
     photoURL: {
-      type: [String], // Change from a single string to an array of strings
-      default: [],
+      type: String, 
+      default: "https://i.pinimg.com/736x/3b/33/47/3b3347c6e29f5b364d7b671b6a799943.jpg", // ✅ Default profile image
     },
 
   },

@@ -34,7 +34,7 @@ export function OverviewAnalyticsView() {
       {/* Welcome Message */}
       <Snackbar
         open={openSnackbar}
-        autoHideDuration={2000}
+        autoHideDuration={700}
         onClose={() => setOpenSnackbar(false)}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >

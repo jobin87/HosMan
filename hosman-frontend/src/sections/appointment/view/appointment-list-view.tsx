@@ -84,7 +84,7 @@ export default function AppointmentListView() {
       {/* Snackbar for Welcome Message */}
       <Snackbar
         open={openSnackbar}
-        autoHideDuration={2000}
+        autoHideDuration={700}
         onClose={() => setOpenSnackbar(false)}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >

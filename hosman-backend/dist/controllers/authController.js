@@ -22,6 +22,7 @@ const crypto_1 = __importDefault(require("crypto"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const multer_1 = __importDefault(require("multer"));
 const path_1 = __importDefault(require("path"));
+const sessionController_1 = require("./sessionController");
 const transporter = nodemailer_1.default.createTransport({
     service: "Gmail",
     auth: {
@@ -44,9 +45,9 @@ const storage = multer_1.default.diskStorage({
 const upload = (0, multer_1.default)({ storage });
 const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { userName, role, userRegNum, specialization, userEmail, password, zipCode } = req.body;
+        const { userName, role, userRegNum, specialization, userEmail, password, zipCode, department } = req.body;
         // Check if all fields are provided
-        if (!userName || !userEmail || !password) {
+        if (!userName || !userEmail || !password || !department) {
             res
                 .status(400)
                 .json({ success: false, message: "All fields are required" });
@@ -102,6 +103,7 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             userName,
             userEmail,
             specialization,
+            department,
             password: hashedPassword,
             role: role,
             isVerified: false,
@@ -184,57 +186,59 @@ exports.verifyEmail = verifyEmail;
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, password } = req.body;
+        const userAgent = req.headers["user-agent"] || "Unknown Device";
+        const userIP = req.ip || "Unknown IP";
         console.log("Login Attempt:", email);
         // Check if user exists
         const existingUser = yield user_1.default.findOne({ userEmail: email });
-        console.log("existingUse:", existingUser);
         if (!existingUser) {
-            console.log("User not found");
             res.status(400).json({ success: false, message: "Invalid email" });
             return;
         }
         if (!existingUser.isVerified) {
-            console.log("User not verified");
             res.status(400).json({ success: false, message: "Email not verified" });
             return;
         }
         // Validate password
         const isPasswordCorrect = yield bcryptjs_1.default.compare(password, existingUser.password);
-        console.log("Password Match:", isPasswordCorrect);
         if (!isPasswordCorrect) {
             res.status(400).json({ success: false, message: "Incorrect password" });
             return;
         }
         // Generate JWT Token
         const token = jsonwebtoken_1.default.sign({ id: existingUser._id, email: existingUser.userEmail }, SECRET_KEY, { expiresIn: "1h" });
-        // Store session in the database
-        let existingSession = yield session_1.default.findOne({ userId: existingUser._id }).sort({ loginTime: -1 });
+        // 🔍 **Find an existing session with the same user & same browser (user-agent)**
+        let existingSession = yield session_1.default.findOne({
+            userId: existingUser._id,
+            deviceId: userAgent,
+            isActive: false, // Only check for inactive sessions
+        });
         if (existingSession) {
-            // Update existing session instead of creating a new one
+            // ✅ **Reuse the existing session** instead of creating a new one
             existingSession.token = token;
-            existingSession.deviceId = req.headers["user-agent"] || "Unknown Device";
-            existingSession.ipAddress = req.ip || "Unknown IP";
-            existingSession.loginTime = new Date();
+            existingSession.ipAddress = userIP;
             existingSession.isActive = true;
+            existingSession.loginTime = new Date();
             existingSession.logoutTime = null;
-            existingSession.role = existingUser.role;
-            existingSession.userName = existingUser.userName;
-            existingSession.specialization = existingUser.specialization;
             yield existingSession.save();
         }
         else {
-            // Create a new session if no active session exists
+            // ❗ No inactive session found → **Create a new session**
             yield session_1.default.create({
                 userId: existingUser._id,
                 token,
                 userName: existingUser.userName,
+                department: existingUser.department,
                 specialization: existingUser.specialization,
                 role: existingUser.role,
-                deviceId: req.headers["user-agent"] || "Unknown Device",
-                ipAddress: req.ip || "Unknown IP",
+                deviceId: userAgent,
+                ipAddress: userIP,
                 isActive: true,
+                loginTime: new Date(),
             });
         }
+        (0, sessionController_1.notifySessionUpdate)(req.app.locals.io);
+        // Set authentication cookie
         res.cookie("authToken", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
@@ -250,7 +254,6 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             email: existingUser.userEmail,
             username: existingUser.userName,
             role: existingUser.role,
-            photoURL: "https://i.pinimg.com/736x/3b/33/47/3b3347c6e29f5b364d7b671b6a799943.jpg",
         });
     }
     catch (err) {
@@ -313,6 +316,7 @@ const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
         });
+        (0, sessionController_1.notifySessionUpdate)(req.app.locals.io);
         res.status(200).json({ success: true, message: "Logout successful", loggedOut: true });
     }
     catch (error) {
@@ -321,19 +325,40 @@ const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.logout = logout;
 const sessions = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     try {
-        const sessions = yield session_1.default.find().sort({ loginTime: -1 });
-        if (!sessions.length) {
-            res.status(404).json({ success: false, message: "No sessions found" });
+        const loggedInUserId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id; // Get the logged-in user ID from authentication middleware
+        // ✅ Fetch all doctors (active & inactive)
+        const uniqueDoctors = yield session_1.default.aggregate([
+            { $match: { role: "Doctor" } }, // Get only doctors (both active & inactive)
+            { $sort: { loginTime: -1 } }, // Sort by latest login time (most recent first)
+            {
+                $group: {
+                    _id: "$userId", // Group by userId to keep only the latest session per doctor
+                    userId: { $first: "$userId" },
+                    userName: { $first: "$userName" },
+                    department: { $first: "$department" },
+                    specialization: { $first: "$specialization" },
+                    isActive: { $first: "$isActive" },
+                    loginTime: { $first: "$loginTime" } // Keep the latest login time
+                },
+            },
+            { $sort: { loginTime: -1 } } // Sort again by latest login time
+        ]);
+        // ✅ Remove the logged-in user from the list
+        const filteredDoctors = uniqueDoctors.filter(doctor => doctor.userId !== loggedInUserId);
+        if (filteredDoctors.length === 0) {
+            res.status(404).json({ success: false, message: "No doctors found" });
             return;
         }
         res.status(200).json({
             success: true,
-            message: "Sessions retrieved successfully",
-            sessions,
+            message: "Doctors retrieved successfully",
+            doctors: filteredDoctors // ✅ All doctors (excluding logged-in user)
         });
     }
     catch (error) {
+        console.error("Error fetching doctors:", error);
         res.status(500).json({ success: false, message: "Internal Server Error", error });
     }
 });

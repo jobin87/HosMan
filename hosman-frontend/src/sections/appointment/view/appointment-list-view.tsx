@@ -10,7 +10,7 @@ import {
   Alert,
   Box,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { paths } from "src/routes/paths";
 import { useAppDispatch, useAppSelector } from "src/store";
 import { getAppointmentData } from "src/store/appointment/appointmentThunk";
@@ -25,12 +25,10 @@ export default function AppointmentListView() {
     (state) => state.appointment.appointmentData
   );
 
-  console.log("Fetched Appointments:", data);
-
   const [searchDepartment, setSearchDepartment] = useState("");
 
+  // Fetch appointments if data is undefined or empty
   useEffect(() => {
-    // Fetch only if data is undefined or empty
     if (
       !data ||
       (Array.isArray(data.appointments) && data.appointments.length === 0)
@@ -68,21 +66,14 @@ export default function AppointmentListView() {
       `${paths.dashboard.Appointment.department.replace(":id", department)}`
     );
   };
-
   const [openSnackbar, setOpenSnackbar] = useState(false);
-
-  // Show welcome message if the user is a manager
-  useEffect(() => {
-    if (role === "Doctor" || role === "Nurse") {
-      setOpenSnackbar(true);
-    }
-  }, []);
 
   useEffect(() => {
     // Check if welcome message was already shown in this session
     const hasShownWelcome = sessionStorage.getItem("welcomeMessageShown");
+    console.log("Welcome Message Status:", sessionStorage.getItem("welcomeMessageShown"));
 
-    if (role === "Manager" && !hasShownWelcome) {
+    if (role === "Doctor" && !hasShownWelcome) {
       setOpenSnackbar(true);
       sessionStorage.setItem("welcomeMessageShown", "true"); // Mark as shown
     }
@@ -97,24 +88,20 @@ export default function AppointmentListView() {
         onClose={() => setOpenSnackbar(false)}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
-        <Alert
-          onClose={() => setOpenSnackbar(false)}
-          severity="success"
-          variant="filled"
-        >
+        <Alert onClose={() => setOpenSnackbar(false)} severity="success" variant="filled">
           🎉 Welcome to the Dashboard!
         </Alert>
       </Snackbar>
 
-      {/* ✅ Show loading indicator if data is still being fetched */}
+      {/* Show loading indicator if data is still being fetched */}
       {loading ? (
         <Box
           sx={{
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            height: "80vh", // Makes sure it's centered vertically
-            width: "100%", // Ensures full width coverage
+            height: "80vh",
+            width: "100%",
           }}
         >
           <Typography variant="h6">Fetching appointments... ⏳</Typography>

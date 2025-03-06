@@ -7,6 +7,7 @@ interface ISession extends Document {
   deviceId: string;
   role: string;
   specialization: string;
+  department: string;
   userName: string;
   ipAddress: string;
   isActive: boolean;
@@ -27,6 +28,10 @@ const sessionSchema = new Schema<ISession>(
       required: true,
     },
     userName: {
+      type: String,
+      required: true,
+    },
+    department: {
       type: String,
       required: true,
     },

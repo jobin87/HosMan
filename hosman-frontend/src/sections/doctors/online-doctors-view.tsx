@@ -13,10 +13,12 @@ import {
 } from "@mui/material";
 import { useEffect } from "react";
 import { useUser } from "src/hooks/use-user";
+import { io } from "socket.io-client";
 import { useAppDispatch, useAppSelector } from "src/store";
 import { requestgetSessions } from "src/store/app/appThunk";
 
 export default function OnlineDoctorsList() {
+  const socket = io("https://hosman-backend-sdne.onrender.com/");
   const dispatch = useAppDispatch();
   const { role } = useUser();
   const { data, loading } =
@@ -24,11 +26,17 @@ export default function OnlineDoctorsList() {
   console.log("fsrtehdataatsgs:", data);
 
   useEffect(() => {
-    if (data === undefined || (Array.isArray(data) && data.length === 0)) {
       const params = {} as any;
       dispatch(requestgetSessions(params));
-    }
-  }, [dispatch, data?.length]); // ✅ Prevents unnecessary re-fetching
+      socket.on("updateSessions", () => {
+        console.log("Received session update from backend...");
+        dispatch(requestgetSessions(params)); // 🔄 Refresh session list
+      });
+  
+      return () => {
+        socket.off("updateSessions"); // ✅ Cleanup on unmount
+      };
+  }, [dispatch, data?.length]); 
 
   const formatToIST = (utcTime: string) => {
     return new Date(utcTime).toLocaleTimeString("en-IN", {
@@ -40,34 +48,27 @@ export default function OnlineDoctorsList() {
   };
 
   const sessions = Array.isArray(data) ? data : [];
-  const doctors = sessions.filter((session: any) => session.role === "Doctor");
-  const onlineDoctors = doctors.filter((doctor: any) => doctor.isActive);
-  const offlineDoctors = doctors.filter((doctor: any) => !doctor.isActive);
+  const { id: loggedInUserId } = useUser(); // ✅ Get logged-in user ID
+  const doctors = (sessions || []).filter((doctor: any) => doctor.userId !== loggedInUserId);
+    const onlineDoctors = doctors?.filter((doctor: any) => doctor.isActive) || [];
+  const offlineDoctors = doctors?.filter((doctor: any) => !doctor.isActive) || [];
+  
 
   return (
     <Box sx={{ p: 2, width: "100%" }}>
       <Typography variant="h6" gutterBottom>
         Doctors Online
       </Typography>
-      {loading ? (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "80vh", // Makes sure it's centered vertically
-            width: "100%", // Ensures full width coverage
-          }}
-        >
-          <Typography variant="h6">Fetching Doctors online... ⏳</Typography>
-        </Box>
-      ) : (
+    { (
         <>
           <TableContainer component={Paper} sx={{ width: "100%" }}>
             <Table>
               <TableHead>
                 <TableRow sx={{ backgroundColor: "#f4f6f8" }}>
                   <TableCell sx={{ fontSize: "0.9rem", py: 2 }}>Name</TableCell>
+                  <TableCell sx={{ fontSize: "0.9rem", py: 2 }}>
+                    department
+                  </TableCell>
                   <TableCell sx={{ fontSize: "0.9rem", py: 2 }}>
                     Specialized
                   </TableCell>
@@ -110,6 +111,15 @@ export default function OnlineDoctorsList() {
                         }}
                       >
                         {doctor.department}
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          fontSize: "0.9rem",
+                          py: 2,
+                          color: doctor.isActive ? "inherit" : "#A0A0A0",
+                        }}
+                      >
+                        {doctor.specialization}
                       </TableCell>
                       <TableCell
                         sx={{

@@ -31,6 +31,8 @@ export function SignOutButton({
   const dispatch = useAppDispatch();
 
   const handleLogout = useCallback(async () => {
+    sessionStorage.removeItem("welcomeMessageShown");
+    localStorage.clear();
     try {
       const response = await makeNetworkCall({
         method: API_METHODS.DELETE,

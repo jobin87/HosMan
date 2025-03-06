@@ -21,6 +21,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    department: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     specialization: {
       type: String,
       required: true,

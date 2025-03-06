@@ -10,6 +10,7 @@ import bcrypt from 'bcryptjs';
 import { AuthRequest } from "../middlewares/authMiddlewares";
 import multer from "multer";
 import path from "path";
+import { notifySessionUpdate } from "./sessionController";
 
 
 
@@ -37,11 +38,11 @@ const upload = multer({ storage });
 
 export const signup = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { userName, role, userRegNum, specialization, userEmail, password, zipCode } =
+    const { userName, role, userRegNum, specialization, userEmail, password, zipCode , department } =
       req.body;
 
     // Check if all fields are provided
-    if (!userName || !userEmail || !password ) {
+    if (!userName || !userEmail || !password || !department) {
       res
         .status(400)
         .json({ success: false, message: "All fields are required" });
@@ -104,6 +105,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
       userName,
       userEmail,
       specialization,
+      department,
       password: hashedPassword,
       role: role,
       isVerified: false,
@@ -199,31 +201,25 @@ export const verifyEmail = async (
 export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password } = req.body;
+    const userAgent = req.headers["user-agent"] || "Unknown Device";
+    const userIP = req.ip || "Unknown IP";
 
     console.log("Login Attempt:", email);
 
     // Check if user exists
     const existingUser = await User.findOne({ userEmail: email });
-    console.log("existingUse:", existingUser);
     if (!existingUser) {
-      console.log("User not found");
       res.status(400).json({ success: false, message: "Invalid email" });
       return;
     }
 
     if (!existingUser.isVerified) {
-      console.log("User not verified");
       res.status(400).json({ success: false, message: "Email not verified" });
       return;
     }
 
     // Validate password
-    const isPasswordCorrect = await bcrypt.compare(
-      password,
-      existingUser.password
-    );
-    console.log("Password Match:", isPasswordCorrect);
-
+    const isPasswordCorrect = await bcrypt.compare(password, existingUser.password);
     if (!isPasswordCorrect) {
       res.status(400).json({ success: false, message: "Incorrect password" });
       return;
@@ -236,47 +232,47 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       { expiresIn: "1h" }
     );
 
-    // Store session in the database
-    let existingSession = await Session.findOne({ userId: existingUser._id }).sort({ loginTime: -1 });
+    // 🔍 **Find an existing session with the same user & same browser (user-agent)**
+    let existingSession = await Session.findOne({
+      userId: existingUser._id,
+      deviceId: userAgent,
+      isActive: false, // Only check for inactive sessions
+    });
 
     if (existingSession) {
-      // Update existing session instead of creating a new one
+      // ✅ **Reuse the existing session** instead of creating a new one
       existingSession.token = token;
-      existingSession.deviceId = req.headers["user-agent"] || "Unknown Device";
-      existingSession.ipAddress = req.ip || "Unknown IP";
-      existingSession.loginTime = new Date();
+      existingSession.ipAddress = userIP;
       existingSession.isActive = true;
+      existingSession.loginTime = new Date();
       existingSession.logoutTime = null;
-      existingSession.role = existingUser.role;
-      existingSession.userName = existingUser.userName;
-      existingSession.specialization = existingUser.specialization;
-
-
 
       await existingSession.save();
     } else {
-      // Create a new session if no active session exists
+      // ❗ No inactive session found → **Create a new session**
       await Session.create({
         userId: existingUser._id,
         token,
         userName: existingUser.userName,
+        department: existingUser.department, 
         specialization: existingUser.specialization, 
-        role :existingUser.role,
-        deviceId: req.headers["user-agent"] || "Unknown Device",
-        ipAddress: req.ip || "Unknown IP",
+        role: existingUser.role,
+        deviceId: userAgent,
+        ipAddress: userIP,
         isActive: true,
-
+        loginTime: new Date(),
       });
     }
 
+    notifySessionUpdate(req.app.locals.io);
 
+    // Set authentication cookie
     res.cookie("authToken", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       maxAge: 60 * 60 * 1000, // 1 hour expiration
     });
-
 
     res.status(200).json({
       success: true,
@@ -287,14 +283,13 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       email: existingUser.userEmail,
       username: existingUser.userName,
       role: existingUser.role,
-      photoURL:
-        "https://i.pinimg.com/736x/3b/33/47/3b3347c6e29f5b364d7b671b6a799943.jpg",
     });
   } catch (err) {
     console.error("Login Error:", err);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
-};  
+};
+ 
 
 export const updateProfile = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
@@ -369,6 +364,7 @@ export const logout = async (req: Request, res: Response): Promise<void> => {
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
     });
+    notifySessionUpdate(req.app.locals.io);
 
     res.status(200).json({ success: true, message: "Logout successful", loggedOut: true });
   } catch (error: any) {
@@ -376,23 +372,44 @@ export const logout = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const sessions = async (req: Request, res: Response): Promise<void> => {
+export const sessions = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
+    const loggedInUserId = req.user?.id; // Get the logged-in user ID from authentication middleware
 
-    const sessions = await Session.find().sort({ loginTime: -1 });
+    // ✅ Fetch all doctors (active & inactive)
+    const uniqueDoctors = await Session.aggregate([
+      { $match: { role: "Doctor" } }, // Get only doctors (both active & inactive)
+      { $sort: { loginTime: -1 } }, // Sort by latest login time (most recent first)
+      {
+        $group: {
+          _id: "$userId", // Group by userId to keep only the latest session per doctor
+          userId: { $first: "$userId" },
+          userName: { $first: "$userName" },
+          department: { $first: "$department" },
+          specialization: { $first: "$specialization" },
+          isActive: { $first: "$isActive" },
+          loginTime: { $first: "$loginTime" } // Keep the latest login time
+        },
+      },
+      { $sort: { loginTime: -1 } } // Sort again by latest login time
+    ]);
 
-    if (!sessions.length) {
-      res.status(404).json({ success: false, message: "No sessions found" });
+    // ✅ Remove the logged-in user from the list
+    const filteredDoctors = uniqueDoctors.filter(doctor => doctor.userId !== loggedInUserId);
+
+    if (filteredDoctors.length === 0) {
+      res.status(404).json({ success: false, message: "No doctors found" });
       return;
     }
 
     res.status(200).json({
       success: true,
-      message: "Sessions retrieved successfully",
-      sessions,
+      message: "Doctors retrieved successfully",
+      doctors: filteredDoctors // ✅ All doctors (excluding logged-in user)
     });
-  } catch  (error) {
+  } catch (error) {
+    console.error("Error fetching doctors:", error);
     res.status(500).json({ success: false, message: "Internal Server Error", error });
-
   }
 };
+

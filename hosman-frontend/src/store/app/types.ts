@@ -101,6 +101,7 @@ export interface SellerDetails {
 export interface UserRegistrationParams {
   role: string | null;
   userName: string;
+  department: string;
   specialization: string;
   userEmail: string;
   password: string;

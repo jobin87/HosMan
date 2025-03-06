@@ -167,7 +167,7 @@ export const requestgetSessions = createAsyncThunk(
       });
 
       console.log("API Response:", response);
-      return response?.data?.sessions;
+      return response?.data?.doctors;
     } catch (error) {
       console.error("Error fetching sessions:", error);
       throw error;

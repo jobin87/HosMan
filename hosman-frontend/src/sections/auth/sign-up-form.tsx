@@ -33,7 +33,9 @@ export const NewUserSchema = zod.object({
   role: schemaHelper.objectOrNull<string | null>({
     message: { required_error: "Type is required!" },
   }),
-  specialization: zod.string().min(1, { message: "Name is required!" }),
+  department: zod.string().min(1, { message: "department is required!" }),
+
+  specialization: zod.string().min(1, { message: "specialization is required!" }),
   zipCode: zod
     .string()
     .regex(/^[1-9][0-9]{5}$/, { message: "invalid zipcode" }),
@@ -58,7 +60,8 @@ export function SignUpForm() {
 
   const defaultValues = {
     userName: "",
-    specialization:"",
+    department:"",
+    specialization: "",
     userEmail: "",
     userRegNum: "",
     role: "Manager",
@@ -72,7 +75,7 @@ export function SignUpForm() {
     resolver: zodResolver(NewUserSchema),
     defaultValues,
   });
-  const isResendLoading= false;
+  const isResendLoading = false;
 
   const {
     reset,
@@ -117,8 +120,8 @@ export function SignUpForm() {
         toast.success("Registration completed successfully");
         setIsSignUpSuccess(true);
         reset();
-      } else {    
-        toast.error("Sign Up Failed");              
+      } else {
+        toast.error("Sign Up Failed");
       }
     } catch (error) {
       console.error(error);
@@ -152,7 +155,6 @@ export function SignUpForm() {
               fullWidth
               name="role"
               label="Role"
-              {...methods.register}
               children={USER_TYPES.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
@@ -160,49 +162,19 @@ export function SignUpForm() {
               ))}
               defaultValue={"Manager"}
             />
-            <Field.Text
-              {...methods.register}
-              name="userName"
-              label={fullnamePlaceHolder}
-            />
-             <Field.Text
-              {...methods.register}
-              name="specialization"
-              label="specialization"
-            />
-            <Field.Text
-              {...methods.register}
-              name="userRegNum"
-              label={identityPlaceHolder}
-            />
+            <Field.Text name="userName" label={fullnamePlaceHolder} />
+
+            <Field.Text name="department" label="department" />
+            <Field.Text name="specialization" label="specialization" />
+            <Field.Text name="userRegNum" label={identityPlaceHolder} />
 
             <Field.Text {...methods.register} name="zipCode" label="ZipCode" />
-            <Field.Text
-              {...methods.register}
-              name="userEmail"
-              label="Email address"
-            />
+            <Field.Text name="userEmail" label="Email address" />
             <Field.Text
               name="password"
               label="Password"
-              {...methods.register}
               placeholder="6+ characters"
               InputLabelProps={{ shrink: true }}
-              // InputProps={{
-              //   endAdornment: (
-              //     <InputAdornment position="end">
-              //       <IconButton onClick={password.onToggle} edge="end">
-              //         <Iconify
-              //           icon={
-              //             password.value
-              //               ? "solar:eye-bold"
-              //               : "solar:eye-closed-bold"
-              //           }
-              //         />
-              //       </IconButton>
-              //     </InputAdornment>
-              //   ),
-              // }}
             />
           </Box>
           <Stack alignItems="flex-center" sx={{ mt: 3 }} flex={1}>

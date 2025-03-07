@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { io } from "socket.io-client";
 import { paths } from "src/routes/paths";
 import { useAppDispatch, useAppSelector } from "src/store";
 import { requestGetPatient } from "src/store/patient/patientThunk";
@@ -25,11 +26,21 @@ export default function PatientList() {
   const { data ,loading } = useAppSelector((state) => state.patients.patientlist);
   const role = useAppSelector((state) => state.app.auth.role);
 
+  const socket = io("https://hosman-backend-sdne.onrender.com/");
+
+
 
   useEffect(() => {
     if (!data || data.length === 0) {
       const params={} as any
       dispatch(requestGetPatient(params)); // ✅ Fetch only if data is missing
+        socket.on("updateAppointments", () => {
+          dispatch(requestGetPatient(params)); // ✅ Refresh appointment list when updated
+        });
+    
+        return () => {
+          socket.off("updateAppointments");
+        };
     }
   }, [dispatch, data]); // ✅ Runs only when `data` is empty
   

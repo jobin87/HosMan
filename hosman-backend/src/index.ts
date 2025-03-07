@@ -69,6 +69,23 @@ io.on("connection", (socket) => {
 export const notifyDoctorUpdate = () => {
   io.emit("updateDoctors"); // 🔴 This now correctly uses `io`
 };
+export const notifyTreatmentUpdate = () => {
+  io.emit("updateTreatments");
+};
+
+export const notifyStaffUpdate = () => {
+  io.emit("updateStaff");
+};
+
+export const notifyAppointmentUpdate = () => {
+  io.emit("updateAppointments");
+};
+export const notifyPatientUpdate = () => {
+  io.emit("updatePatients");
+};
+export const notifyReportsUpdate = () => {
+  io.emit("updateReports");
+};
 
 // ✅ Start the server (IMPORTANT: Use `server.listen`)
 const PORT = process.env.PORT || 5001; // ✅ Make sure this matches your frontend WebSocket connection

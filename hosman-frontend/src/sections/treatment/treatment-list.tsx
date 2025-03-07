@@ -22,6 +22,7 @@ import {
   requestGetTreatment,
 } from "src/store/all-staff/allStaffThunk";
 import { useEffect } from "react";
+import { io } from "socket.io-client";
 
 // Sample data for hospital treatments
 
@@ -58,6 +59,9 @@ export default function TreatmentList() {
     // Add edit functionality here
   };
 
+  const socket = io("https://hosman-backend-sdne.onrender.com/");
+
+
   useEffect(() => {
     if (!data || data.length === 0) {
       const params = {} as any
@@ -75,6 +79,13 @@ export default function TreatmentList() {
       await dispatch(deleteTreatmentById({ treatmentID: _id }));
       const params = {} as any;
       await dispatch(requestGetTreatment(params)); // Re-fetch after deletion
+        socket.on("updateAppointments", () => {
+          dispatch(requestGetTreatment(params)); // ✅ Refresh appointment list when updated
+        });
+    
+        return () => {
+          socket.off("updateAppointments");
+        };
     } catch (error) {
       console.error("Error deleting treatment:", error);
     }

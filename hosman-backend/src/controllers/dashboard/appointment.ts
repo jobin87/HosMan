@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import AppointmentModel from "../../models/dashboard/appointment";
 import StaffModel from "../../models/dashboard/staff";
+import { notifyAppointmentUpdate } from "../..";
 
 export const appointments = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -36,6 +37,8 @@ export const appointments = async (req: Request, res: Response): Promise<void> =
 
     console.log("New appointment object:", newAppointment);
     await newAppointment.save();
+
+    notifyAppointmentUpdate()
 
     res.status(201).json({
       message: "Appointment booked successfully",

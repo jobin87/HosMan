@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import StaffModel from "../../models/dashboard/staff";
+import { notifyStaffUpdate } from "../..";
 
 export const addStaff = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -11,6 +12,7 @@ export const addStaff = async (req: Request, res: Response): Promise<void> => {
     } else {
       const newStaff = new StaffModel({ Name, staffType, department, experience, contactNumber, staffRegId });
       await newStaff.save();
+      notifyStaffUpdate()
       res.status(201).json({ message: "Staff added successfully", staff: newStaff });
     }
   } catch (error) {

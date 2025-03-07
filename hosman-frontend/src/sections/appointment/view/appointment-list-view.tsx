@@ -16,6 +16,7 @@ import { useAppDispatch, useAppSelector } from "src/store";
 import { getAppointmentData } from "src/store/appointment/appointmentThunk";
 import { DashboardContent } from "src/layouts/dashboard";
 import { useUser } from "src/hooks/use-user";
+import { io } from "socket.io-client";
 
 export default function AppointmentListView() {
   const { role } = useUser();
@@ -27,6 +28,8 @@ export default function AppointmentListView() {
 
   const [searchDepartment, setSearchDepartment] = useState("");
 
+  const socket = io("https://hosman-backend-sdne.onrender.com/");
+
   // Fetch appointments if data is undefined or empty
   useEffect(() => {
     if (
@@ -35,6 +38,13 @@ export default function AppointmentListView() {
     ) {
       const params = {} as any;
       dispatch(getAppointmentData(params));
+        socket.on("updateAppointments", () => {
+          dispatch(getAppointmentData(params)); // ✅ Refresh appointment list when updated
+        });
+    
+        return () => {
+          socket.off("updateAppointments");
+        };
     }
   }, [dispatch, data?.appointments?.length]);
 

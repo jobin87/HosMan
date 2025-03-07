@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { v4 as uuidv4 } from "uuid";
 import ReportModel from "../../models/dashboard/report";
 import mongoose from "mongoose";
+import { notifyReportsUpdate } from "../..";
 
 export const AddReports = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -25,6 +26,7 @@ export const AddReports = async (req: Request, res: Response): Promise<void> => 
     });
 
     await newReport.save();
+    notifyReportsUpdate()
     res.status(201).json({ message: "Report added successfully", reportId: reportId, newReport });
   } catch (error: any) {
     if (error.code === 11000) {

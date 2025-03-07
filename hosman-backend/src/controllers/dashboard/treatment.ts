@@ -9,6 +9,7 @@ import crypto from "crypto";
 import { promises } from "readline"
 import Treatment from "../../models/dashboard/treatment";
 import mongoose from "mongoose";
+import { notifyTreatmentUpdate } from "../..";
 
 
 
@@ -28,6 +29,7 @@ export const treatementAdded = async (req: Request, res: Response): Promise<void
 
     const newTreatment = new Treatment({ treatment, specialization, department, price, id });
     await newTreatment.save();
+    notifyTreatmentUpdate()
 
      res.status(201).json({ 
       message: "Treatment added successfully", 

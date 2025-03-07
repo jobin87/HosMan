@@ -20,10 +20,13 @@ import { paths } from "src/routes/paths";
 import { DashboardContent } from "src/layouts/dashboard";
 import { useAppDispatch, useAppSelector } from "src/store";
 import { getReportList } from "src/store/report/reportThunk";
+import { io } from "socket.io-client";
 
 export default function ReportListView() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const socket = io("https://hosman-backend-sdne.onrender.com/");
+
 
   // ✅ Ensure data is initialized correctly
   const { data, loading } = useAppSelector(
@@ -36,6 +39,13 @@ export default function ReportListView() {
     if (!data || data.length === 0) {
       const params = {} as any;
       dispatch(getReportList(params));
+        socket.on("updateAppointments", () => {
+          dispatch(getReportList(params)); // ✅ Refresh appointment list when updated
+        });
+    
+        return () => {
+          socket.off("updateAppointments");
+        };
     }
   }, [dispatch, data]);
 

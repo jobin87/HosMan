@@ -8,6 +8,7 @@ import nodemailer from "nodemailer";
 import crypto from "crypto";
 import { promises } from "readline"
 import Patient from "../../models/dashboard/patient";
+import { notifyPatientUpdate } from "../..";
 
 export const PatientAdded = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -21,6 +22,7 @@ export const PatientAdded = async (req: Request, res: Response): Promise<void> =
 
     const newPatient = new Patient({ patientName, patientRegId, disease, age, contactNumber });
     await newPatient.save();
+    notifyPatientUpdate()
 
     res.status(201).json({ message: "Patient added successfully", patient: newPatient, patientAdded: true });
   } catch (error) {

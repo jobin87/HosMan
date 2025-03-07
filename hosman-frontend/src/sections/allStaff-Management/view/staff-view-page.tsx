@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { io } from "socket.io-client";
 import { DashboardContent } from "src/layouts/dashboard";
 import { paths } from "src/routes/paths";
 import { useAppDispatch, useAppSelector } from "src/store";
@@ -79,9 +80,19 @@ export default function StaffsListingPage() {
     navigate(paths.dashboard.staff.addStaff);
   };
 
+  const socket = io("https://hosman-backend-sdne.onrender.com/");
+
+
   useEffect(() => {
     if (!staffGroups || Object.keys(staffGroups).length === 0) {
       dispatch(requestAllStaffList());
+        socket.on("updateAppointments", () => {
+          dispatch(requestAllStaffList()); // ✅ Refresh appointment list when updated
+        });
+    
+        return () => {
+          socket.off("updateAppointments");
+        };
     }
   }, [dispatch, Object.keys(staffGroups || {}).length]); // Ensures proper re-fetching
   

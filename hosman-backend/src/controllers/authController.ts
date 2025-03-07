@@ -116,7 +116,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
 
     await newUser.save();
 
-    const verificationUrl = `http://localhost:5001/api/auth/v1/verify-email?token=${verificationToken}`;
+    const verificationUrl = `https://hosman-backend-sdne.onrender.com/api/auth/v1/verify-email?token=${verificationToken}`;
 
     const mailOptions = {
       from: process.env.EMAIL_USER,

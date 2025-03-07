@@ -5,7 +5,7 @@ import { number, z as zod } from "zod";
 import { Field, Form } from "src/components/hook-form";
 import { Box, Card, Stack, Typography } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
-import { updateTreatment } from "src/store/all-staff/allStaffThunk";
+import { requestGetTreatment, updateTreatment } from "src/store/all-staff/allStaffThunk";
 import { useNavigate, useLocation } from "react-router-dom";
 import { paths } from "src/routes/paths";
 
@@ -81,6 +81,8 @@ export const EditTreatmentData = () => {
       await dispatch(
         updateTreatment({ treatmentId: data.treatmentId, ...updates })
       );
+      const params = {} as any
+      dispatch(requestGetTreatment(params))
 
       navigate(paths.dashboard.Treatment.root);
     } catch (error: any) {

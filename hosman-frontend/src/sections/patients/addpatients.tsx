@@ -2,11 +2,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { LoadingButton } from "@mui/lab";
 import { Box, Stack, Card, Typography, Container } from "@mui/material";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
 import { Field, Form } from "src/components/hook-form";
 import { paths } from "src/routes/paths";
 import { useAppDispatch } from "src/store";
-import { requestAddPatientList } from "src/store/patient/patientThunk";
+import { requestAddPatientList, requestGetPatient } from "src/store/patient/patientThunk";
 import { z as zod } from "zod";
 
 export type NewPatientSchemaType = zod.infer<typeof newPatientSchema>;
@@ -57,6 +58,9 @@ export const AddpatientsData = () => {
       console.log("API Response:", response); // ✅ Debugging the full response
       if (response?.patientAdded) {
         console.log("Patient added successfully!");
+        const params = {} as any;
+        dispatch(requestGetPatient(params))
+        toast.success("Patient Added Successfully")
         navigate(paths.dashboard.patients.root) 
         
       }

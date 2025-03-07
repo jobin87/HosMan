@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAppointments = exports.appointments = void 0;
 const appointment_1 = __importDefault(require("../../models/dashboard/appointment"));
+const __1 = require("../..");
 const appointments = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { department, doctorName, patientName, appointmentTime, appointmentDate, payment } = req.body;
@@ -43,6 +44,7 @@ const appointments = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         });
         console.log("New appointment object:", newAppointment);
         yield newAppointment.save();
+        (0, __1.notifyAppointmentUpdate)();
         res.status(201).json({
             message: "Appointment booked successfully",
             appointment: newAppointment,

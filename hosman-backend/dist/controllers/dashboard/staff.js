@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getStaff = exports.addStaff = void 0;
 const staff_1 = __importDefault(require("../../models/dashboard/staff"));
+const __1 = require("../..");
 const addStaff = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { Name, staffType, department, experience, contactNumber, staffRegId } = req.body;
@@ -24,6 +25,7 @@ const addStaff = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         else {
             const newStaff = new staff_1.default({ Name, staffType, department, experience, contactNumber, staffRegId });
             yield newStaff.save();
+            (0, __1.notifyStaffUpdate)();
             res.status(201).json({ message: "Staff added successfully", staff: newStaff });
         }
     }

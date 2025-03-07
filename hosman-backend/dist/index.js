@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.notifyDoctorUpdate = void 0;
+exports.notifyReportsUpdate = exports.notifyPatientUpdate = exports.notifyAppointmentUpdate = exports.notifyStaffUpdate = exports.notifyTreatmentUpdate = exports.notifyDoctorUpdate = void 0;
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const db_1 = require("./config/db");
@@ -61,6 +61,26 @@ const notifyDoctorUpdate = () => {
     io.emit("updateDoctors"); // 🔴 This now correctly uses `io`
 };
 exports.notifyDoctorUpdate = notifyDoctorUpdate;
+const notifyTreatmentUpdate = () => {
+    io.emit("updateTreatments");
+};
+exports.notifyTreatmentUpdate = notifyTreatmentUpdate;
+const notifyStaffUpdate = () => {
+    io.emit("updateStaff");
+};
+exports.notifyStaffUpdate = notifyStaffUpdate;
+const notifyAppointmentUpdate = () => {
+    io.emit("updateAppointments");
+};
+exports.notifyAppointmentUpdate = notifyAppointmentUpdate;
+const notifyPatientUpdate = () => {
+    io.emit("updatePatients");
+};
+exports.notifyPatientUpdate = notifyPatientUpdate;
+const notifyReportsUpdate = () => {
+    io.emit("updateReports");
+};
+exports.notifyReportsUpdate = notifyReportsUpdate;
 // ✅ Start the server (IMPORTANT: Use `server.listen`)
 const PORT = process.env.PORT || 5001; // ✅ Make sure this matches your frontend WebSocket connection
 server.listen(PORT, () => {

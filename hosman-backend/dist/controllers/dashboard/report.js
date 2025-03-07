@@ -16,6 +16,7 @@ exports.AssignWorkers = exports.getReports = exports.AddReports = void 0;
 const uuid_1 = require("uuid");
 const report_1 = __importDefault(require("../../models/dashboard/report"));
 const mongoose_1 = __importDefault(require("mongoose"));
+const __1 = require("../..");
 const AddReports = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { description, category, roomNo } = req.body;
@@ -34,6 +35,7 @@ const AddReports = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             isAssigned: false, // ✅ Default value when a report is created
         });
         yield newReport.save();
+        (0, __1.notifyReportsUpdate)();
         res.status(201).json({ message: "Report added successfully", reportId: reportId, newReport });
     }
     catch (error) {

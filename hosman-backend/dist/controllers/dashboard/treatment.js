@@ -16,6 +16,7 @@ exports.updateTreatment = exports.deleteAllTreatments = exports.deleteTreatmentB
 const SECRET_KEY = "112eryt33";
 const treatment_1 = __importDefault(require("../../models/dashboard/treatment"));
 const mongoose_1 = __importDefault(require("mongoose"));
+const __1 = require("../..");
 const treatementAdded = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { treatment, specialization, department, price, id } = req.body;
@@ -29,6 +30,7 @@ const treatementAdded = (req, res) => __awaiter(void 0, void 0, void 0, function
         }
         const newTreatment = new treatment_1.default({ treatment, specialization, department, price, id });
         yield newTreatment.save();
+        (0, __1.notifyTreatmentUpdate)();
         res.status(201).json({
             message: "Treatment added successfully",
             Treatment: newTreatment,

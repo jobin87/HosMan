@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getPatient = exports.PatientAdded = void 0;
 const SECRET_KEY = "112eryt33";
 const patient_1 = __importDefault(require("../../models/dashboard/patient"));
+const __1 = require("../..");
 const PatientAdded = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { patientName, contactNumber, disease, age, patientRegId } = req.body;
@@ -25,6 +26,7 @@ const PatientAdded = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         }
         const newPatient = new patient_1.default({ patientName, patientRegId, disease, age, contactNumber });
         yield newPatient.save();
+        (0, __1.notifyPatientUpdate)();
         res.status(201).json({ message: "Patient added successfully", patient: newPatient, patientAdded: true });
     }
     catch (error) {

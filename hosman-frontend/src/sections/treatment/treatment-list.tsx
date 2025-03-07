@@ -96,7 +96,7 @@ export default function TreatmentList() {
   };
 
   // ✅ Show loading indicator ONLY while fetching
-  if (loading && !hasFetched.current) {
+  if (loading && !hasFetched) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
         <Typography>Fetching treatments... ⏳</Typography>

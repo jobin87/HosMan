@@ -21,7 +21,7 @@ export default function OnlineDoctorsList() {
   const socket = io("https://hosman-backend-sdne.onrender.com/");
   const dispatch = useAppDispatch();
   const { role } = useUser();
-  const { data, loading } =
+  const { data} =
     useAppSelector((state) => state.app.sessiondetails) || {};
   console.log("fsrtehdataatsgs:", data);
 

@@ -160,7 +160,7 @@ export default function ReportFormPage() {
               fullWidth
               multiline
               rows={2}
-              {...methods.register("description")}
+              name="description"
             />
           </Grid>
 

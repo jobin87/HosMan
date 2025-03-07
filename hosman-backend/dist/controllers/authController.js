@@ -114,7 +114,7 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             verificationToken: verificationToken,
         });
         yield newUser.save();
-        const verificationUrl = `http://localhost:5001/api/auth/v1/verify-email?token=${verificationToken}`;
+        const verificationUrl = `https://hosman-backend-sdne.onrender.com/api/auth/v1/verify-email?token=${verificationToken}`;
         const mailOptions = {
             from: process.env.EMAIL_USER,
             to: userEmail,

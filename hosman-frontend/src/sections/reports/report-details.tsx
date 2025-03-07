@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "src/store";
 import {
@@ -26,6 +26,7 @@ import {
 } from "@mui/material";
 import { DashboardContent } from "src/layouts/dashboard";
 import { requestAllStaffList } from "src/store/all-staff/allStaffThunk";
+import { paths } from "src/routes/paths";
 
 export default function ReportDetailsView() {
   const { id } = useParams<{ id: string }>(); // Get category ID from URL
@@ -42,6 +43,7 @@ export default function ReportDetailsView() {
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedReport, setSelectedReport] = useState<any>(null);
   const [workerName, setWorkerName] = useState("");
+  const navigate = useNavigate()
 
   // ✅ Fetch reports and staff details on component mount
   useEffect(() => {
@@ -97,15 +99,16 @@ export default function ReportDetailsView() {
       );
 
       if (response.meta.requestStatus === "fulfilled") {
+        navigate(paths.dashboard.Reports.root)
         console.log("✅ Worker assigned successfully:", selectedReport._id);
 
         // ✅ Update the UI immediately
-        setSelectedReport((prev) =>
+        setSelectedReport((prev:any) =>
           prev ? { ...prev, workerAssigned: workerName } : prev
         );
 
         // ✅ Update the state to reflect the assigned worker in reports
-        const updatedReports = filteredReports.map((report) =>
+        const updatedReports = filteredReports.map((report:any) =>
           report._id === selectedReport._id
             ? { ...report, workerAssigned: workerName }
             : report

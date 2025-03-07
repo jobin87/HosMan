@@ -28,8 +28,6 @@ export default function PatientList() {
 
   const socket = io("https://hosman-backend-sdne.onrender.com/");
 
-
-
   useEffect(() => {
     if (!data || data.length === 0) {
       const params={} as any

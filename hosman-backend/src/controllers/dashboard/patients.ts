@@ -49,8 +49,8 @@ export const getPatient = async (req: Request, res: Response): Promise<void> => 
     } else {
       // If no `patientRegId` provided, return all doctors
       const patientsdata=  await Patient.find();
-    
-    
+
+
       res.status(200).json({ 
         message: "All patients fetched successfully",
        patientsdata

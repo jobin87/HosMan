@@ -15,6 +15,7 @@ describe('TaskService Unit Tests', () => {
         findUnique: jest.fn(),
         update: jest.fn(),
         delete: jest.fn(),
+        count: jest.fn(),
       },
     };
 
@@ -58,6 +59,16 @@ describe('TaskService Unit Tests', () => {
         status: 'todo',
         userId: 'user-1',
       },
+      include: {
+        user: {
+          select: {
+            id: true,
+            userName: true,
+            userEmail: true,
+            role: true,
+          },
+        },
+      },
     });
   });
 
@@ -68,10 +79,12 @@ describe('TaskService Unit Tests', () => {
       { id: 'task-2', userId: 'user-2' },
     ];
 
+    mockPrisma.task.count.mockResolvedValueOnce(mockTasksUser.length);
     mockPrisma.task.findMany.mockResolvedValueOnce(mockTasksUser);
     const userTasks = await service.getUserTasks('user-1', 'user');
     expect(userTasks.tasks).toEqual(mockTasksUser);
 
+    mockPrisma.task.count.mockResolvedValueOnce(mockTasksAdmin.length);
     mockPrisma.task.findMany.mockResolvedValueOnce(mockTasksAdmin);
     const adminTasks = await service.getUserTasks('user-admin', 'admin');
     expect(adminTasks.tasks).toEqual(mockTasksAdmin);

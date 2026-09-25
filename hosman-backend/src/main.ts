@@ -8,9 +8,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   const allowedOrigins = [
-    'http://localhost:5173',
-    'https://hosman-beta.netlify.app',
-  ];
+    'http://localhost:5173',]
 
   app.enableCors({
     origin: allowedOrigins,

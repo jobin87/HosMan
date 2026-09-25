@@ -1,40 +1,12 @@
 import { lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import {  GuestGuard } from 'src/guard';
-
-
-
-// Roles
-const StaffRolesList = lazy(() => import('src/pages/dashboard/settings/staff/roles'));
-
+import { AuthGuard, RoleBasedGuard } from 'src/guard';
 import { LoadingScreen } from 'src/components/loading-screen';
-
 import { DashboardLayout } from 'src/layouts/dashboard/layout';
 
-const IndexPage = lazy(() => import('src/pages/dashboard/six'));
-
-const UploadDocuments = lazy(() => import('src/pages/dashboard/upload-documents'));
-
-// ----------------------------------------------------------------------
-const DoctorListPage = lazy(() => import('src/pages/dashboard/doctors/doctors-list'));
-const PatientsListPage = lazy(() => import('src/pages/dashboard/patients/patients-list'));
-const AppointMentListPage = lazy(() => import('src/pages/dashboard/appointment/appointment-list'));
-const TreatmentListPage = lazy(() => import('src/pages/dashboard/treatment/treatment'));
-const ReportPage = lazy(() => import('src/pages/dashboard/reports/reports'));
-
-
-
-
-
-const UserProfilePage = lazy(() => import('src/pages/dashboard/user/profile'));
-const UserAccountPage = lazy(() => import('src/pages/dashboard/user/account'));
-const UserSecurityPage = lazy(() => import('src/pages/dashboard/user/account-security'));
-const DeviceSessionPage = lazy(() => import('src/pages/dashboard/user/device-sessions'));
-// const GeneralPage = lazy(() => import('src/pages/dashboard/user/general-account'));
-const HomePage = lazy(()=>import('src/pages/home'))
-
-// ----------------------------------------------------------------------
+const RealPrepDashboardPage = lazy(() => import('src/pages/dashboard/realprep-dashboard'));
+const TasksPage = lazy(() => import('src/pages/dashboard/tasks-page'));
 
 const layoutContent = (
   <DashboardLayout>
@@ -47,79 +19,16 @@ const layoutContent = (
 export const dashboardRoutes = [
   {
     path: 'dashboard',
-    element: <GuestGuard>{layoutContent}</GuestGuard>,
+    element: <AuthGuard>{layoutContent}</AuthGuard>,
     children: [
-      { element: <HomePage/>, index: true },
+      { element: <RealPrepDashboardPage />, index: true },
       {
-        path: 'doctors',
-        children: [
-          { element: <DoctorListPage/>, index: true },
-          { path: 'Doctors-profile', element: <UserProfilePage /> },
-        ],
-      },
-      {
-        path: 'patients',
-        children: [
-          { element: <PatientsListPage/>, index: true },
-          { path: 'Patients-profile', element: <UserProfilePage /> },
-        ],
-      },
-      {
-        path: 'appointment',
-        children: [
-          { element: <AppointMentListPage/>, index: true },
-          { path: 'Patients-profile', element: <UserProfilePage /> },
-        ],
-      },
-      {
-        path: 'treatment',
-        children: [
-          { element: <TreatmentListPage/>, index: true },
-          { path: 'Patients-profile', element: <UserProfilePage /> },
-        ],
-      },
-      {
-        path: 'report',
-        children: [
-          { element: <ReportPage/>, index: true },
-          { path: 'Patients-profile', element: <UserProfilePage /> },
-        ],
-      },
-      {
-        path: 'user',
-        children: [
-          { element: <UserAccountPage />, index: true },
-          { path: 'account/:tab', element: <UserAccountPage /> },
-          { path: 'profile', element: <UserProfilePage /> },
-          { path: 'security', element: <UserSecurityPage /> },
-          { path: 'device', element: <DeviceSessionPage /> },
-          // { path: 'general', element: <GeneralPage /> },
-        ],
-      },
-      {
-        path: 'documents',
-        children: [
-          { element: <UploadDocuments />, index: true },
-          { path: 'list', element: <UploadDocuments /> },
-        ],
-      },
-      {
-        path: 'settings',
-        children: [
-          { element: <IndexPage />, index: true },
-          {
-            path: 'staff',
-            children: [
-            ],
-          },
-          {
-            path: 'roles',
-            children: [
-              { element: <StaffRolesList />, index: true },
-              { path: 'list', element: <StaffRolesList /> },
-            ],
-          },
-        ],
+        path: 'tasks',
+        element: (
+          <RoleBasedGuard acceptRoles={['admin']}>
+            <TasksPage />
+          </RoleBasedGuard>
+        ),
       },
     ],
   },

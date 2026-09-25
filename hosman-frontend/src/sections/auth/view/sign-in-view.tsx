@@ -1,160 +1,173 @@
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { z as zod } from 'zod';
 
-import LoadingButton from '@mui/lab/LoadingButton';
 import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import Link from '@mui/material/Link';
+import LoadingButton from '@mui/lab/LoadingButton';
+import Stack from '@mui/material/Stack';
 
-import { RouterLink } from 'src/routes/components';
-import { paths } from 'src/routes/paths';
-
-import { useBoolean } from 'src/hooks/use-boolean';
-
-import { useAppDispatch } from 'src/store';
-
-import { AnimateLogo2 } from 'src/components/animate';
-import { Field, Form } from 'src/components/hook-form';
-import { Iconify } from 'src/components/iconify';
-
+import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { FormHead } from '../form-head';
-import { useNavigate } from 'react-router-dom';
 
-// ----------------------------------------------------------------------
+import { Iconify } from 'src/components/iconify';
+import { paths } from 'src/routes/paths';
+import { useAppDispatch } from 'src/store';
+import { requestSignInWithPassword } from 'src/store/app/appThunk';
+
+// Zod Schema for Login Validation
+export const SignInSchema = zod.object({
+  email: zod
+    .string()
+    .min(1, { message: 'Email address is required' })
+    .email({ message: 'Please enter a valid email address' }),
+  password: zod
+    .string()
+    .min(1, { message: 'Password is required' })
+    .min(6, { message: 'Password must be at least 6 characters' }),
+});
 
 export type SignInSchemaType = zod.infer<typeof SignInSchema>;
 
-export const SignInSchema = zod.object({
-  
-  email: zod
-    .string()
-    .min(1, { message: 'Email is required!' })
-    .email({ message: 'Email must be a valid email address!' }),
-  password: zod
-    .string()
-    .min(1, { message: 'Password is required!' })
-    .min(6, { message: 'Password must be at least 6 characters!' }),
-  deviceId: zod.string().min(1, { message: 'Device ID is required!' }),
-});
-
-
 export function CenteredSignInView() {
-  const password = useBoolean();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const navigate= useNavigate()
-
-  const methods = useForm<SignInSchemaType>({
-    resolver: zodResolver(SignInSchema),
-  });
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const {
-    reset,
+    register,
     handleSubmit,
-    formState: { isSubmitting },
-  } = methods;
+    formState: { errors },
+  } = useForm<SignInSchemaType>({
+    resolver: zodResolver(SignInSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
 
-  const getClientIp = async () => {
+  const onSubmit = async (data: SignInSchemaType) => {
+    setLoading(true);
     try {
-      const response = await fetch('https://api64.ipify.org?format=json');
-      const data = await response.json();
-      return data.ip;
-    } catch (error) {
-      console.error('Error fetching IP address:', error);
-      return null;
+      const res = await dispatch(
+        requestSignInWithPassword({ userEmail: data.email, password: data.password })
+      ).unwrap();
+
+      const user = res?.user || res?.data?.user;
+      const userName = user?.userName || user?.name || data.email.split('@')[0];
+
+      toast.success(`Welcome back, ${userName}!`);
+      navigate(paths.dashboard.root);
+    } catch (error: any) {
+      toast.error(error?.message || 'Login failed. Check your credentials.');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const onSubmit = handleSubmit(async (data) => {
-    const ipaddress = await getClientIp();
-    if (await ipaddress) {
-     console.log(ipaddress)
-     navigate(paths.dashboard.root)
-
-    } else {
-      toast.error('Error fetching IP address! Try again later.');
-    }
-  });
-
-  const renderLogo = <AnimateLogo2 sx={{ mb: 3, mx: 'auto' }} />;
-
-  const renderForm = (
-    <Box gap={3} display="flex" flexDirection="column">
-      <Field.Text name="email" label="Email address" InputLabelProps={{ shrink: true }} />
-
-      <Box gap={1.5} display="flex" flexDirection="column">
-        <Link
-          component={RouterLink}
-          href={paths.auth.forgotPassword}
-          variant="body2"
-          color="inherit"
-          sx={{ alignSelf: 'flex-end' }}
-        >
-          Forgot password?
-        </Link>
-
-        <Field.Text
-          name="password"
-          label="Password"
-          placeholder="6+ characters"
-          type={password.value ? 'text' : 'password'}
-          InputLabelProps={{ shrink: true }}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={password.onToggle} edge="end">
-                  <Iconify icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Box>
-
-      <LoadingButton
-        fullWidth
-        color="inherit"
-        size="large"
-        type="submit"
-        variant="contained"
-        loading={isSubmitting}      >
-        Sign in
-      </LoadingButton>
-    </Box>
-  );
-
   return (
-    <Box
+    <Card
       sx={{
-        py: 5,
-        px: 3,
+        p: { xs: 4, sm: 5 },
         width: 1,
-        borderRadius: 2,
+        maxWidth: 480,
+        minHeight: 520,
         display: 'flex',
         flexDirection: 'column',
-        bgcolor: 'background.default',
-        maxWidth: 'var(--layout-auth-content-width)',
+        justifyContent: 'center',
+        mx: 'auto',
+        boxShadow: (theme) => theme.customShadows?.card || '0px 12px 40px rgba(0, 0, 0, 0.12)',
+        borderRadius: 3,
       }}
     >
-      {renderLogo}
+      <Stack spacing={3.5} sx={{ mb: 4, textAlign: 'center' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 1.5 }}>
+          <Box
+            sx={{
+              width: 46,
+              height: 46,
+              borderRadius: 2.5,
+              bgcolor: 'primary.main',
+              color: 'primary.contrastText',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontWeight: 800,
+              fontSize: 24,
+              boxShadow: '0 4px 14px rgba(37, 99, 235, 0.3)',
+            }}
+          >
+            R
+          </Box>
+          <Typography variant="h4" fontWeight={800} color="text.primary">
+            ResultPrep
+          </Typography>
+        </Box>
 
-      <FormHead
-        title="Sign in to your account"
-        description={
-          <>
-            {`Don’t have an account? `}
-            <Link component={RouterLink} href={paths.auth.signUp} variant="subtitle2">
-              Get started
+        <Box>
+          <Typography variant="h5" fontWeight={700}>
+            Sign in to your account
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.8 }}>
+            Don't have an account?{' '}
+            <Link component={RouterLink} to={paths.auth.signUp} variant="subtitle2" color="primary">
+              Sign up
             </Link>
-          </>
-        }
-      />
+          </Typography>
+        </Box>
+      </Stack>
 
-      <Form methods={methods} onSubmit={onSubmit}>
-        {renderForm}
-      </Form>
-    </Box>
+      <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate autoComplete="off">
+        <Stack spacing={3}>
+          <TextField
+            fullWidth
+            label="Email address"
+            autoComplete="off"
+            {...register('email')}
+            error={!!errors.email}
+            helperText={errors.email?.message}
+            inputProps={{ autoComplete: 'off' }}
+          />
+
+          <TextField
+            fullWidth
+            label="Password"
+            type={showPassword ? 'text' : 'password'}
+            autoComplete="new-password"
+            {...register('password')}
+            error={!!errors.password}
+            helperText={errors.password?.message}
+            inputProps={{ autoComplete: 'new-password' }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                    <Iconify icon={showPassword ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+
+          <LoadingButton
+            fullWidth
+            size="large"
+            type="submit"
+            variant="contained"
+            loading={loading}
+            sx={{ py: 1.6, fontSize: 16, fontWeight: 700, mt: 1 }}
+          >
+            Sign In
+          </LoadingButton>
+        </Stack>
+      </Box>
+    </Card>
   );
 }

@@ -19,9 +19,9 @@ export type ConfigValue = {
 // ----------------------------------------------------------------------
 
 export const CONFIG: ConfigValue = {
-  appName: 'hosman',
+  appName: 'ResultPrep',
   appVersion: packageJson.version,
-  baseUrl: import.meta.env.VITE_AUTH_BASE_URL ?? "https://netflixclone-1-oerp.onrender.com",
+  baseUrl: import.meta.env.VITE_API_URL ?? 'http://localhost:3000',
   assetsDir: import.meta.env.VITE_AUTH_ASSETS_DIR ?? '',
   auth: {
     skip: false,

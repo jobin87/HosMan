@@ -1,0 +1,134 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String    @id @default(uuid())
+  userName          String
+  userEmail         String    @unique
+  password          String
+  userRegNum        String    @default("")
+  department        String    @default("General")
+  specialization    String    @default("General")
+  role              String    @default("user") // 'admin', 'user', 'Doctor', 'Nurse', 'Manager'
+  zipCode           String    @default("")
+  isApproved        Boolean   @default(true)
+  approvedBy        String?   @default("System")
+  isVerified        Boolean   @default(true)
+  verificationToken String?   @default("")
+  photoURL          String    @default("https://i.pinimg.com/736x/3b/33/47/3b3347c6e29f5b364d7b671b6a799943.jpg")
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  sessions          Session[]
+  tasks             Task[]
+}
+
+model Task {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  status      String   @default("todo") // 'todo' | 'in_progress' | 'completed'
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+}
+
+model Session {
+  id             String    @id @default(uuid())
+  userId         String
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token          String
+  userName       String
+  department     String
+  specialization String
+  role           String
+  deviceId       String
+  ipAddress      String
+  isActive       Boolean   @default(true)
+  loginTime      DateTime  @default(now())
+  logoutTime     DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+model Appointment {
+  id              String   @id @default(uuid())
+  department      String
+  doctorName      String
+  patientName     String
+  appointmentTime String
+  appointmentDate String
+  payment         String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Patient {
+  id            String   @id @default(uuid())
+  patientName   String
+  contactNumber String
+  disease       String
+  age           String
+  patientRegId  String   @unique
+  status        String   @default("Active")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Report {
+  id             String   @id @default(uuid())
+  reportId       String   @unique
+  description    String
+  category       String
+  roomNo         String
+  assignedWorker String?
+  isAssigned     Boolean  @default(false)
+  dateReported   DateTime @default(now())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model RoomAndCategory {
+  id        String   @id @default(uuid())
+  category  String
+  roomNo    String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Staff {
+  id            String   @id @default(uuid())
+  Name          String
+  staffType     String
+  department    String
+  experience    Int
+  contactNumber String
+  staffRegId    String   @unique
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model StaffRole {
+  id            String   @id @default(uuid())
+  staffName     String
+  staffPosition String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Treatment {
+  id             String   @id @default(uuid())
+  department     String
+  specialization String
+  price          Float
+  treatment      String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}

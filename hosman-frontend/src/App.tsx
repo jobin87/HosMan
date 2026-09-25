@@ -13,11 +13,8 @@ import { persistor, store } from 'src/store';
 import { ThemeProvider } from 'src/theme/theme-provider';
 
 import { MotionLazy } from 'src/components/animate/motion-lazy';
-import { ProgressBar } from 'src/components/progress-bar';
-import { defaultSettings, SettingsDrawer, SettingsProvider } from 'src/components/settings';
 
 import { Toaster } from 'react-hot-toast';
-import { LocalizationProvider } from './locales';
 
 // ----------------------------------------------------------------------
 
@@ -25,21 +22,17 @@ export default function App() {
   useScrollToTop();
 
   return (
-    <LocalizationProvider>
+    <>
       <Toaster />
       <ReduxProvider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <SettingsProvider settings={defaultSettings}>
-            <ThemeProvider>
-              <MotionLazy>
-                <ProgressBar />
-                <SettingsDrawer />
-                <Router />
-              </MotionLazy>
-            </ThemeProvider>
-          </SettingsProvider>
+          <ThemeProvider>
+            <MotionLazy>
+              <Router />
+            </MotionLazy>
+          </ThemeProvider>
         </PersistGate>
       </ReduxProvider>
-    </LocalizationProvider>
+    </>
   );
 }

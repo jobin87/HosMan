@@ -3,10 +3,10 @@ import type { BoxProps } from '@mui/material/Box';
 import { forwardRef } from 'react';
 
 import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 
 import { RouterLink } from 'src/routes/components';
 
-import { CONFIG } from 'src/config-global';
 import { paths } from 'src/routes/paths';
 import { useAppSelector } from 'src/store';
 import { logoClasses } from './classes';
@@ -28,32 +28,43 @@ export const Logo = forwardRef<HTMLDivElement, LogoProps>(
 
     const singleLogo = (
       <Box
-        alt="Single logo"
-        component="img"
-        src={`${CONFIG.assetsDir}/logo/logo-single.svg`}
-        width="100%"
-        height="100%"
-      />
+        sx={{
+          width: 36,
+          height: 36,
+          borderRadius: '10px',
+          background: 'linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#ffffff',
+          fontWeight: 900,
+          fontSize: 18,
+          boxShadow: '0 4px 12px rgba(37, 99, 235, 0.25)',
+          flexShrink: 0,
+        }}
+      >
+        R
+      </Box>
     );
 
     const fullLogo = (
-      <Box
-        alt="Full logo"
-        component="img"
-        src={`${CONFIG.assetsDir}/logo/logo-single.svg`}
-        width="100%"
-        height="100%"
-      />
+      <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 1.25 }}>
+        {singleLogo}
+        <Typography
+          variant="h6"
+          fontWeight={900}
+          sx={{
+            letterSpacing: '-0.03em',
+            color: '#0f172a',
+            fontSize: 20,
+            lineHeight: 1,
+            userSelect: 'none',
+          }}
+        >
+          Result<Box component="span" sx={{ color: '#2563eb' }}>Prep</Box>
+        </Typography>
+      </Box>
     );
-
-    const baseSize = {
-      width: width ?? 40,
-      height: height ?? 40,
-      ...(!isSingle && {
-        width: width ?? 100,
-        height: height ?? 40,
-      }),
-    };
 
     return (
       <Box
@@ -61,11 +72,11 @@ export const Logo = forwardRef<HTMLDivElement, LogoProps>(
         component={RouterLink}
         href={userLogged ? href : paths.auth.signIn}
         className={logoClasses.root.concat(className ? ` ${className}` : '')}
-        aria-label="Logo"
+        aria-label="ResultPrep Logo"
         sx={{
-          ...baseSize,
-          flexShrink: 0,
           display: 'inline-flex',
+          alignItems: 'center',
+          textDecoration: 'none',
           verticalAlign: 'middle',
           ...(disableLink && { pointerEvents: 'none' }),
           ...sx,
@@ -77,3 +88,4 @@ export const Logo = forwardRef<HTMLDivElement, LogoProps>(
     );
   }
 );
+

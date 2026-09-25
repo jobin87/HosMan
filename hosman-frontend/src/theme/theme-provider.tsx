@@ -2,12 +2,10 @@ import type {} from '@mui/lab/themeAugmentation';
 import type {} from '@mui/material/themeCssVarsAugmentation';
 import type {} from '@mui/x-data-grid/themeAugmentation';
 import type {} from '@mui/x-date-pickers/themeAugmentation';
-import type {} from '@mui/x-tree-view/themeAugmentation';
+// import type {} from '@mui/x-tree-view/themeAugmentation';
 
 import CssBaseline from '@mui/material/CssBaseline';
-import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/styles';
-
-import { useSettingsContext } from 'src/components/settings';
+import { ThemeProvider as CssVarsProvider } from '@mui/material/styles';
 
 import { createTheme } from './create-theme';
 import { schemeConfig } from './scheme-config';
@@ -20,9 +18,7 @@ type Props = {
 };
 
 export function ThemeProvider({ children }: Props) {
-  const settings = useSettingsContext();
-
-  const theme = createTheme(settings);
+  const theme = createTheme();
 
   return (
     <CssVarsProvider
@@ -31,7 +27,7 @@ export function ThemeProvider({ children }: Props) {
       modeStorageKey={schemeConfig.modeStorageKey}
     >
       <CssBaseline />
-      <RTL direction={settings.direction}>{children}</RTL>
+      <RTL direction="ltr">{children}</RTL>
     </CssVarsProvider>
   );
 }

@@ -3,15 +3,4 @@ import { paths } from 'src/routes/paths';
 
 // ----------------------------------------------------------------------
 
-export const _account = [
-  {
-    label: 'Security',
-    href: paths.dashboard.welcome,
-    icon: <Iconify icon="solar:shield-keyhole-bold-duotone" />,
-  },
-  {
-    label: 'Account settings',
-    href: paths.dashboard.user.account('general'),
-    icon: <Iconify icon="solar:settings-bold-duotone" />,
-  },
-];
+export const _account = [];

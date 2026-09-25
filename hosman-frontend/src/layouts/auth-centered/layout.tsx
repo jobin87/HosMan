@@ -13,7 +13,6 @@ import { stylesMode } from 'src/theme/styles';
 import { Logo } from 'src/components/logo';
 
 import { usePathname } from 'src/routes/hooks';
-import { SettingsButton } from '../components/settings-button';
 import { SignOutButton } from '../components/sign-out-button';
 import { HeaderSection } from '../core/header-section';
 import { LayoutSection } from '../core/layout-section';
@@ -71,8 +70,6 @@ export function AuthCenteredLayout({ sx, children, header }: AuthCenteredLayoutP
                 >
                   Need help?
                 </Link>
-                {/* -- Settings button -- */}
-                <SettingsButton />
               </Box>
             ),
           }}
@@ -85,7 +82,7 @@ export function AuthCenteredLayout({ sx, children, header }: AuthCenteredLayoutP
       /** **************************************
        * Style
        *************************************** */
-      cssVars={{ '--layout-auth-content-width': '420px' }}
+      cssVars={{ '--layout-auth-content-width': '480px' }}
       sx={{
         '&::before': {
           width: 1,

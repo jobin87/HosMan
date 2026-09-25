@@ -9,8 +9,7 @@ import { SplashScreen } from 'src/components/loading-screen';
 
 const SignInPage = lazy(() => import('src/pages/auth/sign-in'));
 const SignUpPage = lazy(() => import('src/pages/auth/sign-up'));
-// const ForgotPassword = lazy(() => import('src/pages/auth/forgot-password'));
-// const ResetPassword = lazy(() => import('src/pages/auth/reset-password'));
+const ForgotPasswordPage = lazy(() => import('src/pages/auth/forgot-password'));
 
 export const authRoutes = [
   {
@@ -37,8 +36,8 @@ export const authRoutes = [
           <GuestGuard>
             <AuthSplitLayout
               section={{
-                title: 'Welcome to HosMan... For  yours!',
-                subtitle: 'Your gateway to a seamless and successful health consideration journey',
+                title: 'Welcome to ResultPrep',
+                subtitle: 'Manage your tasks, track progress in real-time, and empower your team efficiently.',
               }}
             >
               <SignUpPage />
@@ -46,26 +45,16 @@ export const authRoutes = [
           </GuestGuard>
         ),
       },
-      // {
-      //   path: 'forgot-password',
-      //   element: (
-      //     <GuestGuard>
-      //       <AuthSplitLayout>
-      //         <ForgotPassword />
-      //       </AuthSplitLayout>
-      //     </GuestGuard>
-      //   ),
-      // },
-      // {
-      //   path: 'reset-password',
-      //   element: (
-      //     <GuestGuard>
-      //       <AuthSplitLayout>
-      //         <ResetPassword />
-      //       </AuthSplitLayout>
-      //     </GuestGuard>
-      //   ),
-      // },
+      {
+        path: 'forgot-password',
+        element: (
+          <GuestGuard>
+            <AuthCenteredLayout>
+              <ForgotPasswordPage />
+            </AuthCenteredLayout>
+          </GuestGuard>
+        ),
+      },
     ],
   },
 ];

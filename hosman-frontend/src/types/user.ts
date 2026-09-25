@@ -141,6 +141,7 @@ export type IUserDetails = {
   userId: string;
   sellerId: string;
   email: string;
+  role?: string;
   permissions: string[];
   isSellerSuperAdmin: boolean;
   superAdmin: boolean;

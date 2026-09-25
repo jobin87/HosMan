@@ -1,5 +1,4 @@
 import type { CSSObject, Theme } from '@mui/material/styles';
-import type { SettingsState } from 'src/components/settings';
 
 import { useMemo } from 'react';
 
@@ -40,14 +39,15 @@ export const StyledDivider = styled('span')(({ theme }) => ({
 
 export function useNavColorVars(
   theme: Theme,
-  settings: SettingsState
+  navColor: string = 'integrate',
+  navLayout: string = 'vertical'
 ): Record<'layout' | 'section', CSSObject> {
   const {
     vars: { palette },
   } = theme;
 
   return useMemo(() => {
-    switch (settings.navColor) {
+    switch (navColor) {
       case 'integrate':
         return {
           layout: {
@@ -67,38 +67,48 @@ export function useNavColorVars(
       case 'apparent':
         return {
           layout: {
-            '--layout-nav-bg': palette.grey[900],
-            '--layout-nav-horizontal-bg': varAlpha(palette.grey['900Channel'], 0.96),
-            '--layout-nav-border-color': 'transparent',
-            '--layout-nav-text-primary-color': palette.common.white,
-            '--layout-nav-text-secondary-color': palette.grey[500],
-            '--layout-nav-text-disabled-color': palette.grey[600],
+            '--layout-nav-bg': palette.background.default,
+            '--layout-nav-horizontal-bg': varAlpha(palette.background.defaultChannel, 0.96),
+            '--layout-nav-border-color': varAlpha(palette.grey['500Channel'], 0.12),
+            '--layout-nav-text-primary-color': palette.text.primary,
+            '--layout-nav-text-secondary-color': palette.text.secondary,
+            '--layout-nav-text-disabled-color': palette.text.disabled,
             [stylesMode.dark]: {
-              '--layout-nav-bg': palette.grey[800],
-              '--layout-nav-horizontal-bg': varAlpha(palette.grey['800Channel'], 0.8),
+              '--layout-nav-bg': palette.background.default,
+              '--layout-nav-horizontal-bg': varAlpha(palette.background.defaultChannel, 0.96),
             },
           },
           section: {
             // caption
-            '--nav-item-caption-color': palette.grey[600],
+            '--nav-item-caption-color': palette.text.secondary,
             // subheader
-            '--nav-subheader-color': palette.grey[600],
-            '--nav-subheader-hover-color': palette.common.white,
+            '--nav-subheader-color': palette.text.secondary,
+            '--nav-subheader-hover-color': palette.text.primary,
             // item
-            '--nav-item-color': palette.grey[500],
-            '--nav-item-root-active-color': palette.primary.light,
-            '--nav-item-root-open-color': palette.common.white,
+            '--nav-item-color': palette.text.secondary,
+            '--nav-item-root-active-color': palette.primary.main,
+            '--nav-item-root-open-color': palette.text.primary,
             // bullet
-            '--nav-bullet-light-color': bulletColor.dark,
+            '--nav-bullet-light-color': bulletColor.light,
             // sub
-            ...(settings.navLayout === 'vertical' && {
-              '--nav-item-sub-active-color': palette.common.white,
-              '--nav-item-sub-open-color': palette.common.white,
+            ...(navLayout === 'vertical' && {
+              '--nav-item-sub-active-color': palette.text.primary,
+              '--nav-item-sub-open-color': palette.text.primary,
             }),
           },
         };
       default:
-        throw new Error(`Invalid color: ${settings.navColor}`);
+        return {
+          layout: {
+            '--layout-nav-bg': palette.background.default,
+            '--layout-nav-horizontal-bg': varAlpha(palette.background.defaultChannel, 0.8),
+            '--layout-nav-border-color': varAlpha(palette.grey['500Channel'], 0.12),
+            '--layout-nav-text-primary-color': palette.text.primary,
+            '--layout-nav-text-secondary-color': palette.text.secondary,
+            '--layout-nav-text-disabled-color': palette.text.disabled,
+          },
+          section: {},
+        };
     }
   }, [
     palette.background.default,
@@ -109,7 +119,7 @@ export function useNavColorVars(
     palette.text.disabled,
     palette.text.primary,
     palette.text.secondary,
-    settings.navColor,
-    settings.navLayout,
+    navColor,
+    navLayout,
   ]);
 }

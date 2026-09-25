@@ -2,262 +2,172 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { STORAGE_KEY } from 'src/guard/permissions';
 import {
   API_METHODS,
-  ENDPOINT_ADMIN_LOGIN,
-  ENDPOINT_ADMIN_USER_DETAILS,
-  ENDPOINT_ADMIN_USER_NOTIFICATION_SETTINGS,
-  ENDPOINT_ADMIN_USER_UPDATE_PASSWORD,
-  ENDPOINT_ADMIN_USER_UPDATE_PROFILE,
-  ENDPOINT_DOCUMENT_CREATE,
-  ENDPOINT_DOCUMENT_LIST,
-  ENDPOINT_DOCUMENT_UPDATE,
-  ENDPOINT_FORGOT_PASSWORD,
-  ENDPOINT_RESET_PASSWORD,
-  ENDPOINT_SELLER_ONBOARDING_REGISTRATION,
-  ENDPOINT_UPDATE_PASSWORD,
+  ENDPOINT_AUTH_LOGIN,
+  ENDPOINT_AUTH_REGISTER,
+  ENDPOINT_USERS_ME,
+  ENDPOINT_USERS_GET_ALL,
+  ENDPOINT_USERS_DELETE,
+  ENDPOINT_TASKS_CREATE,
+  ENDPOINT_TASKS_GET_ALL,
+  ENDPOINT_TASKS_UPDATE,
+  ENDPOINT_TASKS_DELETE,
   makeNetworkCall,
 } from 'src/network';
-import { paths } from 'src/routes/paths';
-import { persistor } from '..';
-import { requestSellerOnboardingStatus } from '../sellers/sellersThunk';
+import { persistor } from 'src/store';
 import { setUserLoggedOut } from './appReducer';
-import type {
-  docUrlUpdateProps,
-  fileListRequestProps,
-  IDocumentUpdateProps,
-  IForgetPassword,
-  IResetPassword,
-  SellerRegistrationParams,
-  SignInParams,
-} from './types';
 
-// Sign in action
+// Sign in thunk
 export const requestSignInWithPassword = createAsyncThunk(
   'app/signInWithPassword',
-  async (params: SignInParams) => {
+  async (params: { userEmail?: string; email?: string; password: string }) => {
     const response = await makeNetworkCall({
       method: API_METHODS.POST,
-      url: ENDPOINT_ADMIN_LOGIN,
-      data: params,
+      url: ENDPOINT_AUTH_LOGIN,
+      data: {
+        userEmail: params.userEmail || params.email,
+        password: params.password,
+      },
     });
-
-    const { userLogged } = response?.data?.data;
-
-    if (userLogged) {
-      return response?.data?.data;
-    }
-
-    throw new Error('Something went wrong!');
+    return response?.data;
   }
 );
 
-// Seller Registration
-export const requestSellerRegistration = createAsyncThunk(
-  'app/registerSeller',
-  async (data: SellerRegistrationParams) => {
+// Register user thunk
+export const requestRegisterUser = createAsyncThunk(
+  'app/registerUser',
+  async (data: { userName: string; userEmail: string; password: string; role?: string }) => {
     const response = await makeNetworkCall({
       method: API_METHODS.POST,
-      url: ENDPOINT_SELLER_ONBOARDING_REGISTRATION,
-      data,
+      url: ENDPOINT_AUTH_REGISTER,
+      data: {
+        userName: data.userName,
+        userEmail: data.userEmail,
+        password: data.password,
+        role: data.role || 'user',
+      },
     });
-    return response?.data?.data;
+    return response?.data;
   }
 );
 
-// Sign out action
+// Sign out thunk
 export const requestSignOut = createAsyncThunk(
   'app/signOut',
-  async (onClose: (() => void) | undefined = () => {}, { dispatch }) => {
+  async (_, { dispatch }) => {
     dispatch(setUserLoggedOut());
     await persistor.purge();
     sessionStorage.removeItem(STORAGE_KEY);
-    onClose();
-    window.location.href = paths.auth.signIn;
   }
 );
 
-// Forgot Password
-export const requestForgetPassword = createAsyncThunk(
-  'app/requestForgetPassword',
-  async (data: IForgetPassword) => {
-    const response = await makeNetworkCall({
-      method: API_METHODS.POST,
-      url: ENDPOINT_FORGOT_PASSWORD,
-      data,
-    });
-    return response?.data?.data;
-  }
-);
-
-// Reset Password
-export const requestResetPassword = createAsyncThunk(
-  'app/requestResetPassword',
-  async (data: IResetPassword) => {
-    const response = await makeNetworkCall({
-      method: API_METHODS.POST,
-      url: ENDPOINT_RESET_PASSWORD,
-      data,
-    });
-    return response?.data?.data;
-  }
-);
-
-// Change Default Password
-export const changeDefaultPassword = createAsyncThunk(
-  'app/changeDefaultPassword',
-  async ({ Password }: { Password: string }) => {
-    try {
-      const response = await makeNetworkCall({
-        method: API_METHODS.POST,
-        url: ENDPOINT_UPDATE_PASSWORD,
-        data: { newPassword: Password },
-      });
-      return response?.data?.data?.defaultPasswordUpdated;
-    } catch (error) {
-      console.error('Error during default password update in:', error);
-      throw error;
-    }
-  }
-);
-
-// Upload Document
-export const getAllUserDocuments = createAsyncThunk(
-  'app/getDocuments',
-  async (params: fileListRequestProps) => {
-    try {
-      const response = await makeNetworkCall({
-        method: API_METHODS.POST,
-        url: ENDPOINT_DOCUMENT_LIST,
-        data: params,
-      });
-      return response?.data?.data?.documents;
-    } catch (error) {
-      console.error('Error during fetching all documents in:', error);
-      throw error;
-    }
-  }
-);
-
-export const uploadPresignedUrl = createAsyncThunk(
-  'app/uploadDocument',
-  async (params: docUrlUpdateProps, { dispatch }): Promise<boolean | undefined> => {
-    try {
-      const response = await makeNetworkCall({
-        method: API_METHODS.POST,
-        url: ENDPOINT_DOCUMENT_CREATE,
-        data: [params],
-      });
-
-      const Files: any = await dispatch(requestSellerOnboardingStatus(params?.ownerId));
-      if (Files?.length > 0) {
-        return response?.data?.documentAdded;
-      }
-    } catch (error) {
-      console.error('Error during sending document-url in:', error);
-      throw error;
-    }
-  }
-);
-
-// Document Update
-export const requestDocumentUpdate = createAsyncThunk(
-  'document/requestDocumentUpdate',
-  async (params: IDocumentUpdateProps, { dispatch }): Promise<boolean | undefined> => {
-    try {
-      const response = await makeNetworkCall({
-        method: API_METHODS.PATCH,
-        url: `${ENDPOINT_DOCUMENT_UPDATE}${params.id}`,
-        data: {
-          comment: params?.comment,
-          status: params?.status,
-          docName: params?.docName,
-          docSize: params?.docSize,
-          lock: params?.lock,
-        },
-      });
-      dispatch(requestSellerOnboardingStatus(params?.sellerId));
-      return response?.data?.data;
-    } catch (error) {
-      console.error('Error during sending document-url in:', error);
-      throw error;
-    }
-  }
-);
-
-// -----------------------------------------------------------------------
-
-// Get details
-export const requestUserDetails = createAsyncThunk('user/requestUserDetails', async () => {
-  try {
+// User Profile thunk (GET /users/me)
+export const requestUserDetails = createAsyncThunk(
+  'user/requestUserDetails',
+  async () => {
     const response = await makeNetworkCall({
       method: API_METHODS.GET,
-      url: ENDPOINT_ADMIN_USER_DETAILS,
+      url: ENDPOINT_USERS_ME,
     });
-    return response?.data?.data;
-  } catch (error) {
-    console.log('error No user Details', error);
-  }
-});
-
-// Update Noification Settings
-export const updateUserNotificationSettings = createAsyncThunk(
-  'user/updateUserNotificationSettings',
-  async (params: {
-    newsAndAnnouncementsEnabled?: boolean;
-    weeklyUpdatesEnabled?: boolean;
-    generalNotificationsEnabled?: boolean;
-    sellerNotificationsEnabled?: boolean;
-    kaartxUpdatesEnabled?: boolean;
-    browserNotificationsEnabled?: boolean;
-  }) => {
-    try {
-      const response = await makeNetworkCall({
-        method: API_METHODS.PATCH,
-        url: ENDPOINT_ADMIN_USER_NOTIFICATION_SETTINGS,
-        data: params,
-      });
-      return response?.data?.data;
-    } catch (error) {
-      console.log('error No user Details', error);
-    }
+    return response?.data;
   }
 );
 
-// Update User Profile
-export const updateUserProfile = createAsyncThunk(
-  'user/updateUserProfile',
-  async (params: {
-    countryCode: string;
-    name: string;
-    phone: string;
-    profileImage: string;
-    userId: string;
-  }) => {
-    try {
-      const response = await makeNetworkCall({
-        method: API_METHODS.PATCH,
-        url: ENDPOINT_ADMIN_USER_UPDATE_PROFILE,
-        data: params,
-      });
-      return response?.data?.data;
-    } catch (error) {
-      console.log('error No user Details updated', error);
-    }
+// All Users thunk (Admin only GET /users)
+export const requestGetAllUsers = createAsyncThunk(
+  'user/requestGetAllUsers',
+  async () => {
+    const response = await makeNetworkCall({
+      method: API_METHODS.GET,
+      url: ENDPOINT_USERS_GET_ALL,
+    });
+    return response?.data;
   }
 );
 
-// Update User Password
-export const updateUserPassword = createAsyncThunk(
-  'user/updateUserPassword',
-  async (params: { currentPassword: string; newPassword: string }) => {
-    try {
-      const response = await makeNetworkCall({
-        method: API_METHODS.PATCH,
-        url: ENDPOINT_ADMIN_USER_UPDATE_PASSWORD,
-        data: params,
-      });
-      return response?.data?.data;
-    } catch (error) {
-      console.log('error No user Details updated', error);
-    }
+// Delete User thunk (Admin only DELETE /users/:id)
+export const requestDeleteUser = createAsyncThunk(
+  'user/requestDeleteUser',
+  async (id: string) => {
+    const response = await makeNetworkCall({
+      method: API_METHODS.DELETE,
+      url: `${ENDPOINT_USERS_DELETE}${id}`,
+    });
+    return response?.data;
+  }
+);
+
+// Approve User thunk (Admin only PATCH /users/:id/approve)
+export const requestApproveUser = createAsyncThunk(
+  'user/requestApproveUser',
+  async (params: { id: string; isApproved: boolean }) => {
+    const response = await makeNetworkCall({
+      method: API_METHODS.PATCH,
+      url: `/users/${params.id}/approve`,
+      data: { isApproved: params.isApproved },
+    });
+    return response?.data;
+  }
+);
+
+// Get Tasks thunk (GET /tasks)
+export const requestGetTasks = createAsyncThunk(
+  'tasks/requestGetTasks',
+  async (params?: { page?: number; limit?: number; status?: string; scope?: string; search?: string }) => {
+    const queryParts: string[] = [];
+    if (params?.page !== undefined) queryParts.push(`page=${params.page}`);
+    if (params?.limit !== undefined) queryParts.push(`limit=${params.limit}`);
+    if (params?.status) queryParts.push(`status=${encodeURIComponent(params.status)}`);
+    if (params?.scope) queryParts.push(`scope=${encodeURIComponent(params.scope)}`);
+    if (params?.search) queryParts.push(`search=${encodeURIComponent(params.search)}`);
+
+    const queryString = queryParts.length > 0 ? `?${queryParts.join('&')}` : '';
+    const response = await makeNetworkCall({
+      method: API_METHODS.GET,
+      url: `${ENDPOINT_TASKS_GET_ALL}${queryString}`,
+    });
+    return response?.data;
+  }
+);
+
+// Create Task thunk (POST /tasks)
+export const requestCreateTask = createAsyncThunk(
+  'tasks/requestCreateTask',
+  async (data: { title: string; description?: string; status?: string; userId?: string }) => {
+    const response = await makeNetworkCall({
+      method: API_METHODS.POST,
+      url: ENDPOINT_TASKS_CREATE,
+      data,
+    });
+    return response?.data;
+  }
+);
+
+// Update Task thunk (PUT /tasks/:id)
+export const requestUpdateTask = createAsyncThunk(
+  'tasks/requestUpdateTask',
+  async (params: { id: string; title?: string; description?: string; status?: string; userId?: string }) => {
+    const response = await makeNetworkCall({
+      method: API_METHODS.PUT,
+      url: `${ENDPOINT_TASKS_UPDATE}${params.id}`,
+      data: {
+        ...(params.title !== undefined && { title: params.title }),
+        ...(params.description !== undefined && { description: params.description }),
+        ...(params.status !== undefined && { status: params.status }),
+        ...(params.userId !== undefined && { userId: params.userId }),
+      },
+    });
+    return response?.data;
+  }
+);
+
+// Delete Task thunk (DELETE /tasks/:id)
+export const requestDeleteTask = createAsyncThunk(
+  'tasks/requestDeleteTask',
+  async (id: string) => {
+    const response = await makeNetworkCall({
+      method: API_METHODS.DELETE,
+      url: `${ENDPOINT_TASKS_DELETE}${id}`,
+    });
+    return response?.data;
   }
 );

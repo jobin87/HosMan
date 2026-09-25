@@ -8,25 +8,29 @@ import Typography from '@mui/material/Typography';
 import { ForbiddenIllustration } from 'src/assets/illustrations';
 
 import { varBounce, MotionContainer } from 'src/components/animate';
+import { useUser } from 'src/hooks/use-user';
 
 // ----------------------------------------------------------------------
 
 export type RoleBasedGuardProp = {
   sx?: SxProps<Theme>;
-  currentRole: string;
+  currentRole?: string;
   hasContent?: boolean;
-  acceptRoles: string[];
+  acceptRoles?: string[];
   children: React.ReactNode;
 };
 
 export function RoleBasedGuard({
   sx,
   children,
-  hasContent,
+  hasContent = true,
   currentRole,
   acceptRoles,
 }: RoleBasedGuardProp) {
-  if (typeof acceptRoles !== 'undefined' && !acceptRoles.includes(currentRole)) {
+  const user = useUser();
+  const activeRole = currentRole || user?.role || 'user';
+
+  if (typeof acceptRoles !== 'undefined' && acceptRoles.length > 0 && !acceptRoles.includes(activeRole)) {
     return hasContent ? (
       <Container component={MotionContainer} sx={{ textAlign: 'center', ...sx }}>
         <m.div variants={varBounce().in}>

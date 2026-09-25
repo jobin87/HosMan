@@ -1,31 +1,26 @@
 import { createSlice } from '@reduxjs/toolkit';
-
-import { basicInitialState, networkCallInitialState } from '../types';
+import { basicInitialState } from '../types';
 import {
-  changeDefaultPassword,
-  getAllUserDocuments,
-  requestForgetPassword,
-  requestResetPassword,
-  requestSellerRegistration,
   requestSignInWithPassword,
+  requestRegisterUser,
   requestUserDetails,
+  requestGetTasks,
+  requestCreateTask,
+  requestUpdateTask,
+  requestDeleteTask,
+  requestGetAllUsers,
+  requestApproveUser,
 } from './appThunk';
 
 const initialState = {
   auth: basicInitialState,
   accessToken: null,
   userLogged: false,
-  forgetpassword: networkCallInitialState,
-  resetpassword: networkCallInitialState,
-  userDocuments: [],
-
-  // ---------------------------------------
-  onboarding: {
-    steps: {
-      step: 6,
-      enabled: false,
-    },
-  },
+  tasks: [],
+  tasksTotalCount: 0,
+  tasksTotalPages: 1,
+  usersList: [],
+  tasksLoading: false,
 };
 
 export const appReducer = createSlice({
@@ -48,15 +43,10 @@ export const appReducer = createSlice({
       state.auth = basicInitialState;
       state.accessToken = null;
       state.userLogged = false;
-    },
-    setForgetPassword: (state, action) => {
-      state.forgetpassword = action.payload;
-    },
-    setResetPassword: (state, action) => {
-      state.resetpassword = action.payload;
-    },
-    setOnboardingSteps: (state, action) => {
-      state.onboarding.steps = action.payload;
+      state.tasks = [];
+      state.tasksTotalCount = 0;
+      state.tasksTotalPages = 1;
+      state.usersList = [];
     },
   },
   extraReducers(builder) {
@@ -64,16 +54,14 @@ export const appReducer = createSlice({
       // Sign In
       .addCase(requestSignInWithPassword.fulfilled, (state, action) => {
         state.auth.loading = false;
-        state.auth.data = action.payload;
-
-        const { userLogged, accessToken } = action.payload;
-
-        if (userLogged) {
-          state.accessToken = accessToken;
-          state.userLogged = userLogged;
+        const resData = action.payload;
+        if (resData?.accessToken) {
+          state.accessToken = resData.accessToken;
+          state.userLogged = true;
+          state.auth.data = resData.user;
         }
       })
-      .addCase(requestSignInWithPassword.pending, (state, action) => {
+      .addCase(requestSignInWithPassword.pending, (state) => {
         state.auth.loading = true;
       })
       .addCase(requestSignInWithPassword.rejected, (state, action) => {
@@ -81,66 +69,82 @@ export const appReducer = createSlice({
         state.auth.loading = false;
       })
 
-      // Seller Registration
-      .addCase(requestSellerRegistration.fulfilled, (state, action) => {
+      // Register
+      .addCase(requestRegisterUser.fulfilled, (state) => {
         state.auth.loading = false;
       })
-      .addCase(requestSellerRegistration.pending, (state, action) => {
+      .addCase(requestRegisterUser.pending, (state) => {
         state.auth.loading = true;
       })
-      .addCase(requestSellerRegistration.rejected, (state, action) => {
+      .addCase(requestRegisterUser.rejected, (state, action) => {
         state.auth.error = action.error;
         state.auth.loading = false;
       })
 
-      // Forget Password
-      .addCase(requestForgetPassword.fulfilled, (state, action) => {
-        state.forgetpassword.loading = false;
-        state.forgetpassword.data = action.payload;
-      })
-      .addCase(requestForgetPassword.pending, (state, action) => {
-        state.forgetpassword.loading = true;
-      })
-      .addCase(requestForgetPassword.rejected, (state, action) => {
-        state.forgetpassword.error = action.error;
-        state.forgetpassword.loading = false;
-      })
-
-      // Reset Password
-      .addCase(requestResetPassword.fulfilled, (state, action) => {
-        state.forgetpassword.loading = false;
-        state.forgetpassword.data = action.payload;
-      })
-      .addCase(requestResetPassword.pending, (state, action) => {
-        state.forgetpassword.loading = true;
-      })
-      .addCase(requestResetPassword.rejected, (state, action) => {
-        state.forgetpassword.error = action.error;
-        state.forgetpassword.loading = false;
-      })
-
-      // -------------------------------------------------------------------------------------
-
-      // User Details
+      // User Details (Me)
       .addCase(requestUserDetails.fulfilled, (state, action) => {
-        state.auth.data = {
-          ...state.auth.data,
-          ...action.payload,
-        };
+        const user = action.payload?.user || action.payload;
+        if (user) {
+          state.auth.data = {
+            ...state.auth.data,
+            ...user,
+          };
+        }
       })
 
-      // Change Default Password
-      .addCase(changeDefaultPassword.fulfilled, (state, action) => {
-        console.log('action.payload.defaultPasswordUpdated', action.payload, state);
-        if (action.payload) {
-          state.auth.data.defaultPassword = false;
+      // All Users (Admin)
+      .addCase(requestGetAllUsers.fulfilled, (state, action) => {
+        state.usersList = action.payload?.users || action.payload || [];
+      })
+
+      // Approve User
+      .addCase(requestApproveUser.fulfilled, (state: any, action: any) => {
+        const updatedUser = action.payload?.user || action.payload;
+        if (updatedUser?.id) {
+          const index = state.usersList.findIndex((u: any) => u.id === updatedUser.id);
+          if (index !== -1) {
+            state.usersList[index] = { ...state.usersList[index], ...updatedUser };
+          }
         }
       })
-      .addCase(getAllUserDocuments.fulfilled, (state, action) => {
-        console.log('action.payload.documents', action.payload, state);
-        if (action.payload) {
-          state.userDocuments = action.payload;
+
+      // Tasks List
+      .addCase(requestGetTasks.pending, (state) => {
+        state.tasksLoading = true;
+      })
+      .addCase(requestGetTasks.fulfilled, (state: any, action: any) => {
+        state.tasksLoading = false;
+        state.tasks = action.payload?.tasks || action.payload || [];
+        state.tasksTotalCount = action.payload?.totalCount ?? action.payload?.count ?? (action.payload?.tasks?.length || 0);
+        state.tasksTotalPages = action.payload?.totalPages || 1;
+      })
+      .addCase(requestGetTasks.rejected, (state) => {
+        state.tasksLoading = false;
+      })
+
+      // Create Task
+      .addCase(requestCreateTask.fulfilled, (state: any, action) => {
+        const task = action.payload?.task || action.payload;
+        if (task?.id) {
+          state.tasks.unshift(task);
         }
+      })
+
+      // Update Task
+      .addCase(requestUpdateTask.fulfilled, (state: any, action) => {
+        const task = action.payload?.task || action.payload;
+        if (task?.id) {
+          const index = state.tasks.findIndex((t: any) => t.id === task.id);
+          if (index !== -1) {
+            state.tasks[index] = task;
+          }
+        }
+      })
+
+      // Delete Task
+      .addCase(requestDeleteTask.fulfilled, (state: any, action: any) => {
+        const deletedId = action.meta.arg;
+        state.tasks = state.tasks.filter((t: any) => t.id !== deletedId);
       });
   },
 });
@@ -150,10 +154,7 @@ export const {
   setLogged,
   setAuthToken,
   setUserDetails,
-  setForgetPassword,
-  setResetPassword,
   setUserLoggedOut,
-  setOnboardingSteps,
 } = appReducer.actions;
 
 export default appReducer.reducer;

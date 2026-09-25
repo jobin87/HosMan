@@ -5,7 +5,6 @@ import { paths } from 'src/routes/paths';
 
 import { SplashScreen } from 'src/components/loading-screen';
 import { useUser } from 'src/hooks/use-user';
-import { SERVICE_STATUS } from 'src/constants/service.constants';
 
 // ----------------------------------------------------------------------
 
@@ -37,33 +36,8 @@ export function AuthGuard({ children }: Props) {
     if (!userLogged) {
       const href = `${paths.auth.signIn}?${createQueryString('returnTo', pathname)}`;
       router.replace(href);
+      setIsChecking(false);
       return;
-    }
-
-    if (!sellerDetails?.isSellerApproved) {
-      if (sellerDetails?.approvalStatus === SERVICE_STATUS.DECLINED) {
-        router.replace(paths.onboarding.root);
-        setIsChecking(false);
-        return;
-      }
-
-      if (sellerDetails?.approvalStatus === SERVICE_STATUS.UNDERVERIFICATION) {
-        router.replace(paths.onboarding.root);
-        setIsChecking(false);
-        return;
-      }
-
-      if (sellerDetails?.approvalStatus === SERVICE_STATUS.PENDING) {
-        //PENDING
-        if (pathname?.split('/')?.[1] === 'onboarding') {
-          setIsChecking(false);
-          return;
-        } else {
-          router.replace(paths.onboarding.form);
-          setIsChecking(false);
-          return;
-        }
-      }
     }
 
     setIsChecking(false);

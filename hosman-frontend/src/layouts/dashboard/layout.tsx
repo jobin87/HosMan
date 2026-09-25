@@ -10,21 +10,19 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 
 import { Logo } from 'src/components/logo';
-import { useSettingsContext } from 'src/components/settings';
 
 // import { DefaultPasswordChangeModal } from 'src/components/default-password-change-modal';
 // import { DefaultPasswordChangeAlert } from 'src/components/default-password-change-modal/default-password-change-alert';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useUser } from 'src/hooks/use-user';
 import { useRouter } from 'src/routes/hooks';
 import { useAppDispatch } from 'src/store';
 import { layoutClasses } from '../classes';
 import { AccountDrawer } from '../components/account-drawer';
 import { MenuButton } from '../components/menu-button';
-import { SettingsButton } from '../components/settings-button';
 import { _account } from '../config-nav-account';
-import { navData as dashboardNavData } from '../config-nav-dashboard';
+import { navData as dashboardNavData, filterNavByRole } from '../config-nav-dashboard';
 import { HeaderSection } from '../core/header-section';
 import { LayoutSection } from '../core/layout-section';
 import { Main } from './main';
@@ -32,11 +30,6 @@ import { NavHorizontal } from './nav-horizontal';
 import { NavMobile } from './nav-mobile';
 import { NavVertical } from './nav-vertical';
 import { StyledDivider, useNavColorVars } from './styles';
-import { Searchbar } from '../components/searchbar';
-import { LanguagePopover } from '../components/language-popover';
-import { NotificationsDrawer } from '../components/notifications-drawer';
-import { _contacts, _notifications } from 'src/_mock';
-import { ContactsPopover } from '../components/contacts-popover';
 
 // ----------------------------------------------------------------------
 
@@ -54,7 +47,6 @@ export type DashboardLayoutProps = {
 export function DashboardLayout({ sx, children, header, data }: DashboardLayoutProps) {
   const userData = useUser();
 
-
   const isDefaultPasswordUpdated = userData?.defaultPassword;
 
   const [ setDefaultPasswordChangeAlertOpen] =
@@ -66,17 +58,20 @@ export function DashboardLayout({ sx, children, header, data }: DashboardLayoutP
 
   const router = useRouter();
 
-  const settings = useSettingsContext();
+  const [isNavMini, setIsNavMini] = useState(false);
+  const isNavHorizontal = false;
+  const isNavVertical = !isNavHorizontal;
 
-  const navColorVars = useNavColorVars(theme, settings);
+  const navColorVars = useNavColorVars(theme);
 
   const layoutQuery: Breakpoint = 'lg';
 
-  const navData = data?.nav ?? dashboardNavData;
+  const userRole = userData?.role || 'user';
+  const rawNavData = data?.nav ?? dashboardNavData;
 
-  const isNavMini = settings.navLayout === 'mini';
-  const isNavHorizontal = settings.navLayout === 'horizontal';
-  const isNavVertical = isNavMini || settings.navLayout === 'vertical';
+  const navData = useMemo(() => {
+    return filterNavByRole(rawNavData, userRole);
+  }, [rawNavData, userRole]);
 
 
 
@@ -169,25 +164,7 @@ export function DashboardLayout({ sx, children, header, data }: DashboardLayoutP
             ),
             rightArea: (
               <Box display="flex" alignItems="center" gap={{ xs: 0, sm: 0.75 }}>
-                {/* -- Searchbar -- */}
-                {/* <Searchbar data={navData} /> */}
-                {/* -- Language popover -- */}
-                {/* <LanguagePopover
-                  data={[
-                    { value: 'en', label: 'English', countryCode: 'GB' },
-                    { value: 'fr', label: 'French', countryCode: 'FR' },
-                    { value: 'vi', label: 'Vietnamese', countryCode: 'VN' },
-                    { value: 'cn', label: 'Chinese', countryCode: 'CN' },
-                    { value: 'ar', label: 'Arabic', countryCode: 'SA' },
-                  ]}
-                /> */}
-                {/* -- Notifications popover -- */}
-                {/* <NotificationsDrawer data={_notifications} /> */}
-                {/* -- Contacts popover -- */}
-                {/* <ContactsPopover data={_contacts} /> */}
-                {/* -- Settings button -- */}
-                <SettingsButton />
-                {/* -- Account drawer -- */}
+        
                 <AccountDrawer data={_account} />
               </Box>
             ),
@@ -204,12 +181,7 @@ export function DashboardLayout({ sx, children, header, data }: DashboardLayoutP
             isNavMini={isNavMini}
             layoutQuery={layoutQuery}
             cssVars={navColorVars.section}
-            onToggleNav={() =>
-              settings.onUpdateField(
-                'navLayout',
-                settings.navLayout === 'vertical' ? 'mini' : 'vertical'
-              )
-            }
+            onToggleNav={() => setIsNavMini((prev) => !prev)}
           />
         )
       }
@@ -227,9 +199,9 @@ export function DashboardLayout({ sx, children, header, data }: DashboardLayoutP
         '--layout-nav-mini-width': '88px',
         '--layout-nav-vertical-width': '300px',
         '--layout-nav-horizontal-height': '64px',
-        '--layout-dashboard-content-pt': theme.spacing(4),
-        '--layout-dashboard-content-pb': theme.spacing(2),
-        '--layout-dashboard-content-px': theme.spacing(5),
+        '--layout-dashboard-content-pt': theme.spacing(3),
+        '--layout-dashboard-content-pb': theme.spacing(3),
+        '--layout-dashboard-content-px': theme.spacing(3),
       }}
       sx={{
         [`& .${layoutClasses.hasSidebar}`]: {

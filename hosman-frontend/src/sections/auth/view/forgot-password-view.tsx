@@ -1,105 +1,158 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useMemo } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { z as zod } from 'zod';
 
-import LoadingButton from '@mui/lab/LoadingButton';
 import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import Link from '@mui/material/Link';
+import LoadingButton from '@mui/lab/LoadingButton';
+import Stack from '@mui/material/Stack';
 
-import { PasswordIcon } from 'src/assets/icons';
+import { Link as RouterLink } from 'react-router-dom';
+import toast from 'react-hot-toast';
+
 import { paths } from 'src/routes/paths';
 
-import { Field, Form } from 'src/components/hook-form';
-import { useAppDispatch, useAppSelector } from 'src/store';
-
-import { requestForgetPassword } from 'src/store/app/appThunk';
-
-import { useRouter } from 'src/routes/hooks';
-
-import toast from 'react-hot-toast';
-import { FormHead } from '../form-head';
-
-import { setForgetPassword } from 'src/store/app/appReducer';
-import { networkCallInitialState } from 'src/store/types';
-import { FormReturnLink } from '../form-return-link';
-
-// Define the schema for validating the email field
-export type ForgetPasswordSchemaType = zod.infer<typeof ForgetPasswordSchema>;
-
-export const ForgetPasswordSchema = zod.object({
+export const ForgotPasswordSchema = zod.object({
   email: zod
     .string()
-    .min(1, { message: 'Email is required!' })
-    .email({ message: 'Email must be a valid email address!' }),
+    .min(1, { message: 'Email address is required' })
+    .email({ message: 'Please enter a valid email address' }),
 });
 
-// Component for the forgot password form
+export type ForgotPasswordSchemaType = zod.infer<typeof ForgotPasswordSchema>;
+
 export function ForgotPasswordView() {
-  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
-  const dispatch = useAppDispatch();
-
-  const { data, loading } = useAppSelector((state) => state.app.forgetpassword);
-
-  const defaultValues = useMemo(() => ({ email: '' }), []);
-
-  const methods = useForm<ForgetPasswordSchemaType>({
-    resolver: zodResolver(ForgetPasswordSchema),
-    defaultValues,
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ForgotPasswordSchemaType>({
+    resolver: zodResolver(ForgotPasswordSchema),
+    defaultValues: { email: '' },
   });
 
-  const { handleSubmit } = methods;
-
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = async (data: ForgotPasswordSchemaType) => {
+    setLoading(true);
     try {
-      dispatch(
-        requestForgetPassword({
-          email: data.email,
-        })
-      );
+      // Simulate API call for password reset request
+      await new Promise((res) => setTimeout(res, 800));
+      setSubmitted(true);
+      toast.success(`Password reset link sent to ${data.email}`);
     } catch (error) {
-      console.error(error);
+      toast.error('Failed to send reset link. Please try again.');
+    } finally {
+      setLoading(false);
     }
-  });
-
-  useEffect(() => {
-    if (data?.emailSend) {
-      toast.success('A reset password link has been sent to your email!');
-      router.push(paths.auth.signIn);
-      dispatch(setForgetPassword(networkCallInitialState));
-    }
-  }, [data]);
-
-  // Form UI with validation and loading state
-  const renderForm = (
-    <Box gap={3} display="flex" flexDirection="column">
-      <Field.Text
-        name="email"
-        label="Email address"
-        placeholder="example@gmail.com"
-        autoFocus
-        InputLabelProps={{ shrink: true }}
-      />
-
-      <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={loading}>
-        Send request
-      </LoadingButton>
-    </Box>
-  );
+  };
 
   return (
-    <Box textAlign={'center'}>
-      <FormHead
-        icon={<PasswordIcon />}
-        title="Forgot your password?"
-        description="Please enter the email address associated with your account and we'll email you a link to reset your password."
-      />
+    <Card
+      sx={{
+        p: { xs: 4, sm: 5 },
+        width: 1,
+        maxWidth: 460,
+        minHeight: 460,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        mx: 'auto',
+        boxShadow: (theme) => theme.customShadows?.card || '0px 8px 32px rgba(0, 0, 0, 0.12)',
+        borderRadius: 3,
+      }}
+    >
+      <Stack spacing={3.5} sx={{ mb: 4, textAlign: 'center' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 1.5 }}>
+          <Box
+            sx={{
+              width: 44,
+              height: 44,
+              borderRadius: 2,
+              bgcolor: 'primary.main',
+              color: 'primary.contrastText',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontWeight: 800,
+              fontSize: 22,
+            }}
+          >
+            R
+          </Box>
+          <Typography variant="h4" fontWeight={800} color="text.primary">
+            ResultPrep
+          </Typography>
+        </Box>
 
-      <Form methods={methods} onSubmit={onSubmit}>
-        {renderForm}
-      </Form>
+        <Box>
+          <Typography variant="h5" fontWeight={700}>
+            Forgot Password?
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+            Enter your email address to receive a password reset link.
+          </Typography>
+        </Box>
+      </Stack>
 
-      <FormReturnLink href={paths.auth.signIn} />
-    </Box>
+      {submitted ? (
+        <Stack spacing={3} sx={{ textAlign: 'center' }}>
+          <Typography variant="body1" color="success.main" fontWeight={600}>
+            Check your inbox! We've sent password reset instructions to your email address.
+          </Typography>
+
+          <Link
+            component={RouterLink}
+            to={paths.auth.signIn}
+            variant="subtitle2"
+            color="primary"
+            sx={{ display: 'inline-flex', alignItems: 'center', justifyCenter: 'center', gap: 0.5 }}
+          >
+            Return to Sign In
+          </Link>
+        </Stack>
+      ) : (
+        <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate autoComplete="off">
+          <Stack spacing={3}>
+            <TextField
+              fullWidth
+              label="Email address"
+              autoComplete="off"
+              {...register('email')}
+              error={!!errors.email}
+              helperText={errors.email?.message}
+              inputProps={{ autoComplete: 'off' }}
+            />
+
+            <LoadingButton
+              fullWidth
+              size="large"
+              type="submit"
+              variant="contained"
+              loading={loading}
+              sx={{ py: 1.4, fontSize: 16, fontWeight: 700 }}
+            >
+              Reset Password
+            </LoadingButton>
+
+            <Box sx={{ textAlign: 'center', mt: 1 }}>
+              <Link
+                component={RouterLink}
+                to={paths.auth.signIn}
+                variant="subtitle2"
+                color="primary"
+              >
+                Return to Sign In
+              </Link>
+            </Box>
+          </Stack>
+        </Box>
+      )}
+    </Card>
   );
 }

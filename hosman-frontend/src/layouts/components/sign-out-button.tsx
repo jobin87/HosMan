@@ -5,11 +5,6 @@ import Button from '@mui/material/Button';
 import { useCallback } from 'react';
 
 import { Iconify } from 'src/components/iconify';
-import {
-  API_METHODS,
-  ENDPOINT_ADMIN_USER_LOGOUT_CURRENT_SESSION,
-  makeNetworkCall,
-} from 'src/network';
 import { useAppDispatch } from 'src/store';
 import { requestSignOut } from 'src/store/app/appThunk';
 
@@ -32,12 +27,9 @@ export function SignOutButton({
 
   const handleLogout = useCallback(async () => {
     try {
-      const response = await makeNetworkCall({
-        method: API_METHODS.DELETE,
-        url: ENDPOINT_ADMIN_USER_LOGOUT_CURRENT_SESSION,
-      });
-      if (response?.data?.data?.loggedOut) {
-        dispatch(requestSignOut(onClose));
+      await dispatch(requestSignOut());
+      if (onClose) {
+        onClose();
       }
     } catch (error) {
       console.error(error);

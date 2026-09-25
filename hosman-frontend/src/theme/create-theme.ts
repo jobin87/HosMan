@@ -1,47 +1,36 @@
 import type { Theme } from '@mui/material/styles';
-import type { SettingsState } from 'src/components/settings';
 
-import { experimental_extendTheme as extendTheme } from '@mui/material/styles';
+import { extendTheme } from '@mui/material/styles';
 
 import { colorSchemes, components, customShadows, shadows, typography } from './core';
 import { overridesTheme } from './overrides-theme';
 import { setFont } from './styles/utils';
-import { updateComponentsWithSettings, updateCoreWithSettings } from './with-settings/update-theme';
 
 // ----------------------------------------------------------------------
 
-export function createTheme(settings: SettingsState): Theme {
+export function createTheme(): Theme {
   const initialTheme = {
     colorSchemes,
-    shadows: shadows(settings.colorScheme),
-    customShadows: customShadows(settings.colorScheme),
-    direction: settings.direction,
+    shadows: shadows('light'),
+    customShadows: customShadows('light'),
     shape: { borderRadius: 8 },
     components,
     typography: {
       ...typography,
-      fontFamily: setFont(settings.fontFamily),
+      fontFamily: setFont('Public Sans'),
     },
     cssVarPrefix: '',
     shouldSkipGeneratingVar,
   };
 
-  /**
-   * 1.Update values from settings before creating theme.
-   */
-  const updateTheme = updateCoreWithSettings(initialTheme, settings);
-
-  /**
-   * 2.Create theme + add locale + update component with settings.
-   */
-  const theme = extendTheme(updateTheme, updateComponentsWithSettings(settings), overridesTheme);
+  const theme = extendTheme(initialTheme, overridesTheme);
 
   return theme;
 }
 
 // ----------------------------------------------------------------------
 
-function shouldSkipGeneratingVar(keys: string[], value: string | number): boolean {
+function shouldSkipGeneratingVar(keys: string[], _value: string | number): boolean {
   const skipGlobalKeys = [
     'mixins',
     'overlays',

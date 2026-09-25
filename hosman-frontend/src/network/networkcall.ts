@@ -27,10 +27,10 @@ export const makeNetworkCall = async (config: INetworkCallConfig) => {
   try {
     const { app } = defaultStore.getState();
     const { method = API_METHODS.GET, extraHeaders = {}, extraHeadersOnly = false } = config;
-    const authKey = app.auth?.data?.accessToken;
+    const authKey = app.accessToken || app.auth?.data?.accessToken || app.auth?.data?.token;
 
     const commonHeaders = {
-      ...(authKey !== undefined && { Authorization: `Bearer ${authKey}` }),
+      ...(authKey && { Authorization: `Bearer ${authKey}` }),
       'Content-Type': 'application/json',
       withCredentials: false,
     };

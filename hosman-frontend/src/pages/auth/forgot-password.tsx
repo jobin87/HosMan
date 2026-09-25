@@ -1,21 +1,20 @@
 import { Helmet } from 'react-helmet-async';
 
 import { CONFIG } from 'src/config-global';
-
-import { UserProfileView } from 'src/sections/user/view';
+import { ForgotPasswordView } from 'src/sections/auth/view';
 
 // ----------------------------------------------------------------------
 
-const metadata = { title: `User profile | Dashboard - ${CONFIG.appName}` };
+const metadata = { title: `Forgot Password | ${CONFIG.appName}` };
 
 export default function Page() {
   return (
     <>
       <Helmet>
-        <title> {metadata.title}</title>
+        <title>{metadata.title}</title>
       </Helmet>
 
-      <UserProfileView />
+      <ForgotPasswordView />
     </>
   );
 }

@@ -15,7 +15,6 @@ import { Section } from './section';
 import { Main, Content } from './main';
 import { HeaderSection } from '../core/header-section';
 import { LayoutSection } from '../core/layout-section';
-import { SettingsButton } from '../components/settings-button';
 
 // ----------------------------------------------------------------------
 
@@ -69,8 +68,6 @@ export function AuthSplitLayout({ sx, section, children, header }: AuthSplitLayo
                 >
                   Need help?
                 </Link>
-                {/* -- Settings button -- */}
-                <SettingsButton />
               </Box>
             ),
           }}
@@ -83,7 +80,7 @@ export function AuthSplitLayout({ sx, section, children, header }: AuthSplitLayo
       /** **************************************
        * Style
        *************************************** */
-      cssVars={{ '--layout-auth-content-width': '420px' }}
+      cssVars={{ '--layout-auth-content-width': '560px' }}
       sx={sx}
     >
       <Main layoutQuery={layoutQuery}>

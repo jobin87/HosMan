@@ -9,7 +9,6 @@ import { paths } from 'src/routes/paths';
 
 import { Logo } from 'src/components/logo';
 
-import { SettingsButton } from '../components/settings-button';
 import { HeaderSection } from '../core/header-section';
 import { LayoutSection } from '../core/layout-section';
 import { Main } from './main';
@@ -58,8 +57,6 @@ export function SimpleLayout({ sx, children, header, content }: SimpleLayoutProp
                 >
                   Need help?
                 </Link>
-                {/* -- Settings button -- */}
-                <SettingsButton />
               </Box>
             ),
           }}

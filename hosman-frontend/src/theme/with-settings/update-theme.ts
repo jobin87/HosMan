@@ -1,5 +1,4 @@
 import type { Components, Theme } from '@mui/material/styles';
-import type { SettingsState } from 'src/components/settings';
 
 import COLORS from '../core/colors.json';
 import { components as coreComponents } from '../core/components';
@@ -11,6 +10,11 @@ import PRIMARY_COLOR from './primary-color.json';
 import type { ThemeComponents, ThemeUpdateOptions } from '../types';
 
 // ----------------------------------------------------------------------
+
+type SettingsOptions = {
+  primaryColor?: 'default' | 'cyan' | 'purple' | 'blue' | 'orange' | 'red';
+  contrast?: 'default' | 'hight';
+};
 
 const PRIMARY_COLORS = {
   default: COLORS.primary,
@@ -30,15 +34,20 @@ const PRIMARY_COLORS = {
 
 export function updateCoreWithSettings(
   theme: ThemeUpdateOptions,
-  settings: SettingsState
+  settings: SettingsOptions = {}
 ): ThemeUpdateOptions {
   const { colorSchemes, customShadows } = theme;
+  const primaryColor = settings.primaryColor || 'default';
+  const contrast = settings.contrast || 'default';
 
   const updatedPrimary = getPalette(
-    settings.primaryColor,
+    primaryColor,
     corePrimary,
-    PRIMARY_COLORS[settings.primaryColor]
+    PRIMARY_COLORS[primaryColor]
   );
+
+  const lightPalette = typeof colorSchemes?.light === 'object' ? (colorSchemes.light as any).palette : {};
+  const darkPalette = typeof colorSchemes?.dark === 'object' ? (colorSchemes.dark as any).palette : {};
 
   return {
     ...theme,
@@ -46,20 +55,20 @@ export function updateCoreWithSettings(
       ...colorSchemes,
       light: {
         palette: {
-          ...colorSchemes?.light?.palette,
+          ...lightPalette,
           /** [1] */
           primary: updatedPrimary,
           /** [2] */
           background: {
-            ...colorSchemes?.light?.palette?.background,
-            default: getBackgroundDefault(settings.contrast),
-            defaultChannel: hexToRgbChannel(getBackgroundDefault(settings.contrast)),
+            ...lightPalette?.background,
+            default: getBackgroundDefault(contrast),
+            defaultChannel: hexToRgbChannel(getBackgroundDefault(contrast)),
           },
         },
       },
       dark: {
         palette: {
-          ...colorSchemes?.dark?.palette,
+          ...darkPalette,
           /** [1] */
           primary: updatedPrimary,
         },
@@ -69,7 +78,7 @@ export function updateCoreWithSettings(
       ...customShadows,
       /** [1] */
       primary:
-        settings.primaryColor === 'default'
+        primaryColor === 'default'
           ? coreCustomShadows('light').primary
           : createShadowColor(updatedPrimary.mainChannel),
     },
@@ -78,7 +87,7 @@ export function updateCoreWithSettings(
 
 // ----------------------------------------------------------------------
 
-export function updateComponentsWithSettings(settings: SettingsState) {
+export function updateComponentsWithSettings(settings: SettingsOptions = {}) {
   const components: ThemeComponents = {};
 
   /** [2] */
@@ -112,7 +121,7 @@ export function updateComponentsWithSettings(settings: SettingsState) {
 // ----------------------------------------------------------------------
 
 function getPalette(
-  name: SettingsState['primaryColor'],
+  name: SettingsOptions['primaryColor'] = 'default',
   initialPalette: typeof corePrimary,
   updatedPalette: typeof corePrimary
 ) {
@@ -120,7 +129,7 @@ function getPalette(
   return name === 'default' ? initialPalette : createPaletteChannel(updatedPalette);
 }
 
-function getBackgroundDefault(contrast: SettingsState['contrast']) {
+function getBackgroundDefault(contrast: SettingsOptions['contrast'] = 'default') {
   /** [2] */
   return contrast === 'default' ? '#FFFFFF' : coreGreyPalette[200];
 }

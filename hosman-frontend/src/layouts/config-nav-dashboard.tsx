@@ -41,60 +41,30 @@ const ICONS = {
 
 // ----------------------------------------------------------------------
 
-export const navData = [
-  /**
-   * Overview
-   */
-  {
-    subheader: 'Overview',
-    items: [{ title: 'Hospital-Info', path: paths.dashboard.root, icon: ICONS.dashboard }],
-  },
-  /*
-   * Management
-   */
-  {
-    subheader: 'diagnosis-data',
-    items: [
-      {
-        title: 'Doctors',
-        path: paths.dashboard.doctor.root,
-      },
-      {
-        title: 'patients',
-        path: paths.dashboard.patients.root
-      },
-      {
-        title: 'Appointment',
-        path: paths.dashboard.Appointment.root,
-      },
-      {
-        title: 'treatments',
-        path: paths.dashboard.Treatment.root,
-      },
-      
-      {
-        title: 'Reports',
-        path: paths.dashboard.Reports.root,
+import type { NavSectionProps } from 'src/components/nav-section';
 
-      },
-     
-    ],
-  },
+export const navData = [
   {
-    subheader: 'Settings',
+    subheader: 'Management',
     items: [
-      {
-        title: 'Staff Management',
-        path: paths.dashboard.settings.root,      
-      },
-      {
-        title: 'Hospital-files',
-        path: paths.dashboard.settings.staff.list,
-      },
-      {
-        title: 'Inventory',
-        path: paths.dashboard.settings.staff.list,
-      },
+      { title: 'Dashboard', path: paths.dashboard.root, icon: ICONS.dashboard, roles: ['admin', 'user'] },
+      { title: 'Task Manager', path: paths.dashboard.tasks, icon: ICONS.kanban, roles: ['admin'] },
     ],
   },
 ];
+
+/**
+ * Filter navData by user role dynamically
+ */
+export function filterNavByRole(data: NavSectionProps['data'], userRole?: string) {
+  const role = userRole || 'user';
+  return data
+    .map((group) => {
+      const filteredItems = group.items.filter(
+        (item) => !item.roles || item.roles.includes(role)
+      );
+      return { ...group, items: filteredItems };
+    })
+    .filter((group) => group.items.length > 0);
+}
+

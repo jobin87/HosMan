@@ -18,24 +18,22 @@ export function GuestGuard({ children }: Props) {
 
   const searchParams = useSearchParams();
 
-  const { userLogged, loading } = useUser();
+  const { userLogged } = useUser();
 
   const [isChecking, setIsChecking] = useState<boolean>(true);
 
-  const returnTo = searchParams.get('returnTo') || CONFIG.auth.redirectPath;
+  const returnTo = searchParams.get('returnTo');
 
   const checkPermissions = useCallback(async (): Promise<void> => {
-    if (userLogged) {
+    if (userLogged && returnTo) {
       router.replace(returnTo);
-      return;
     }
-
     setIsChecking(false);
   }, [userLogged, returnTo, router]);
 
   useEffect(() => {
     checkPermissions();
-  }, [checkPermissions, loading]);
+  }, [checkPermissions]);
 
   if (isChecking) {
     return <SplashScreen />;

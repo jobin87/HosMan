@@ -73,7 +73,8 @@ export function DashboardView() {
   const isAdmin = currentUser?.role === 'admin';
 
   const users: IRealPrepUser[] = useMemo(() => {
-    if (!reduxUsersList || reduxUsersList.length === 0) {
+    const list = Array.isArray(reduxUsersList) ? reduxUsersList : [];
+    if (!list || list.length === 0) {
       if (currentUser?.id) {
         return [
           {
@@ -88,7 +89,7 @@ export function DashboardView() {
       }
       return [];
     }
-    return reduxUsersList.map((u: any) => ({
+    return list.map((u: any) => ({
       id: u.id,
       name: u.userName || u.name || (u.userEmail ? u.userEmail.split('@')[0] : 'User'),
       email: u.userEmail || u.email || '',
@@ -100,7 +101,8 @@ export function DashboardView() {
   }, [reduxUsersList, currentUser]);
 
   const tasks: ITask[] = useMemo(() => {
-    return (reduxTasks || []).map((t: any) => {
+    const rawTasks = Array.isArray(reduxTasks) ? reduxTasks : [];
+    return rawTasks.map((t: any) => {
       const matchingUser = users.find((u) => String(u.id) === String(t.userId));
       const validStatus: TaskStatus =
         t.status === 'in_progress' || t.status === 'completed' ? t.status : 'todo';
@@ -149,7 +151,9 @@ export function DashboardView() {
         return;
       }
       await dispatch(requestGetTasks({}));
-      await dispatch(requestGetAllUsers());
+      if (isAdmin) {
+        await dispatch(requestGetAllUsers());
+      }
     } catch (error) {
       toast.error('Failed to load dashboard data');
     } finally {

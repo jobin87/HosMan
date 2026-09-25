@@ -94,13 +94,17 @@ export const appReducer = createSlice({
 
       // All Users (Admin)
       .addCase(requestGetAllUsers.fulfilled, (state, action) => {
-        state.usersList = action.payload?.users || action.payload || [];
+        const rawUsers = action.payload?.users || action.payload;
+        state.usersList = Array.isArray(rawUsers) ? rawUsers : [];
+      })
+      .addCase(requestGetAllUsers.rejected, (state) => {
+        state.usersList = [];
       })
 
       // Approve User
       .addCase(requestApproveUser.fulfilled, (state: any, action: any) => {
         const updatedUser = action.payload?.user || action.payload;
-        if (updatedUser?.id) {
+        if (updatedUser?.id && Array.isArray(state.usersList)) {
           const index = state.usersList.findIndex((u: any) => u.id === updatedUser.id);
           if (index !== -1) {
             state.usersList[index] = { ...state.usersList[index], ...updatedUser };
@@ -114,12 +118,15 @@ export const appReducer = createSlice({
       })
       .addCase(requestGetTasks.fulfilled, (state: any, action: any) => {
         state.tasksLoading = false;
-        state.tasks = action.payload?.tasks || action.payload || [];
-        state.tasksTotalCount = action.payload?.totalCount ?? action.payload?.count ?? (action.payload?.tasks?.length || 0);
+        const rawTasks = action.payload?.tasks || action.payload;
+        state.tasks = Array.isArray(rawTasks) ? rawTasks : [];
+        state.tasksTotalCount = action.payload?.totalCount ?? action.payload?.count ?? (Array.isArray(rawTasks) ? rawTasks.length : 0);
         state.tasksTotalPages = action.payload?.totalPages || 1;
       })
-      .addCase(requestGetTasks.rejected, (state) => {
+      .addCase(requestGetTasks.rejected, (state: any) => {
         state.tasksLoading = false;
+        state.tasks = [];
+        state.tasksTotalCount = 0;
       })
 
       // Create Task

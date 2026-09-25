@@ -75,11 +75,14 @@ export const requestUserDetails = createAsyncThunk(
 // All Users thunk (Admin only GET /users)
 export const requestGetAllUsers = createAsyncThunk(
   'user/requestGetAllUsers',
-  async () => {
+  async (_, { rejectWithValue }) => {
     const response = await makeNetworkCall({
       method: API_METHODS.GET,
       url: ENDPOINT_USERS_GET_ALL,
     });
+    if (response?.status !== 200 && response?.status !== 201) {
+      return rejectWithValue(response?.data);
+    }
     return response?.data;
   }
 );
@@ -87,11 +90,14 @@ export const requestGetAllUsers = createAsyncThunk(
 // Delete User thunk (Admin only DELETE /users/:id)
 export const requestDeleteUser = createAsyncThunk(
   'user/requestDeleteUser',
-  async (id: string) => {
+  async (id: string, { rejectWithValue }) => {
     const response = await makeNetworkCall({
       method: API_METHODS.DELETE,
       url: `${ENDPOINT_USERS_DELETE}${id}`,
     });
+    if (response?.status !== 200 && response?.status !== 201) {
+      return rejectWithValue(response?.data);
+    }
     return response?.data;
   }
 );
@@ -99,12 +105,16 @@ export const requestDeleteUser = createAsyncThunk(
 // Approve User thunk (Admin only PATCH /users/:id/approve)
 export const requestApproveUser = createAsyncThunk(
   'user/requestApproveUser',
-  async (params: { id: string; isApproved: boolean }) => {
+  async (params: { id?: string; userId?: string; isApproved: boolean }, { rejectWithValue }) => {
+    const targetId = params.id || params.userId;
     const response = await makeNetworkCall({
       method: API_METHODS.PATCH,
-      url: `/users/${params.id}/approve`,
+      url: `/users/${targetId}/approve`,
       data: { isApproved: params.isApproved },
     });
+    if (response?.status !== 200 && response?.status !== 201) {
+      return rejectWithValue(response?.data);
+    }
     return response?.data;
   }
 );
@@ -112,7 +122,7 @@ export const requestApproveUser = createAsyncThunk(
 // Get Tasks thunk (GET /tasks)
 export const requestGetTasks = createAsyncThunk(
   'tasks/requestGetTasks',
-  async (params?: { page?: number; limit?: number; status?: string; scope?: string; search?: string }) => {
+  async (params: { page?: number; limit?: number; status?: string; scope?: string; search?: string } | undefined, { rejectWithValue }) => {
     const queryParts: string[] = [];
     if (params?.page !== undefined) queryParts.push(`page=${params.page}`);
     if (params?.limit !== undefined) queryParts.push(`limit=${params.limit}`);
@@ -125,6 +135,9 @@ export const requestGetTasks = createAsyncThunk(
       method: API_METHODS.GET,
       url: `${ENDPOINT_TASKS_GET_ALL}${queryString}`,
     });
+    if (response?.status !== 200 && response?.status !== 201) {
+      return rejectWithValue(response?.data);
+    }
     return response?.data;
   }
 );

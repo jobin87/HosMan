@@ -27,7 +27,7 @@ export class TaskController {
   @Post(TASK_CONFIG.endpoints.create)
   @HttpCode(HttpStatus.CREATED)
   async createTask(@Req() req: any, @Body() dto: CreateTaskDto) {
-    return handleError(() => this.taskService.createTask(req.user.id, dto));
+    return handleError(() => this.taskService.createTask(req.user.id, dto, req.user.role));
   }
 
   @Get(TASK_CONFIG.endpoints.getAll)

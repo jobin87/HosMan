@@ -26,6 +26,7 @@ export class UsersController {
   }
 
   @Get(USERS_CONFIG.endpoints.getAll)
+  @Roles('admin')
   async getAllUsers(@Req() req: any) {
     return handleError(() => this.usersService.getAllUsers(req.user.role));
   }

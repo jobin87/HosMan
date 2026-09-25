@@ -39,6 +39,13 @@ export class UsersService {
   }
 
   async getAllUsers(currentUserRole?: string) {
+    if (currentUserRole !== 'admin') {
+      throw new ForbiddenException({
+        success: false,
+        message: 'Forbidden: Admin privilege required to view all users',
+      });
+    }
+
     const users = await this.prisma.user.findMany({
       select: {
         id: true,

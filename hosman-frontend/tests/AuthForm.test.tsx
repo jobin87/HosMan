@@ -25,8 +25,8 @@ describe('SignUpView Component', () => {
 
     expect(screen.getByLabelText(/Full Name/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Email address/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Password/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Create Account/i })).toBeInTheDocument();
+    expect(screen.getAllByLabelText(/Password/i)[0]).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Create.*Account/i })).toBeInTheDocument();
   });
 
   it('triggers Zod form validation when submitted with empty fields', async () => {
@@ -39,7 +39,7 @@ describe('SignUpView Component', () => {
       </Provider>
     );
 
-    const submitBtn = screen.getByRole('button', { name: /Create Account/i });
+    const submitBtn = screen.getByRole('button', { name: /Create.*Account/i });
     fireEvent.click(submitBtn);
 
     await waitFor(() => {

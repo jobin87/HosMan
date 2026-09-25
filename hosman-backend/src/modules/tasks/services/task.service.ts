@@ -11,8 +11,8 @@ import { UpdateTaskDto } from '../dto/update-task.dto';
 export class TaskService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createTask(userId: string, dto: CreateTaskDto) {
-    const targetUserId = dto.userId || userId;
+  async createTask(userId: string, dto: CreateTaskDto, currentUserRole?: string) {
+    const targetUserId = currentUserRole === 'admin' && dto.userId ? dto.userId : userId;
     const task = await this.prisma.task.create({
       data: {
         title: dto.title,
